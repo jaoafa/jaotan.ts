@@ -4,7 +4,7 @@ import { Discord } from './discord'
 
 async function main() {
   const logger = Logger.configure('main')
-  const config = new Configuration()
+  const config = new Configuration('data/config.json')
   config.load()
   if (!config.validate()) {
     logger.error('❌ Configuration is invalid')
