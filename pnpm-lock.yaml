@@ -18,8 +18,8 @@ devDependencies:
     specifier: 6.4.1
     version: 6.4.1(eslint@8.47.0)(typescript@5.1.6)
   discord.js:
-    specifier: 14.12.1
-    version: 14.12.1
+    specifier: 14.13.0
+    version: 14.13.0
   eslint:
     specifier: 8.47.0
     version: 8.47.0
@@ -893,9 +893,9 @@ packages:
     resolution: {integrity: sha512-X4CDiMnDbA3s3RaUXWXmgAIbY1uxab3fqe3qwzg5XutR3wjqi7M3IkgQbsIBzpqBN2YWr/Qdv7JrFRqSgb4TFg==}
     dev: true
 
-  /discord.js@14.12.1:
-    resolution: {integrity: sha512-gGjhTkauIPgFXxpBl0UZgyehrKhDe90cIS8Hn1xFBYQ63EuUAkKoUqRNmc/pcla6DD16s4cUz5tAbdSpXivnxw==}
-    engines: {node: '>=16.9.0'}
+  /discord.js@14.13.0:
+    resolution: {integrity: sha512-Kufdvg7fpyTEwANGy9x7i4od4yu5c6gVddGi5CKm4Y5a6sF0VBODObI3o0Bh7TGCj0LfNT8Qp8z04wnLFzgnbA==}
+    engines: {node: '>=16.11.0'}
     dependencies:
       '@discordjs/builders': 1.6.5
       '@discordjs/collection': 1.5.3
