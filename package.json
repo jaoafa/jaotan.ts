@@ -4,7 +4,7 @@
   "description": "jaotan.ts",
   "license": "MIT",
   "private": true,
-  "main": "index.js",
+  "main": "dist/main.js",
   "repository": "git@github.com:jaoafa/jaotan.ts.git",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
@@ -38,5 +38,12 @@
     "ts-node-dev": "2.0.0",
     "typescript": "5.1.6",
     "yarn-run-all": "3.1.1"
-  }
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "volta": {
+    "node": "18.17.1"
+  },
+  "packageManager": "pnpm@8.6.12"
 }
