@@ -13,13 +13,12 @@ jaotan.ts の開発に興味を持っていただきありがとうございま�
 ## 開発環境 - Development environments
 
 - プログラミング言語は TypeScript です。
-- Node.js v18 + Yarn v1 で開発しています。
-  - pnpmを使いたい気持ちもあるので、今後切り替えるかもしれません。
+- Node.js v18 + pnpm で開発しています。
 - Visual Studio Code での開発を推奨しています。
 - 依存パッケージは [`package.json`](package.json) で定義しています。
   - Discord API との通信に [discord.js](https://discord.js.org/) というライブラリを使っています。
   - コードのフォーマッタに [prettier](https://prettier.io/) を、Lintに [eslint](https://eslint.org/) を使っています。
-    - 自動で動いたり動かなかったりするので、適宜 `yarn fix` すると良いです
+    - 自動で動いたり動かなかったりするので、適宜 `pnpm fix` すると良いです
   - 設定ファイルの読み込みと、コンソール（標準出力）へのライブラリとして [@book000/node-utils](https://www.npmjs.com/package/@book000/node-utils) を使っています。
 - Dockerfile がありますが、これは本番環境での実行用であり、開発用ではありません。
   - devcontainer を書く予定はあります。
@@ -41,8 +40,8 @@ jaotan.ts の開発に興味を持っていただきありがとうございま�
 - イベント駆動の機能は BaseDiscordEvent クラスを実装するクラスで作ります。（クラス名検討中）
 - コマンドのサンプルは [`src/commands/ping.ts`](src/commands/ping.ts) があるので、それを見てください。
 - コマンドもイベント駆動の機能も、[`src/discord.ts`](src/discord.ts) の `commands`, `events` 配列変数にインスタンスを追加する必要があります。
-- `yarn start` で実行できます。
-  - `yarn dev` でコード変更に合わせて自動再起動ができますが、ログイン回数多すぎって言われてトークンリセットされることがあるので、あんまりお勧めしません。
+- `pnpm start` で実行できます。
+  - `pnpm dev` でコード変更に合わせて自動再起動ができますが、ログイン回数多すぎって言われてトークンリセットされることがあるので、あんまりお勧めしません。
 
 ## ディレクトリ構造 - Directory structure
 
