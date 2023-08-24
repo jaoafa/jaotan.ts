@@ -50,3 +50,11 @@ jobs:
 
       - name: Run lint
         run: pnpm lint
+
+  finish:
+    name: Check finished Node CI
+    runs-on: ubuntu-latest
+    needs: [lint]
+
+    steps:
+      - run: echo "Finished Node CI"
