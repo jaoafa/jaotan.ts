@@ -1,28 +1,32 @@
-FROM node:20-alpine
+FROM node:18-alpine
+
+SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
 # hadolint ignore=DL3018
 RUN apk update && \
   apk upgrade && \
-  apk add --update --no-cache tzdata && \
+  apk add --update --no-cache curl tzdata && \
   cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
   echo "Asia/Tokyo" > /etc/timezone && \
-  apk del tzdata
+  apk del tzdata && \
+  curl -f https://get.pnpm.io/v6.32.js | \
+  node - add --global pnpm
 
 WORKDIR /app
 
-COPY package.json .
-COPY yarn.lock .
+COPY pnpm-lock.yaml ./
 
-RUN echo network-timeout 600000 > .yarnrc && \
-  yarn install --frozen-lockfile && \
-  yarn cache clean
+RUN pnpm fetch
 
+COPY package.json tsconfig.json ./
 COPY src src
-COPY tsconfig.json .
+
+RUN pnpm install --frozen-lockfile --offline
 
 ENV NODE_ENV production
 ENV CONFIG_PATH /data/config.json
+ENV LOG_DIR /data/logs
 
 VOLUME [ "/data" ]
 
-ENTRYPOINT [ "yarn", "start" ]
+ENTRYPOINT [ "pnpm", "start" ]

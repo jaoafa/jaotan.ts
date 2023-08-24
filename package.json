@@ -7,6 +7,7 @@
   "main": "index.js",
   "repository": "git@github.com:jaoafa/jaotan.ts.git",
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "clean": "rimraf dist output",
     "compile": "tsc -p .",
     "dev": "ts-node-dev --poll -r tsconfig-paths/register ./src/main.ts",
@@ -24,7 +25,7 @@
     "@types/node": "20.5.4",
     "@typescript-eslint/eslint-plugin": "6.4.1",
     "@typescript-eslint/parser": "6.4.1",
-    "discord.js": "^14.12.1",
+    "discord.js": "14.12.1",
     "eslint": "8.47.0",
     "eslint-config-prettier": "9.0.0",
     "eslint-config-standard": "17.1.0",
