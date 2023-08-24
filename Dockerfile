@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:20-alpine
 
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
