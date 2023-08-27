@@ -7,6 +7,9 @@ import { BasslineCommand } from './commands/bassline'
 import { PingCommand } from './commands/ping'
 import { TmttmtCommand } from './commands/tmttmt'
 import { PotatoCommand } from './commands/potato'
+import { KowaineCommand } from './commands/kowaine'
+import { KawaiineCommand } from './commands/kawaiine'
+import { PowaCommand } from './commands/powa'
 
 export class Discord {
   public readonly client: Client
@@ -15,6 +18,9 @@ export class Discord {
     new BasslineCommand(),
     new PingCommand(),
     new PotatoCommand(),
+    new KowaineCommand(),
+    new KawaiineCommand(),
+    new PowaCommand(),
     new TmttmtCommand(),
   ]
 
