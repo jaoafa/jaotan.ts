@@ -4,11 +4,15 @@ import { BaseDiscordEvent } from './events'
 import { Configuration } from './config'
 import { BaseCommand } from './commands'
 import { PingCommand } from './commands/ping'
+import { PotatoCommand } from './commands/potato'
 
 export class Discord {
   public readonly client: Client
 
-  public static readonly commands: BaseCommand[] = [new PingCommand()]
+  public static readonly commands: BaseCommand[] = [
+    new PingCommand(),
+    new PotatoCommand(),
+  ]
 
   constructor(config: Configuration) {
     this.client = new Client({
