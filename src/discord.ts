@@ -7,7 +7,6 @@ import { BasslineCommand } from './commands/bassline'
 import { PingCommand } from './commands/ping'
 import { PotatoCommand } from './commands/potato'
 import { KawaiineCommand } from './commands/kawaiine'
-import { KowaineCommand } from './commands/kowaine'
 
 export class Discord {
   public readonly client: Client
