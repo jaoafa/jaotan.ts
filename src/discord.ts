@@ -11,6 +11,7 @@ import { KowaineCommand } from './commands/kowaine'
 import { KawaiineCommand } from './commands/kawaiine'
 import { SuperCommand } from './commands/super'
 import { PowaCommand } from './commands/powa'
+import { AlphaCommand } from './commands/alpha'
 import { GreetingEvent } from './events/greeting'
 
 export class Discord {
@@ -18,6 +19,7 @@ export class Discord {
   public readonly client: Client
 
   public static readonly commands: BaseCommand[] = [
+    new AlphaCommand(),
     new BasslineCommand(),
     new PingCommand(),
     new PotatoCommand(),
