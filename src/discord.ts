@@ -7,6 +7,7 @@ import { BasslineCommand } from './commands/bassline'
 import { PingCommand } from './commands/ping'
 import { PotatoCommand } from './commands/potato'
 import { KowaineCommand } from './commands/kowaine'
+import { KawaiineCommand } from './commands/kawaiine'
 
 export class Discord {
   public readonly client: Client
@@ -16,6 +17,7 @@ export class Discord {
     new PingCommand(),
     new PotatoCommand(),
     new KowaineCommand(),
+    new KawaiineCommand(),
   ]
 
   constructor(config: Configuration) {
