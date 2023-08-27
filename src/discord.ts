@@ -78,6 +78,38 @@ export class Discord {
       return
     }
 
+    if (command.permissions) {
+      const member = message.member
+      if (!member) {
+        logger.warn(`🚫 user not found: ${message.author.tag}`)
+        return
+      }
+
+      const hasPermission = command.permissions.some((permission) => {
+        switch (permission.type) {
+          case 'USER': {
+            return member.id === permission.identifier
+          }
+          case 'ROLE': {
+            return member.roles.cache.some(
+              (role) => role.id === permission.identifier
+            )
+          }
+          case 'PERMISSION': {
+            return member.permissions.has(permission.identifier)
+          }
+          default: {
+            return false
+          }
+        }
+      })
+      if (!hasPermission) {
+        logger.warn(`🚫 permission denied: ${message.author.tag}`)
+        await message.react('🚫')
+        return
+      }
+    }
+
     logger.info(`👌 ${message.author.tag}: execute ${command.name}`)
 
     const [, ...args] = message.content.split(' ')
