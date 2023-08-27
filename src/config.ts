@@ -3,6 +3,7 @@ import { ConfigFramework } from '@book000/node-utils'
 export interface ConfigInterface {
   discord: {
     token: string
+    guildId?: string
     channel?: {
       greeting?: string
     }

@@ -75,13 +75,27 @@ export class Discord {
 
   async onMessageCreate(message: Message) {
     const logger = Logger.configure('Discord.onMessageCreate')
+    // Botのメッセージは無視
+    if (message.author.bot) {
+      return
+    }
+
+    // guildIdが設定されている場合、そのサーバ以外のメッセージは無視
+    const onlyGuildId = this.config.get('discord').guildId
+    if (onlyGuildId && message.guild?.id !== onlyGuildId) {
+      return
+    }
+
+    // 対応するコマンドを探す
     const command = Discord.commands.find((command) =>
       message.content.startsWith(`/${command.name}`)
     )
     if (!command) {
+      // コマンドが見つからない場合は無視
       return
     }
 
+    // コマンドの実行権限を確認
     if (command.permissions) {
       const member = message.member
       if (!member) {
