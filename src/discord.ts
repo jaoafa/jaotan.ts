@@ -4,11 +4,12 @@ import { BaseDiscordEvent } from './events'
 import { Configuration } from './config'
 import { BaseCommand } from './commands'
 import { PingCommand } from './commands/ping'
+import { TmttmtCommand } from './commands/tmttmt'
 
 export class Discord {
   public readonly client: Client
 
-  public static readonly commands: BaseCommand[] = [new PingCommand()]
+  public static readonly commands: BaseCommand[] = [new PingCommand(), new TmttmtCommand()]
 
   constructor(config: Configuration) {
     this.client = new Client({
