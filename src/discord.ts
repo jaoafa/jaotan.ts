@@ -6,6 +6,7 @@ import { BaseCommand } from './commands'
 import { BasslineCommand } from './commands/bassline'
 import { PingCommand } from './commands/ping'
 import { PotatoCommand } from './commands/potato'
+import { KowaineCommand } from './commands/kowaine'
 import { KawaiineCommand } from './commands/kawaiine'
 
 export class Discord {
@@ -15,6 +16,7 @@ export class Discord {
     new BasslineCommand(),
     new PingCommand(),
     new PotatoCommand(),
+    new KowaineCommand(),
     new KawaiineCommand(),
   ]
 
