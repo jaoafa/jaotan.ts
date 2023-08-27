@@ -63,6 +63,7 @@ export class Discord {
   }
 
   async onMessageCreate(message: Message) {
+    const logger = Logger.configure('Discord.onMessageCreate')
     const command = Discord.commands.find((command) =>
       message.content.startsWith(`/${command.name}`)
     )
@@ -70,7 +71,10 @@ export class Discord {
       return
     }
 
-    command.execute(this, message)
+    logger.info(`👌 ${message.author.tag}: execute ${command.name}`)
+
+    const [, ...args] = message.content.split(' ')
+    command.execute(this, message, args)
   }
 
   waitReady() {

@@ -17,5 +17,6 @@ rules:
   '@typescript-eslint/no-explicit-any': off
   '@typescript-eslint/ban-ts-comment': off
   'unicorn/prefer-top-level-await': off
+  'unicorn/prevent-abbreviations': off
   'unicorn/no-null': off
   'no-console': error
