@@ -20,11 +20,14 @@ export class BasslineCommand implements BaseCommand {
     ].join('\n')
   }
 
-  async execute(_discord: Discord, message: Message<boolean>): Promise<void> {
-    const [, ...suspectName] = message.content.split(' ')
+  async execute(
+    _discord: Discord,
+    message: Message<boolean>,
+    args: string[]
+  ): Promise<void> {
     await message.channel.send(
-      suspectName.length > 0
-        ? this.getBasslineText(suspectName.join(' '))
+      args.length > 0
+        ? this.getBasslineText(args.join(' '))
         : this.getBasslineText()
     )
   }
