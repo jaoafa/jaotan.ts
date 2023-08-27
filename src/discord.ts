@@ -13,12 +13,14 @@ import { SuperCommand } from './commands/super'
 import { PowaCommand } from './commands/powa'
 import { AlphaCommand } from './commands/alpha'
 import { GreetingEvent } from './events/greeting'
+import { AkakeseCommand } from './commands/akakese'
 
 export class Discord {
   private config: Configuration
   public readonly client: Client
 
   public static readonly commands: BaseCommand[] = [
+    new AkakeseCommand(),
     new AlphaCommand(),
     new BasslineCommand(),
     new PingCommand(),
