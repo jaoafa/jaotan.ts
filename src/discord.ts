@@ -3,13 +3,20 @@ import { Logger } from '@book000/node-utils'
 import { BaseDiscordEvent } from './events'
 import { Configuration } from './config'
 import { BaseCommand } from './commands'
+import { BasslineCommand } from './commands/bassline'
 import { PingCommand } from './commands/ping'
 import { TmttmtCommand } from './commands/tmttmt'
+import { PotatoCommand } from './commands/potato'
 
 export class Discord {
   public readonly client: Client
 
-  public static readonly commands: BaseCommand[] = [new PingCommand(), new TmttmtCommand()]
+  public static readonly commands: BaseCommand[] = [
+    new BasslineCommand(),
+    new PingCommand(),
+    new PotatoCommand(),
+    new TmttmtCommand(),
+  ]
 
   constructor(config: Configuration) {
     this.client = new Client({
