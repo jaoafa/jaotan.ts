@@ -5,6 +5,7 @@ import { Configuration } from './config'
 import { BaseCommand } from './commands'
 import { BasslineCommand } from './commands/bassline'
 import { PingCommand } from './commands/ping'
+import { TmttmtCommand } from './commands/tmttmt'
 import { PotatoCommand } from './commands/potato'
 import { KowaineCommand } from './commands/kowaine'
 import { KawaiineCommand } from './commands/kawaiine'
@@ -22,6 +23,7 @@ export class Discord {
     new KawaiineCommand(),
     new SuperCommand(),
     new PowaCommand(),
+    new TmttmtCommand(),
   ]
 
   constructor(config: Configuration) {
