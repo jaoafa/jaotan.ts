@@ -9,6 +9,7 @@ import { PotatoCommand } from './commands/potato'
 import { KowaineCommand } from './commands/kowaine'
 import { KawaiineCommand } from './commands/kawaiine'
 import { SuperCommand } from './commands/super'
+import { PowaCommand } from './commands/powa'
 
 export class Discord {
   public readonly client: Client
@@ -20,6 +21,7 @@ export class Discord {
     new KowaineCommand(),
     new KawaiineCommand(),
     new SuperCommand(),
+    new PowaCommand(),
   ]
 
   constructor(config: Configuration) {
