@@ -17,7 +17,6 @@ export class Discord {
     new PingCommand(),
     new PotatoCommand(),
     new KawaiineCommand(),
-    new KowaineCommand(),
   ]
 
   constructor(config: Configuration) {
