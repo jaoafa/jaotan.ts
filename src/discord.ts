@@ -13,6 +13,7 @@ import { SuperCommand } from './commands/super'
 import { PowaCommand } from './commands/powa'
 import { AlphaCommand } from './commands/alpha'
 import { GreetingEvent } from './events/greeting'
+import { EnenEvent } from './events/enen'
 
 export class Discord {
   private config: Configuration
@@ -43,7 +44,10 @@ export class Discord {
     this.client.on('ready', this.onReady.bind(this))
     this.client.on('messageCreate', this.onMessageCreate.bind(this))
 
-    const events: BaseDiscordEvent<any>[] = [new GreetingEvent(this)]
+    const events: BaseDiscordEvent<any>[] = [
+      new GreetingEvent(this),
+      new EnenEvent(this),
+    ]
     for (const event of events) {
       event.register()
     }
