@@ -7,13 +7,10 @@ import { BasslineCommand } from './commands/bassline'
 import { PingCommand } from './commands/ping'
 import { TmttmtCommand } from './commands/tmttmt'
 import { PotatoCommand } from './commands/potato'
-import { KowaineCommand } from './commands/kowaine'
-import { KawaiineCommand } from './commands/kawaiine'
 import { SuperCommand } from './commands/super'
 import { PowaCommand } from './commands/powa'
 import { AlphaCommand } from './commands/alpha'
 import { GreetingEvent } from './events/greeting'
-import { EnenEvent } from './events/enen'
 
 export class Discord {
   private config: Configuration
@@ -24,8 +21,6 @@ export class Discord {
     new BasslineCommand(),
     new PingCommand(),
     new PotatoCommand(),
-    new KowaineCommand(),
-    new KawaiineCommand(),
     new SuperCommand(),
     new PowaCommand(),
     new TmttmtCommand(),
@@ -44,10 +39,7 @@ export class Discord {
     this.client.on('ready', this.onReady.bind(this))
     this.client.on('messageCreate', this.onMessageCreate.bind(this))
 
-    const events: BaseDiscordEvent<any>[] = [
-      new GreetingEvent(this),
-      new EnenEvent(this),
-    ]
+    const events: BaseDiscordEvent<any>[] = [new GreetingEvent(this)]
     for (const event of events) {
       event.register()
     }
