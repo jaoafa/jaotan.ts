@@ -17,6 +17,12 @@ devDependencies:
   '@typescript-eslint/parser':
     specifier: 6.5.0
     version: 6.5.0(eslint@8.48.0)(typescript@5.2.2)
+  axios:
+    specifier: 1.5.0
+    version: 1.5.0
+  detectlanguage:
+    specifier: 2.1.0
+    version: 2.1.0
   discord.js:
     specifier: 14.13.0
     version: 14.13.0
@@ -642,6 +648,14 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
+  /axios@0.21.4:
+    resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
+    dependencies:
+      follow-redirects: 1.15.2
+    transitivePeerDependencies:
+      - debug
+    dev: true
+
   /axios@1.5.0:
     resolution: {integrity: sha512-D4DdjDo5CY50Qms0qGQTTw6Q44jl7zRwY7bthds06pUGfChBCTcQs+N743eFWGEd6pRTMd6A+I87aWyFV5wiZQ==}
     dependencies:
@@ -880,6 +894,14 @@ packages:
   /delayed-stream@1.0.0:
     resolution: {integrity: sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==}
     engines: {node: '>=0.4.0'}
+    dev: true
+
+  /detectlanguage@2.1.0:
+    resolution: {integrity: sha512-EbLGyZxiQJeur5a+GNOzBV9xL/r/7GfvRALSHAKepw38UAvCssn7obVvhsioRIV+uDj3IQtXzL7iNkwu0oCp7g==}
+    dependencies:
+      axios: 0.21.4
+    transitivePeerDependencies:
+      - debug
     dev: true
 
   /diff@4.0.2:
