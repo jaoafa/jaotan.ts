@@ -11,6 +11,8 @@ export interface ConfigInterface {
       mailVerified?: string
     }
   }
+  translateGasUrl?: string
+  detectLanguageApiToken?: string
 }
 
 export class Configuration extends ConfigFramework<ConfigInterface> {
@@ -28,6 +30,12 @@ export class Configuration extends ConfigFramework<ConfigInterface> {
       'discord.role.mailVerified must be a string': (config) =>
         config.discord.role?.mailVerified === undefined ||
         typeof config.discord.role.mailVerified === 'string',
+      'translateGasUrl must be a string': (config) =>
+        config.translateGasUrl === undefined ||
+        typeof config.translateGasUrl === 'string',
+      'detectLanguageApiToken must be a string': (config) =>
+        config.detectLanguageApiToken === undefined ||
+        typeof config.detectLanguageApiToken === 'string',
     }
   }
 }

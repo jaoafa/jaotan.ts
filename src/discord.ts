@@ -1,4 +1,10 @@
-import { Client, GatewayIntentBits, Message } from 'discord.js'
+import {
+  Client,
+  Colors,
+  EmbedBuilder,
+  GatewayIntentBits,
+  Message,
+} from 'discord.js'
 import { Logger } from '@book000/node-utils'
 import { BaseDiscordEvent } from './events'
 import { Configuration } from './config'
@@ -11,6 +17,7 @@ import { SuperCommand } from './commands/super'
 import { PowaCommand } from './commands/powa'
 import { AlphaCommand } from './commands/alpha'
 import { GreetingEvent } from './events/greeting'
+import { TranslateCommand } from './commands/translate'
 
 export class Discord {
   private config: Configuration
@@ -24,6 +31,7 @@ export class Discord {
     new SuperCommand(),
     new PowaCommand(),
     new TmttmtCommand(),
+    new TranslateCommand(),
   ]
 
   constructor(config: Configuration) {
@@ -123,7 +131,50 @@ export class Discord {
     logger.info(`👌 ${message.author.tag}: execute ${command.name}`)
 
     const [, ...args] = message.content.split(' ')
-    command.execute(this, message, args)
+    try {
+      await command.execute(this, message, args)
+    } catch (error) {
+      // エラー処理
+      logger.error('❌ Error', error as Error)
+      const stacktrace = (error as Error).stack?.toString() || ''
+      const files = this.getStackTraceTypeScriptFiles(stacktrace)
+      await message.reply({
+        embeds: [
+          new EmbedBuilder()
+            .setTitle('❌ コマンドの実行中にエラーが発生しました。')
+            .setDescription(
+              '何度か試し、それでも解決しない場合は不具合として報告ください。\n（右クリックから「アプリ」→「不具合報告」を選択）'
+            )
+            .addFields([
+              {
+                name: 'エラーメッセージ',
+                value: `\`\`\`\n${(error as Error).message}\n\`\`\``,
+                inline: false,
+              },
+              {
+                name: '関連ファイル',
+                value: files.map((file) => `- \`${file}\``).join('\n'),
+                inline: false,
+              },
+            ])
+            .setTimestamp(new Date())
+            .setColor(Colors.Red),
+        ],
+      })
+    }
+  }
+
+  getStackTraceTypeScriptFiles(stack: string) {
+    // at Object.execute (/app/dist/commands/translate.ts:48:23)
+
+    const lines = stack.split('\n')
+    const typescriptFiles = lines
+      .filter((line) => line.trim().startsWith('at ') && line.includes('.ts:'))
+      .map((line) => {
+        return line.trim().slice(3)
+      })
+
+    return typescriptFiles
   }
 
   waitReady() {
