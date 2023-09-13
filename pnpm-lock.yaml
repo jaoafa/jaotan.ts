@@ -6,8 +6,8 @@ settings:
 
 devDependencies:
   '@book000/node-utils':
-    specifier: 1.5.14
-    version: 1.5.14
+    specifier: 1.6.1
+    version: 1.6.1
   '@types/node':
     specifier: 20.5.8
     version: 20.5.8
@@ -92,8 +92,8 @@ packages:
       js-tokens: 4.0.0
     dev: true
 
-  /@book000/node-utils@1.5.14:
-    resolution: {integrity: sha512-avEW0fhVSMIGFN7/cCsZCaMRn4K7vkzTcqVm6RfPmGhXMo59UBH1PH2KR79lO0NA0PJgNE68gxWrkrWLm/yMRQ==}
+  /@book000/node-utils@1.6.1:
+    resolution: {integrity: sha512-+UU2c9mgUJ+PEJ8K5Marb4R0E3zI27zvc+wt0AB+Q3q4mk7aWb4zjY76JeO4TPLePvYO4wz/2PAOnW5jyCVr4w==}
     dependencies:
       axios: 1.5.0
       cycle: 1.0.3
