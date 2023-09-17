@@ -1,0 +1,17 @@
+name: Review by jaotan
+
+on:
+  issue_comment:
+    types: [ created ]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    if: github.event.issue.pull_request != null && github.event.sender.id == 8929706 && contains(github.event.comment.body, '@jaotan') && contains(github.event.comment.body, 'review')
+
+    steps:
+      - name: Review
+        run:
+          gh pr review ${{ github.event.issue.number }} -R "$GITHUB_REPOSITORY" -a -b "It was reviewed by a request by comment."
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
