@@ -1,0 +1,27 @@
+{
+  "name": "jaoafa/jaotan.ts",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:0-18",
+  // コンテナ作成時、依存パッケージをインストールする
+  "postCreateCommand": "pnpm install",
+  // コンテナ作成が終了するまで待機する
+  "waitFor": "postCreateCommand",
+  // 定義外のポートは通知しない
+  "otherPortsAttributes": {
+    "onAutoForward": "silent"
+  },
+  "customizations": {
+    // 拡張機能 (see .vscode/extensions.json)
+    "extensions": ["esbenp.prettier-vscode"],
+    // 設定 (see .vscode/settings.json)
+    "settings": {
+      "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+          "source.organizeImports": false
+        }
+      },
+      "git.branchProtection": ["main", "master"],
+      "editor.formatOnSave": true
+    }
+  }
+}
