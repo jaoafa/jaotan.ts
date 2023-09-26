@@ -6,8 +6,8 @@ settings:
 
 devDependencies:
   '@book000/node-utils':
-    specifier: 1.6.11
-    version: 1.6.11
+    specifier: 1.6.12
+    version: 1.6.12
   '@types/node':
     specifier: 20.5.8
     version: 20.5.8
@@ -92,10 +92,10 @@ packages:
       js-tokens: 4.0.0
     dev: true
 
-  /@book000/node-utils@1.6.11:
-    resolution: {integrity: sha512-+Hz5zXkis+tOdM7gKagBeF7bIhJX/dEBjhvkYSmPU5hZ0GHv8vOTnMMQ4i+4gQfOZCXECq0kb2pWEHvdLA0r3g==}
+  /@book000/node-utils@1.6.12:
+    resolution: {integrity: sha512-UZ43VYYaHgeHOryK+o3Vpp2Ei4pwexv/R9BAxiUdDLNrXyMTvhsMNhDZ7bVzVhyaT9OE128QOAusW/A33vQMoA==}
     dependencies:
-      axios: 1.5.0
+      axios: 1.5.1
       cycle: 1.0.3
       form-data: 4.0.0
       jsonc-parser: 3.2.0
@@ -647,16 +647,6 @@ packages:
     resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
     dependencies:
       follow-redirects: 1.15.2
-    transitivePeerDependencies:
-      - debug
-    dev: true
-
-  /axios@1.5.0:
-    resolution: {integrity: sha512-D4DdjDo5CY50Qms0qGQTTw6Q44jl7zRwY7bthds06pUGfChBCTcQs+N743eFWGEd6pRTMd6A+I87aWyFV5wiZQ==}
-    dependencies:
-      follow-redirects: 1.15.2
-      form-data: 4.0.0
-      proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
     dev: true
