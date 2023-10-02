@@ -21,7 +21,7 @@
     "start": "ts-node -r tsconfig-paths/register ./src/main.ts"
   },
   "devDependencies": {
-    "@book000/node-utils": "1.6.13",
+    "@book000/node-utils": "1.6.15",
     "@types/node": "20.5.8",
     "@typescript-eslint/eslint-plugin": "6.7.4",
     "@typescript-eslint/parser": "6.7.4",
