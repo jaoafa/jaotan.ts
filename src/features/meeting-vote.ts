@@ -30,14 +30,49 @@ export class MeetingVote {
   /** メッセージテキストの境界値正規表現 */
   private readonly borderRegex = /\[Border:(\d+)]/
 
-  public async run(channel: TextChannel) {
-    const pinnedMessages = await channel.messages.fetchPinned()
+  /** 投票チャンネル */
+  private readonly channel: TextChannel
+
+  /**
+   * コンストラクタ
+   * 
+   * @param channel 投票チャンネル
+   */
+  constructor(channel: TextChannel) {
+    this.channel = channel
+  }
+
+  /**
+   * 新しい投票メッセージを処理します。
+   * 
+   * @param message メッセージ
+   */
+  public async newVoteMessage(message: Message) {
+    if (message.channel.id !== this.channel.id) {
+      throw new Error('This message is not in the vote channel.')
+    }
+    // TODO
+  }
+
+  /**
+   * ピン留めされているすべての投票メッセージをチェック処理します。
+   */
+  public async run() {
+    const pinnedMessages = await this.channel.messages.fetchPinned()
     for (const message of pinnedMessages.values()) {
       await this.runMessage(message)
     }
   }
 
+  /**
+   * 投票メッセージをチェック処理します。
+   * 
+   * @param message メッセージ
+   */
   public async runMessage(message: Message) {
+    if (message.channel.id !== this.channel.id) {
+      throw new Error('This message is not in the vote channel.')
+    }
     const goodUsers = await VoteReactionType.Good.getUsers(message)
     const badUsers = await VoteReactionType.Bad.getUsers(message)
     const whiteUsers = await VoteReactionType.White.getUsers(message)
@@ -149,6 +184,11 @@ export class MeetingVote {
 class VoteReaction {
   public unicode: string
 
+  /**
+   * コンストラクタ
+   * 
+   * @param unicode リアクションのUnicode
+   */
   constructor(unicode: string) {
     this.unicode = unicode
   }
