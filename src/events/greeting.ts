@@ -1,5 +1,6 @@
 import { Message } from 'discord.js'
 import { BaseDiscordEvent } from '.'
+import { Configuration } from '@/config'
 
 /**
  * #greeting チャンネルでの挨拶を処理するイベント
@@ -24,7 +25,7 @@ export class GreetingEvent extends BaseDiscordEvent<'messageCreate'> {
   }
 
   async execute(message: Message<boolean>): Promise<void> {
-    const config = this.discord.getConfig()
+    const config: Configuration = this.discord.getConfig()
     const greetingChannelId =
       config.get('discord').channel?.greeting || '603841992404893707'
     const mailVerifiedRoleId =

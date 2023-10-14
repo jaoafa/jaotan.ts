@@ -22,6 +22,11 @@
       },
       "git.branchProtection": ["main", "master"],
       "editor.formatOnSave": true
-    }
+	},
+	"vscode": {
+		"extensions": [
+			"esbenp.prettier-vscode"
+		]
+	}
   }
 }

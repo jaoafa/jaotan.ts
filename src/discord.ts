@@ -4,6 +4,7 @@ import {
   EmbedBuilder,
   GatewayIntentBits,
   Message,
+  Partials,
 } from 'discord.js'
 import { Logger } from '@book000/node-utils'
 import { BaseDiscordEvent } from './events'
@@ -18,6 +19,8 @@ import { PowaCommand } from './commands/powa'
 import { AlphaCommand } from './commands/alpha'
 import { GreetingEvent } from './events/greeting'
 import { TranslateCommand } from './commands/translate'
+import { MeetingNewVoteEvent } from './events/meeting-vote-new'
+import { MeetingReactionVoteEvent } from './events/meeting-vote-reaction'
 
 export class Discord {
   private config: Configuration
@@ -43,11 +46,16 @@ export class Discord {
         GatewayIntentBits.GuildMessageReactions,
         GatewayIntentBits.MessageContent,
       ],
+      partials: [Partials.User, Partials.Message, Partials.Reaction],
     })
     this.client.on('ready', this.onReady.bind(this))
     this.client.on('messageCreate', this.onMessageCreate.bind(this))
 
-    const events: BaseDiscordEvent<any>[] = [new GreetingEvent(this)]
+    const events: BaseDiscordEvent<any>[] = [
+      new GreetingEvent(this),
+      new MeetingNewVoteEvent(this),
+      new MeetingReactionVoteEvent(this),
+    ]
     for (const event of events) {
       event.register()
     }
