@@ -25,6 +25,7 @@ import { BaseDiscordTask } from './tasks'
 import { MeetingVoteTask } from './tasks/meeting-vote'
 import { PinReactionEvent } from './events/pin-reaction'
 import { PinPrefixEvent } from './events/pin-prefix'
+import { VCSpeechLogMessageUrlEvent } from './events/vc-speech-log-url'
 
 export class Discord {
   private config: Configuration
@@ -61,6 +62,7 @@ export class Discord {
       new MeetingReactionVoteEvent(this),
       new PinReactionEvent(this),
       new PinPrefixEvent(this),
+      new VCSpeechLogMessageUrlEvent(this),
     ]
     for (const event of events) {
       event.register()

@@ -7,6 +7,7 @@ export interface ConfigInterface {
     channel?: {
       greeting?: string
       meetingVote?: string
+      vcSpeechLog?: string
     }
     role?: {
       mailVerified?: string
