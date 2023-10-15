@@ -26,7 +26,7 @@ export class MeetingReactionVoteEvent extends BaseDiscordEvent<'messageReactionA
   ): Promise<void> {
     const config: Configuration = this.discord.getConfig()
     const meetingVoteChannelId =
-      config.get('discord').channel?.meetingVote || '597423974816808970'
+      config.get('discord').channel?.meetingVote || '1149598703846440960'
 
     const message = await reaction.message.fetch()
     // #meeting_vote チャンネル以外は無視

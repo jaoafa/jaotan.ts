@@ -21,6 +21,8 @@ import { GreetingEvent } from './events/greeting'
 import { TranslateCommand } from './commands/translate'
 import { MeetingNewVoteEvent } from './events/meeting-vote-new'
 import { MeetingReactionVoteEvent } from './events/meeting-vote-reaction'
+import { BaseDiscordTask } from './tasks'
+import { MeetingVoteTask } from './tasks/meeting-vote'
 
 export class Discord {
   private config: Configuration
@@ -61,6 +63,12 @@ export class Discord {
     }
 
     this.client.login(config.get('discord').token)
+
+    const tasks: BaseDiscordTask[] = [new MeetingVoteTask(this)]
+    for (const task of tasks) {
+      task.register()
+    }
+
     this.config = config
   }
 

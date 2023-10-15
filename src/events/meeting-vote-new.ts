@@ -14,7 +14,7 @@ export class MeetingNewVoteEvent extends BaseDiscordEvent<'messageCreate'> {
   async execute(message: Message<boolean>): Promise<void> {
     const config: Configuration = this.discord.getConfig()
     const meetingVoteChannelId =
-      config.get('discord').channel?.meetingVote || '597423974816808970'
+      config.get('discord').channel?.meetingVote || '1149598703846440960'
 
     // #meeting_vote チャンネル以外は無視
     if (message.channel.id !== meetingVoteChannelId) return
