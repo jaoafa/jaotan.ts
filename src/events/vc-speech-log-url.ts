@@ -1,9 +1,4 @@
-import {
-  ChannelType,
-  Colors,
-  EmbedBuilder,
-  Message,
-} from 'discord.js'
+import { ChannelType, Colors, EmbedBuilder, Message } from 'discord.js'
 import { BaseDiscordEvent } from '.'
 import { Configuration } from '../config'
 
