@@ -14,9 +14,13 @@ import {
  */
 const DisapprovalReason = {
   /**
-   * 投票による否認
+   * 反対投票による否認
    */
-  Vote: '投票による否認',
+  Vote: '反対投票による否認',
+  /**
+   * 白票投票による否認
+   */
+  VoteWhite: '白票投票による否認',
   /**
    * 期限による否認
    */
@@ -201,7 +205,7 @@ export class MeetingVote {
         goodUsers,
         badUsers,
         whiteUsers,
-        DisapprovalReason.Vote
+        DisapprovalReason.VoteWhite
       )
       return
     }
@@ -381,6 +385,11 @@ export class MeetingVote {
         case DisapprovalReason.Vote: {
           description =
             ':-1: 過半数が反対したため、投票が否認されたことをお知らせします。'
+          break
+        }
+        case DisapprovalReason.VoteWhite: {
+          description =
+            ':-1: 投票権利を有する全員が白票を投票したため、投票が否認されたことをお知らせします。'
           break
         }
         case DisapprovalReason.Limit: {
