@@ -17,7 +17,8 @@ export class MeetingVoteTask extends BaseDiscordTask {
     const meetingVoteChannelId =
       config.get('discord').channel?.meetingVote || '1149598703846440960'
 
-    const channel = this.discord.client.channels.resolve(meetingVoteChannelId)
+    const channel =
+      await this.discord.client.channels.fetch(meetingVoteChannelId)
     if (!channel || channel.type !== ChannelType.GuildText) return
 
     const meetingVoteFeature = new MeetingVote(channel)
