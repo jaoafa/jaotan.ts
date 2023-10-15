@@ -23,6 +23,8 @@ import { MeetingNewVoteEvent } from './events/meeting-vote-new'
 import { MeetingReactionVoteEvent } from './events/meeting-vote-reaction'
 import { BaseDiscordTask } from './tasks'
 import { MeetingVoteTask } from './tasks/meeting-vote'
+import { PinReactionEvent } from './events/pin-reaction'
+import { PinPrefixEvent } from './events/pin-prefix'
 
 export class Discord {
   private config: Configuration
@@ -57,6 +59,8 @@ export class Discord {
       new GreetingEvent(this),
       new MeetingNewVoteEvent(this),
       new MeetingReactionVoteEvent(this),
+      new PinReactionEvent(this),
+      new PinPrefixEvent(this),
     ]
     for (const event of events) {
       event.register()
