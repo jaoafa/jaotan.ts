@@ -6,6 +6,7 @@ export interface ConfigInterface {
     guildId?: string
     channel?: {
       greeting?: string
+      meetingVote?: string
     }
     role?: {
       mailVerified?: string
