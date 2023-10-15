@@ -28,7 +28,9 @@ export class MeetingReactionVoteEvent extends BaseDiscordEvent<'messageReactionA
     const meetingVoteChannelId =
       config.get('discord').channel?.meetingVote || '1149598703846440960'
 
-    const message = await reaction.message.fetch()
+    const message = reaction.message.partial
+      ? await reaction.message.fetch()
+      : reaction.message
     // #meeting_vote チャンネル以外は無視
     if (message.channel.id !== meetingVoteChannelId) return
     // サーバ以外は無視 & メンバーが取得できない場合は無視
