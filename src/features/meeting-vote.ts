@@ -140,9 +140,9 @@ export class MeetingVote {
    * @param user
    */
   public async isMultipleVote(message: Message, user: User) {
-    const goodUsers = await VoteReactionType.Good.getUsers(message)
-    const badUsers = await VoteReactionType.Bad.getUsers(message)
-    const whiteUsers = await VoteReactionType.White.getUsers(message)
+    const goodUsers = await VoteReactionType.Good.getUsers(message, true)
+    const badUsers = await VoteReactionType.Bad.getUsers(message, true)
+    const whiteUsers = await VoteReactionType.White.getUsers(message, true)
 
     const isGood = goodUsers.has(user.id)
     const isBad = badUsers.has(user.id)
@@ -177,9 +177,9 @@ export class MeetingVote {
     if (message.channel.id !== this.channel.id) {
       throw new Error('This message is not in the vote channel.')
     }
-    const goodUsers = await VoteReactionType.Good.getUsers(message)
-    const badUsers = await VoteReactionType.Bad.getUsers(message)
-    const whiteUsers = await VoteReactionType.White.getUsers(message)
+    const goodUsers = await VoteReactionType.Good.getUsers(message, true)
+    const badUsers = await VoteReactionType.Bad.getUsers(message, true)
+    const whiteUsers = await VoteReactionType.White.getUsers(message, true)
 
     const border = this.calculateBorder(message, whiteUsers)
     // 賛成が過半数を超えた場合、投票を承認とする

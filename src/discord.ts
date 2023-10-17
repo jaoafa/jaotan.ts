@@ -51,7 +51,15 @@ export class Discord {
         GatewayIntentBits.GuildMessageReactions,
         GatewayIntentBits.MessageContent,
       ],
-      partials: [Partials.User, Partials.Message, Partials.Reaction],
+      partials: [
+        Partials.User,
+        Partials.Channel,
+        Partials.GuildMember,
+        Partials.Message,
+        Partials.Reaction,
+        Partials.GuildScheduledEvent,
+        Partials.ThreadMember,
+      ],
     })
     this.client.on('ready', this.onReady.bind(this))
     this.client.on('messageCreate', this.onMessageCreate.bind(this))
