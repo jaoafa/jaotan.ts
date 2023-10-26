@@ -1,5 +1,8 @@
 {
-  "extends": [
-    "github>book000/templates//renovate/base"
-  ]
+  "extends": ["config:base", ":disableRateLimiting"],
+  "timezone": "Asia/Tokyo",
+  "dependencyDashboard": false,
+  "automerge": true,
+  "platformAutomerge": true,
+  "assignees": ["book000"]
 }
