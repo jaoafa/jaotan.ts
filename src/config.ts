@@ -10,7 +10,7 @@ export interface ConfigInterface {
       vcSpeechLog?: string
     }
     role?: {
-      mailVerified?: string
+      verified?: string
     }
   }
   translateGasUrl?: string
@@ -30,8 +30,8 @@ export class Configuration extends ConfigFramework<ConfigInterface> {
         config.discord.channel?.greeting === undefined ||
         typeof config.discord.channel.greeting === 'string',
       'discord.role.mailVerified must be a string': (config) =>
-        config.discord.role?.mailVerified === undefined ||
-        typeof config.discord.role.mailVerified === 'string',
+        config.discord.role?.verified === undefined ||
+        typeof config.discord.role.verified === 'string',
       'translateGasUrl must be a string': (config) =>
         config.translateGasUrl === undefined ||
         typeof config.translateGasUrl === 'string',
