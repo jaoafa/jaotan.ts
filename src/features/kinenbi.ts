@@ -80,7 +80,6 @@ export class Kinenbi {
     const urlObject = new URL(this.baseUrl + options.filename)
     urlObject.search = options.query.toString()
 
-    console.log(urlObject.toString())
     const response = await axios.get<string>(urlObject.toString(), {
       validateStatus: () => true,
     })
