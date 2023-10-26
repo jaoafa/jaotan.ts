@@ -27,9 +27,9 @@ export class GreetingEvent extends BaseDiscordEvent<'messageCreate'> {
   async execute(message: Message<boolean>): Promise<void> {
     const config: Configuration = this.discord.getConfig()
     const greetingChannelId =
-      config.get('discord').channel?.greeting || '603841992404893707'
-    const mailVerifiedRoleId =
-      config.get('discord').role?.mailVerified || '597421078817669121'
+      config.get('discord').channel?.greeting || '1149587870273773569'
+    const verifiedRoleId =
+      config.get('discord').role?.verified || '1149583365708709940'
 
     // #greeting チャンネル以外は無視
     if (message.channel.id !== greetingChannelId) return
@@ -45,7 +45,7 @@ export class GreetingEvent extends BaseDiscordEvent<'messageCreate'> {
     }
 
     const member = message.member
-    const isMailVerified = member.roles.cache.has(mailVerifiedRoleId)
+    const isMailVerified = member.roles.cache.has(verifiedRoleId)
 
     // jao メッセージの場合
     if (message.content === 'jao') {
@@ -77,7 +77,7 @@ export class GreetingEvent extends BaseDiscordEvent<'messageCreate'> {
     this.jaoPostedUsers.delete(message.author.id)
     await message.react('\u2B55')
 
-    await message.member.roles.add(mailVerifiedRoleId)
+    await message.member.roles.add(verifiedRoleId)
 
     await message.reply(
       [
