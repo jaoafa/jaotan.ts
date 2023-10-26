@@ -26,6 +26,7 @@ import { MeetingVoteTask } from './tasks/meeting-vote'
 import { PinReactionEvent } from './events/pin-reaction'
 import { PinPrefixEvent } from './events/pin-prefix'
 import { VCSpeechLogMessageUrlEvent } from './events/vc-speech-log-url'
+import { OriginCommand } from './commands/origin'
 
 export class Discord {
   private config: Configuration
@@ -40,6 +41,7 @@ export class Discord {
     new PowaCommand(),
     new TmttmtCommand(),
     new TranslateCommand(),
+    new OriginCommand(),
   ]
 
   constructor(config: Configuration) {
