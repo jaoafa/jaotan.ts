@@ -7,7 +7,7 @@ import {
   Message,
 } from 'discord.js'
 import { BaseCommand, Permission } from '.'
-import { Translate } from '@/library/translate'
+import { Translate } from '@/features/translate'
 
 export class TranslateCommand implements BaseCommand {
   get name(): string {
