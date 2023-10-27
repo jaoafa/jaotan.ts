@@ -60,6 +60,7 @@ export class MeetingReactionVoteEvent extends BaseDiscordEvent<'messageReactionA
     // 複数のリアクションをつけている場合は、リアクションを削除してメッセージを返す
     if (!(await meetingVoteFeature.isMultipleVote(message, user))) {
       await this.executeMultipleVote(message, reaction, user)
+      return
     }
 
     await meetingVoteFeature.runMessage(message)
