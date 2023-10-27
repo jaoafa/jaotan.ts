@@ -93,5 +93,5 @@ jaotan.ts の開発に興味を持っていただきありがとうございま�
 
 ## その他 - Other
 
-不明な点は jMS Gamers Club の `#development` チャンネルなどで質問してください。  
+不明な点は jao Gamers Club の `#development` チャンネルなどで質問してください。  
 プロジェクトにコントリビュートするすべての人々は、[行動規範](CODE_OF_CONDUCT.md) を読み遵守しなければならないことを忘れないでください。
