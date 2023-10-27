@@ -1,6 +1,6 @@
 # jaotan.ts
 
-[jao Minecraft Server](https://jaoafa.com) の公式 Discord サーバ jMS Gamers Club にて動作する Discord Bot `jaotan` のプロジェクトリポジトリです。
+[jao Minecraft Server](https://jaoafa.com) の公式 Discord サーバ jao Gamers Club にて動作する Discord Bot `jaotan` のプロジェクトリポジトリです。
 
 ## License
 
