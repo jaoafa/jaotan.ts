@@ -5,6 +5,7 @@ export interface ConfigInterface {
     token: string
     guildId?: string
     channel?: {
+      general?: string
       greeting?: string
       meetingVote?: string
       vcSpeechLog?: string
