@@ -148,7 +148,7 @@ export class MeetingVote {
     const isBad = badUsers.has(user.id)
     const isWhite = whiteUsers.has(user.id)
 
-    return !(isGood && isBad) && !(isGood && isWhite) && !(isBad && isWhite)
+    return [isGood, isBad, isWhite].filter(Boolean).length > 1
   }
 
   /**
@@ -426,7 +426,7 @@ export class MeetingVote {
         },
         {
           name: '内容',
-          value: content,
+          value: `\`\`\`\n${content}\n\`\`\``,
           inline: false,
         },
         {
@@ -474,7 +474,7 @@ export class MeetingVote {
     const whiteCount = whiteUsers.size
     const totalCount = this.memberIds.length
 
-    return Math.floor((totalCount - whiteCount) / 2) + 1
+    return Math.ceil((totalCount - whiteCount + 1) / 2)
   }
 
   /**
@@ -559,6 +559,9 @@ class VoteReaction {
     message: Message,
     excludeBot = false
   ): Promise<Collection<string, User>> {
+    if (message.partial) {
+      message = await message.fetch()
+    }
     const reactions = message.reactions.cache.find(
       (reaction) => reaction.emoji.name === this.unicode
     )
