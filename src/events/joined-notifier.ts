@@ -30,6 +30,9 @@ export class JoinedNotifierEvent extends BaseDiscordEvent<'guildMemberAdd'> {
       throw new Error('greetingChannel is not found')
     }
 
+    // general チャンネルがあるサーバ以外は無視
+    if (generalChannel.guildId !== member.guild.id) return
+
     // #general で参加したことを通知する
     const generalMessageContent = `:man_dancing:<@${member.id}>さんが jao Gamers Club に参加しました！`
     await generalChannel.send(generalMessageContent)
