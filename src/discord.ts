@@ -27,6 +27,7 @@ import { PinReactionEvent } from './events/pin-reaction'
 import { PinPrefixEvent } from './events/pin-prefix'
 import { VCSpeechLogMessageUrlEvent } from './events/vc-speech-log-url'
 import { OriginCommand } from './commands/origin'
+import { JoinedNotifierEvent } from './events/joined-notifier'
 
 export class Discord {
   private config: Configuration
@@ -73,6 +74,7 @@ export class Discord {
       new PinReactionEvent(this),
       new PinPrefixEvent(this),
       new VCSpeechLogMessageUrlEvent(this),
+      new JoinedNotifierEvent(this),
     ]
     for (const event of events) {
       event.register()
