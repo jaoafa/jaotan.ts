@@ -77,7 +77,13 @@ export class GreetingEvent extends BaseDiscordEvent<'messageCreate'> {
     this.jaoPostedUsers.delete(message.author.id)
     await message.react('\u2B55')
 
-    await message.member.roles.add(verifiedRoleId)
+    const roles = message.member.roles
+    const hasMainRole =
+      roles.cache.filter((_, key) => this.mainRoleIds.includes(key)).size > 0
+
+    if (!hasMainRole) {
+      await roles.add(verifiedRoleId)
+    }
 
     await message.reply(
       [
@@ -89,4 +95,12 @@ export class GreetingEvent extends BaseDiscordEvent<'messageCreate'> {
       ].join('\n')
     )
   }
+
+  private readonly mainRoleIds = [
+    '1138605444600963163', // Admin
+    '1149581338043756654', // Ekusas
+    '1149581969676578846', // Developer
+    '1149583306816491631', // Regular
+    '1149583365708709940', // Verified
+  ]
 }
