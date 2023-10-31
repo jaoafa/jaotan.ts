@@ -21,7 +21,7 @@
     "start": "tsx ./src/main.ts"
   },
   "devDependencies": {
-    "@book000/node-utils": "1.8.2",
+    "@book000/node-utils": "1.8.3",
     "@types/node": "20.8.7",
     "@typescript-eslint/eslint-plugin": "6.9.1",
     "@typescript-eslint/parser": "6.9.1",
