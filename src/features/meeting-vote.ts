@@ -559,16 +559,13 @@ class VoteReaction {
     message: Message,
     excludeBot = false
   ): Promise<Collection<string, User>> {
-    if (message.partial) {
-      message = await message.fetch()
-    }
-    const reactions = message.reactions.cache.find(
-      (reaction) => reaction.emoji.name === this.unicode
-    )
-    if (!reactions) {
+    message = await message.fetch()
+
+    const reaction = message.reactions.resolve(this.unicode)
+    if (!reaction) {
       return new Collection<string, User>()
     }
-    const users = await reactions.users.fetch()
+    const users = await reaction.users.fetch()
     return excludeBot ? users.filter((user: User) => !user.bot) : users
   }
 
