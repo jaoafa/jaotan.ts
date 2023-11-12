@@ -125,8 +125,6 @@ export class TweetEmbedEvent extends BaseDiscordEvent<'messageCreate'> {
       .replaceAll(/<a href="(.+?)">(.+?)<\/a>/g, '[$2]($1)')
       .replaceAll('<br>', '\n')
 
-    console.log(content)
-
     // ツイート情報を返す
     return {
       authorName: tweetInfo.author_name,
