@@ -29,6 +29,19 @@ import { VCSpeechLogMessageUrlEvent } from './events/vc-speech-log-url'
 import { OriginCommand } from './commands/origin'
 import { JoinedNotifierEvent } from './events/joined-notifier'
 import { TweetEmbedEvent } from './events/tweet-embed'
+import { TojaCommand } from './commands/toja'
+import { ToarCommand } from './commands/toar'
+import { ToarjaCommand } from './commands/toarja'
+import { ContorandjaCommand } from './commands/controrandja'
+import { TochaosCommand } from './commands/tochaos'
+import { ToheCommand } from './commands/tohe'
+import { TohejaCommand } from './commands/toheja'
+import { TojaenCommand } from './commands/tojaen'
+import { TokojaCommand } from './commands/tokoja'
+import { TorandCommand } from './commands/torandja'
+import { ToswjaCommand } from './commands/toswja'
+import { TozhCommand } from './commands/tozh'
+import { TozhjaCommand } from './commands/tozhja'
 
 export class Discord {
   private config: Configuration
@@ -37,13 +50,26 @@ export class Discord {
   public static readonly commands: BaseCommand[] = [
     new AlphaCommand(),
     new BasslineCommand(),
+    new ContorandjaCommand(),
+    new OriginCommand(),
     new PingCommand(),
     new PotatoCommand(),
-    new SuperCommand(),
     new PowaCommand(),
+    new SuperCommand(),
     new TmttmtCommand(),
+    new ToarCommand(),
+    new ToarjaCommand(),
+    new TochaosCommand(),
+    new ToheCommand(),
+    new TohejaCommand(),
+    new TojaCommand(),
+    new TojaenCommand(),
+    new TokojaCommand(),
+    new TorandCommand(),
+    new ToswjaCommand(),
+    new TozhCommand(),
+    new TozhjaCommand(),
     new TranslateCommand(),
-    new OriginCommand(),
   ]
 
   constructor(config: Configuration) {
@@ -123,9 +149,10 @@ export class Discord {
     }
 
     // 対応するコマンドを探す
-    const command = Discord.commands.find((command) =>
-      message.content.startsWith(`/${command.name}`)
-    )
+    // コマンドは長い順にソートしておく
+    const command = Discord.commands
+      .sort((a, b) => b.name.length - a.name.length)
+      .find((command) => message.content.startsWith(`/${command.name}`))
     if (!command) {
       // コマンドが見つからない場合は無視
       return

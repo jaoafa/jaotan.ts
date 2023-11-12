@@ -1,6 +1,13 @@
 import { Configuration } from '@/config'
 import axios from 'axios'
 import DetectLanguage from 'detectlanguage'
+import {
+  BaseMessageOptions,
+  Colors,
+  EmbedBuilder,
+  EmbedField,
+  Message,
+} from 'discord.js'
 
 export interface TranslateResult {
   beforeLanguage: string
@@ -202,12 +209,156 @@ export class Translate {
     return result[0].language
   }
 
+  public async execute(
+    message: Message<boolean>,
+    beforeLanguage: string,
+    afterLanguages: string[],
+    text: string
+  ) {
+    // 翻訳前の言語、翻訳後の言語、翻訳するテキストが正しいか確認
+    if (!this.isValidateLanguage(beforeLanguage)) {
+      await message.reply(
+        this.getEmbedMessage(
+          'ERROR',
+          '翻訳失敗',
+          `\`${beforeLanguage}\` はサポートされていないか、無効な言語です。`
+        )
+      )
+      return
+    }
+    if (afterLanguages.length === 0) {
+      await message.reply(
+        this.getEmbedMessage(
+          'ERROR',
+          '翻訳失敗',
+          '翻訳後の言語が指定されていません。'
+        )
+      )
+      return
+    }
+    for (const language of afterLanguages) {
+      if (!this.isValidateLanguage(language)) {
+        await message.reply(
+          this.getEmbedMessage(
+            'ERROR',
+            '翻訳失敗',
+            `\`${language}\` はサポートされていないか、無効な言語です。`
+          )
+        )
+        return
+      }
+    }
+    if (!text) {
+      await message.reply(
+        this.getEmbedMessage(
+          'ERROR',
+          '翻訳失敗',
+          '翻訳するテキストがありません。'
+        )
+      )
+      return
+    }
+
+    // 翻訳処理前にメッセージを送信
+    const reply = await message.reply(
+      this.getEmbedMessage('PENDING', '翻訳中', '翻訳しています...')
+    )
+
+    // 翻訳処理
+    // afterLanguagesの順番で翻訳。翻訳後の言語が複数ある場合は、翻訳後の言語の数だけ繰り返す
+    const fields: EmbedField[] = []
+    for (let i = 0; i < afterLanguages.length; i++) {
+      const language = afterLanguages[i]
+
+      if (beforeLanguage === language) {
+        await reply.edit(
+          this.getEmbedMessage(
+            'ERROR',
+            '翻訳失敗',
+            `\`${beforeLanguage}\` から \`${language}\` への翻訳はできません。`
+          )
+        )
+        return
+      }
+
+      const result = await this.translate(beforeLanguage, language, text)
+      // 言語の日本語名を取得
+      const beforeLanguageName = this.getLanguageName(beforeLanguage)
+      const afterLanguageName = this.getLanguageName(language)
+
+      // 翻訳結果をフィールドに追加
+      fields.push({
+        name: `\`${beforeLanguageName}\` -> \`${afterLanguageName}\``,
+        value: `\`\`\`\n${result.result}\n\`\`\``,
+        inline: true,
+      })
+
+      // 翻訳結果を送信
+      const type = i === afterLanguages.length - 1 ? 'SUCCESS' : 'PENDING'
+      const title =
+        i === afterLanguages.length - 1
+          ? '翻訳完了'
+          : `翻訳中 (${i + 1}/${afterLanguages.length})`
+
+      await reply.edit(this.getEmbedMessage(type, title, null, fields))
+
+      // 翻訳後の言語を翻訳前の言語に、翻訳結果を翻訳前のテキストに設定
+      beforeLanguage = language
+      text = result.result
+    }
+  }
+
+  /**
+   * 埋め込みメッセージ（Embed）を取得
+   *
+   * @param type メッセージの種類（成功、失敗、処理中）
+   * @param title タイトル
+   * @param description 説明
+   * @param fields フィールド
+   * @returns 埋め込みメッセージ
+   */
+  private getEmbedMessage(
+    type: 'SUCCESS' | 'ERROR' | 'PENDING',
+    title: string,
+    description: string | null = null,
+    fields: EmbedField[] = []
+  ): BaseMessageOptions {
+    const color =
+      type === 'SUCCESS'
+        ? Colors.Green
+        : type === 'ERROR'
+        ? Colors.Red
+        : type === 'PENDING'
+        ? Colors.Yellow
+        : Colors.Grey
+    const emoji =
+      type === 'SUCCESS'
+        ? ':white_check_mark:'
+        : type === 'ERROR'
+        ? ':x:'
+        : type === 'PENDING'
+        ? ':hourglass_flowing_sand:'
+        : ':grey_question:'
+
+    const embed = new EmbedBuilder()
+      .setTitle(`${emoji} ${title}`)
+      .setDescription(description)
+      .setColor(color)
+      .setFields(fields)
+      .setTimestamp(Date.now())
+    return {
+      embeds: [embed],
+    }
+  }
+
   public isValidateLanguage(language: string): boolean {
     return Object.keys(this.languages).includes(language)
   }
 
-  public randomLanguage(): string {
-    const languages = Object.keys(this.languages)
+  public randomLanguage(excluded: string[] = []): string {
+    const languages = Object.keys(this.languages).filter(
+      (language) => !excluded.includes(language)
+    )
     return languages[Math.floor(Math.random() * languages.length)]
   }
 
