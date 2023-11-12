@@ -29,6 +29,7 @@ import { VCSpeechLogMessageUrlEvent } from './events/vc-speech-log-url'
 import { OriginCommand } from './commands/origin'
 import { JoinedNotifierEvent } from './events/joined-notifier'
 import { LeavedNotififerEvent } from './events/leaved-notifier'
+import { TweetEmbedEvent } from './events/tweet-embed'
 
 export class Discord {
   private config: Configuration
@@ -77,6 +78,7 @@ export class Discord {
       new VCSpeechLogMessageUrlEvent(this),
       new JoinedNotifierEvent(this),
       new LeavedNotififerEvent(this),
+      new TweetEmbedEvent(this),
     ]
     for (const event of events) {
       event.register()
