@@ -105,7 +105,7 @@ export class TweetEmbedEvent extends BaseDiscordEvent<'messageCreate'> {
     const response = await fetch(
       `https://publish.twitter.com/oembed?url=${tweetUrl}`
     )
-    const tweetInfo: PublishTwitterComResponse = await response.json()
+    const tweetInfo = (await response.json()) as PublishTwitterComResponse
 
     const $ = load(tweetInfo.html)
     const p = $('p')

@@ -327,18 +327,18 @@ export class Translate {
       type === 'SUCCESS'
         ? Colors.Green
         : type === 'ERROR'
-        ? Colors.Red
-        : type === 'PENDING'
-        ? Colors.Yellow
-        : Colors.Grey
+          ? Colors.Red
+          : type === 'PENDING'
+            ? Colors.Yellow
+            : Colors.Grey
     const emoji =
       type === 'SUCCESS'
         ? ':white_check_mark:'
         : type === 'ERROR'
-        ? ':x:'
-        : type === 'PENDING'
-        ? ':hourglass_flowing_sand:'
-        : ':grey_question:'
+          ? ':x:'
+          : type === 'PENDING'
+            ? ':hourglass_flowing_sand:'
+            : ':grey_question:'
 
     const embed = new EmbedBuilder()
       .setTitle(`${emoji} ${title}`)
