@@ -43,6 +43,7 @@ import { TorandCommand } from './commands/torandja'
 import { ToswjaCommand } from './commands/toswja'
 import { TozhCommand } from './commands/tozh'
 import { TozhjaCommand } from './commands/tozhja'
+import { NewDiscussionMention } from './events/new-discussion-mention'
 
 export class Discord {
   private config: Configuration
@@ -105,6 +106,7 @@ export class Discord {
       new JoinedNotifierEvent(this),
       new LeavedNotififerEvent(this),
       new TweetEmbedEvent(this),
+      new NewDiscussionMention(this),
     ]
     for (const event of events) {
       event.register()

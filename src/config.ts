@@ -9,8 +9,10 @@ export interface ConfigInterface {
       greeting?: string
       meetingVote?: string
       vcSpeechLog?: string
+      discussion?: string
     }
     role?: {
+      admin?: string
       verified?: string
     }
   }
