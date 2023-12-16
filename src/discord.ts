@@ -44,6 +44,9 @@ import { ToswjaCommand } from './commands/toswja'
 import { TozhCommand } from './commands/tozh'
 import { TozhjaCommand } from './commands/tozhja'
 import { NewDiscussionMention } from './events/new-discussion-mention'
+import { BaseDiscordJob } from './jobs'
+import nodeCron from 'node-cron'
+import { EveryDayJob } from './jobs/everyday'
 
 export class Discord {
   private config: Configuration
@@ -117,6 +120,11 @@ export class Discord {
     const tasks: BaseDiscordTask[] = [new MeetingVoteTask(this)]
     for (const task of tasks) {
       task.register()
+    }
+
+    const crons: BaseDiscordJob[] = [new EveryDayJob(this)]
+    for (const job of crons) {
+      job.register(nodeCron)
     }
 
     this.config = config

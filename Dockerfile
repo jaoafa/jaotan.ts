@@ -25,6 +25,7 @@ RUN pnpm install --frozen-lockfile --offline
 
 ENV NODE_ENV production
 ENV CONFIG_PATH /data/config.json
+ENV DATA_DIR /data
 ENV LOG_DIR /data/logs
 
 VOLUME [ "/data" ]
