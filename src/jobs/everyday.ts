@@ -89,7 +89,7 @@ export class EveryDayJob extends BaseDiscordJob {
     const todayKinenbi = await kinenbi.get(date)
     const contents = []
 
-    const isAlreadyAddedDetail = false
+    let isAlreadyAddedDetail = false
 
     if (todayKinenbi.length === 0) {
       contents.push('本日の記念日が存在しないか、取得できませんでした。')
@@ -116,6 +116,7 @@ export class EveryDayJob extends BaseDiscordJob {
       }
 
       contents.push(`${num}. ${result.title} \`\`\`${detail.description}\`\`\``)
+      isAlreadyAddedDetail = true
     }
 
     return contents
