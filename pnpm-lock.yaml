@@ -51,8 +51,8 @@ devDependencies:
     specifier: 6.1.1
     version: 6.1.1(eslint@8.56.0)
   eslint-plugin-unicorn:
-    specifier: 50.0.0
-    version: 50.0.0(eslint@8.56.0)
+    specifier: 50.0.1
+    version: 50.0.1(eslint@8.56.0)
   node-cron:
     specifier: 3.0.3
     version: 3.0.3
@@ -1458,8 +1458,8 @@ packages:
       eslint: 8.56.0
     dev: true
 
-  /eslint-plugin-unicorn@50.0.0(eslint@8.56.0):
-    resolution: {integrity: sha512-S830OrmnYzJFMXf2AsPVZE3BlLedAED0a3QNpB+o97eXvJTAdWqc5e+R8ozm1jh8nMV37HykU/h9HMwjZ7Fzbg==}
+  /eslint-plugin-unicorn@50.0.1(eslint@8.56.0):
+    resolution: {integrity: sha512-KxenCZxqSYW0GWHH18okDlOQcpezcitm5aOSz6EnobyJ6BIByiPDviQRjJIUAjG/tMN11958MxaQ+qCoU6lfDA==}
     engines: {node: '>=16'}
     peerDependencies:
       eslint: '>=8.56.0'
