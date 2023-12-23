@@ -47,6 +47,7 @@ import { NewDiscussionMention } from './events/new-discussion-mention'
 import { BaseDiscordJob } from './jobs'
 import nodeCron from 'node-cron'
 import { EveryDayJob } from './jobs/everyday'
+import { BirthdayCommand } from './commands/birthday'
 
 export class Discord {
   private config: Configuration
@@ -55,6 +56,7 @@ export class Discord {
   public static readonly commands: BaseCommand[] = [
     new AlphaCommand(),
     new BasslineCommand(),
+    new BirthdayCommand(),
     new ContorandjaCommand(),
     new OriginCommand(),
     new PingCommand(),
@@ -101,15 +103,15 @@ export class Discord {
 
     const events: BaseDiscordEvent<any>[] = [
       new GreetingEvent(this),
-      new MeetingNewVoteEvent(this),
-      new MeetingReactionVoteEvent(this),
-      new PinReactionEvent(this),
-      new PinPrefixEvent(this),
-      new VCSpeechLogMessageUrlEvent(this),
       new JoinedNotifierEvent(this),
       new LeavedNotififerEvent(this),
-      new TweetEmbedEvent(this),
+      new MeetingNewVoteEvent(this),
+      new MeetingReactionVoteEvent(this),
       new NewDiscussionMention(this),
+      new PinPrefixEvent(this),
+      new PinReactionEvent(this),
+      new TweetEmbedEvent(this),
+      new VCSpeechLogMessageUrlEvent(this),
     ]
     for (const event of events) {
       event.register()
