@@ -72,7 +72,7 @@ export class EveryDayJob extends BaseDiscordJob {
       `**年間通算 ${yearPassed} 日目**`,
       `**年間残り ${yearLeft} 日 (${yearLeftPercent}%)**`,
       '',
-      ':birthday: __**今日の誕生日 (一般社団法人 日本記念日協会)**__ :birthday:',
+      ':birthday: __**今日の記念日 (一般社団法人 日本記念日協会)**__ :birthday:',
       '記念日名の前にある番号(記念日ナンバー)を使って、記念日を詳しく調べられます。`/origin <記念日ナンバー>`を実行して下さい。(当日のみ)',
       '',
       ...kinenbiContents,
