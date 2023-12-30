@@ -29,7 +29,6 @@ import { VCSpeechLogMessageUrlEvent } from './events/vc-speech-log-url'
 import { OriginCommand } from './commands/origin'
 import { JoinedNotifierEvent } from './events/joined-notifier'
 import { LeavedNotififerEvent } from './events/leaved-notifier'
-import { TweetEmbedEvent } from './events/tweet-embed'
 import { TojaCommand } from './commands/toja'
 import { ToarCommand } from './commands/toar'
 import { ToarjaCommand } from './commands/toarja'
@@ -110,7 +109,6 @@ export class Discord {
       new NewDiscussionMention(this),
       new PinPrefixEvent(this),
       new PinReactionEvent(this),
-      new TweetEmbedEvent(this),
       new VCSpeechLogMessageUrlEvent(this),
     ]
     for (const event of events) {
