@@ -13,7 +13,7 @@ export class BirthdayCommand implements BaseCommand {
   }
 
   async execute(
-    _discord: Discord,
+    discord: Discord,
     message: Message<boolean>,
     args: string[]
   ): Promise<void> {
@@ -24,26 +24,26 @@ export class BirthdayCommand implements BaseCommand {
     // それ以外: ヘルプを表示
 
     if (args.length === 0) {
-      await this.executeGet(_discord, message)
+      await this.executeGet(discord, message)
       return
     }
 
     const subCommand = args[0]
     switch (subCommand) {
       case 'set': {
-        await this.executeSet(_discord, message, args.slice(1))
+        await this.executeSet(discord, message, args.slice(1))
         break
       }
       case 'force': {
-        await this.executeForce(_discord, message, args.slice(1))
+        await this.executeForce(discord, message, args.slice(1))
         break
       }
       case 'delete': {
-        await this.executeDelete(_discord, message)
+        await this.executeDelete(discord, message)
         break
       }
       default: {
-        await this.executeHelp(_discord, message)
+        await this.executeHelp(discord, message)
         break
       }
     }
@@ -75,7 +75,7 @@ export class BirthdayCommand implements BaseCommand {
         .addFields([
           {
             name: '誕生日',
-            value: userBirthday.birthday.toLocaleDateString(),
+            value: Birthday.format(userBirthday.birthday),
             inline: true,
           },
           {
@@ -97,15 +97,31 @@ export class BirthdayCommand implements BaseCommand {
     args: string[]
   ): Promise<void> {
     // birthday set 2000-01-01
-    const inputDate = this.parseInputDate(args.join(' '))
+    const inputDate = Birthday.parseInputDate(args.join(' '))
 
     if (!inputDate) {
       const embed = this.createEmbed(
         'error',
         '誕生日設定に失敗',
-        new EmbedBuilder().setDescription(
-          '誕生日を設定するには `/birthday set 2000-01-01` のように入力してください'
-        )
+        new EmbedBuilder()
+          .setDescription('誕生日を解析できませんでした')
+          .setFooter({
+            text: '誕生日を設定するには `/birthday set 2000-01-01` のように入力してください',
+          })
+      )
+      await message.channel.send({ embeds: [embed] })
+      return
+    }
+
+    if (!Birthday.isValidDate(inputDate)) {
+      const embed = this.createEmbed(
+        'error',
+        '誕生日設定に失敗',
+        new EmbedBuilder()
+          .setDescription('入力された日付が不正です')
+          .setFooter({
+            text: '誕生日を設定するには `/birthday set 2000-01-01` のように入力してください',
+          })
       )
       await message.channel.send({ embeds: [embed] })
       return
@@ -119,7 +135,9 @@ export class BirthdayCommand implements BaseCommand {
       '誕生日設定に成功',
       new EmbedBuilder()
         .setDescription(
-          `誕生日を ${inputDate.toLocaleDateString()} に設定しました。\n強制する年齢を登録していた場合はリセットされていますので、再設定ください。`
+          `誕生日を ${Birthday.format(
+            inputDate
+          )} に設定しました。\n強制する年齢を登録していた場合はリセットされていますので、再設定ください。`
         )
         .setFooter({
           text: '強制する年齢を設定するには /birthday force 20 のように、誕生日を削除するには /birthday delete のように実行してください',
@@ -187,58 +205,26 @@ export class BirthdayCommand implements BaseCommand {
     const embed = this.createEmbed(
       'info',
       '誕生日コマンドヘルプ',
-      new EmbedBuilder()
-        .addFields([
-          {
-            name: '/birthday',
-            value: '誕生日を設定しているか確認します',
-          },
-          {
-            name: '/birthday set 2000-01-01',
-            value: '誕生日を設定します',
-          },
-          {
-            name: '/birthday force 20',
-            value: '強制する年齢を設定します',
-          },
-          {
-            name: '/birthday delete',
-            value: '誕生日を削除します',
-          },
-        ])
-        .setFooter({
-          text: '誕生日を設定するには /birthday set 2000-01-01 のように、強制する年齢を設定するには /birthday force 20 のように、誕生日を削除するには /birthday delete のように実行してください',
-        })
+      new EmbedBuilder().addFields([
+        {
+          name: '/birthday',
+          value: '誕生日を設定しているか確認します',
+        },
+        {
+          name: '/birthday set 2000-01-01',
+          value: '誕生日を設定します。月・日のみで指定することもできます',
+        },
+        {
+          name: '/birthday force 20',
+          value: '強制する年齢を設定します',
+        },
+        {
+          name: '/birthday delete',
+          value: '誕生日を削除します',
+        },
+      ])
     )
     await message.channel.send({ embeds: [embed] })
-  }
-
-  parseInputDate(input: string): Date | null {
-    // 2000-01-01
-    // 2000/01/01
-    // 2000.01.01
-    // 2000年01月01日
-    // 20000101
-
-    const patterns = [
-      /(?<year>\d{4})[./年-](?<month>\d{1,2})[./月-](?<day>\d{1,2})日?/,
-      /(?<year>\d{4})(?<month>\d{2})(?<day>\d{2})/,
-      /(?<year>\d{4}) (?<month>\d{1,2}) (?<day>\d{1,2})/,
-    ]
-
-    for (const pattern of patterns) {
-      const match = input.match(pattern)
-      if (match) {
-        const year = Number.parseInt(match.groups?.year ?? '')
-        const month = Number.parseInt(match.groups?.month ?? '')
-        const day = Number.parseInt(match.groups?.day ?? '')
-        if (year && month && day) {
-          return new Date(year, month - 1, day, 0, 0, 0, 0)
-        }
-      }
-    }
-
-    return null
   }
 
   createEmbed(

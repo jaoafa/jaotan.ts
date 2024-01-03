@@ -16,6 +16,10 @@ plugins:
 rules:
   '@typescript-eslint/no-explicit-any': off
   '@typescript-eslint/ban-ts-comment': off
+  '@typescript-eslint/no-floating-promises':
+    - error
+    - { ignoreIIFE: true }
   'unicorn/prefer-top-level-await': off
   'unicorn/prevent-abbreviations': off
   'unicorn/no-null': off
+  'no-console': error

@@ -26,7 +26,10 @@ export class EveryDayJob extends BaseDiscordJob {
     const birthday = new Birthday()
 
     const today = new Date()
-    const todayBirthdays = birthday.get(today)
+    const todayBirthdays = birthday.get({
+      month: today.getMonth() + 1,
+      day: today.getDate(),
+    })
 
     // 記念日を取得
     const kinenbiContents = await this.getKinenbiContents(today)
@@ -62,7 +65,7 @@ export class EveryDayJob extends BaseDiscordJob {
       '',
       ...todayBirthdays.map((birthday) => {
         const age = Birthday.getAge(birthday)
-        const ageText = age < 23 ? `(${age}歳)` : ''
+        const ageText = !!age && age < 23 ? `(${age}歳)` : ''
         return `- <@${birthday.discordId}>の誕生日 ${ageText}`
       }),
     ]

@@ -123,7 +123,7 @@ export class MeetingVote {
       .setColor(Colors.Yellow)
       .setTimestamp(new Date())
 
-    this.channel.send({
+    await this.channel.send({
       embeds: [embed],
       reply: {
         messageReference: message,
