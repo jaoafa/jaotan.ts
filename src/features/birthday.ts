@@ -15,7 +15,7 @@ export interface IBirthdayDate {
  */
 export type IBirthdayDateWithYear = IBirthdayDate & {
   /** 年 */
-  year: number
+  year: number | null
 }
 
 /**
@@ -207,6 +207,7 @@ export class Birthday {
     // 2000.01.01
     // 2000年01月01日
     // 20000101
+    // 2000 01 01
 
     // 年なし
     // 01-01
@@ -214,17 +215,21 @@ export class Birthday {
     // 01.01
     // 01月01日
     // 0101
+    // 01 01
+
+    if (!input) return null
+    if (typeof input !== 'string') return null
 
     const patternsWithYear = [
-      /(?<year>\d{4})[./年-](?<month>\d{1,2})[./月-](?<day>\d{1,2})日?/,
-      /(?<year>\d{4})(?<month>\d{2})(?<day>\d{2})/,
-      /(?<year>\d{4}) (?<month>\d{1,2}) (?<day>\d{1,2})/,
+      /^(?<year>\d{4})[./年-](?<month>\d{1,2})[./月-](?<day>\d{1,2})日?$/,
+      /^(?<year>\d{4})(?<month>\d{2})(?<day>\d{2})$/,
+      /^(?<year>\d{4}) (?<month>\d{1,2}) (?<day>\d{1,2})$/,
     ]
 
     const patternsWithoutYear = [
-      /(?<month>\d{1,2})[./月-](?<day>\d{1,2})日?/,
-      /(?<month>\d{2})(?<day>\d{2})/,
-      /(?<month>\d{1,2}) (?<day>\d{1,2})/,
+      /^(?<month>\d{1,2})[./月-](?<day>\d{1,2})日?$/,
+      /^(?<month>\d{2})(?<day>\d{2})$/,
+      /^(?<month>\d{1,2}) (?<day>\d{1,2})$/,
     ]
 
     for (const pattern of patternsWithYear) {
@@ -246,7 +251,7 @@ export class Birthday {
         const month = Number.parseInt(match.groups?.month ?? '')
         const day = Number.parseInt(match.groups?.day ?? '')
         if (month && day) {
-          return { month, day, year: 0 }
+          return { month, day, year: null }
         }
       }
     }
@@ -292,13 +297,18 @@ export class Birthday {
       return false
     }
 
-    // 年は0以上であること
-    if (year < 0) {
+    // 年はnullまたは0以上であること
+    if (year !== null && year < 0) {
       return false
     }
 
-    // 2月は閏年を考慮して28日または29日であること
-    if (month === 2) {
+    // 年がnullの場合は月日のみであること
+    if (year === null && month && day) {
+      return true
+    }
+
+    // 年がnullではなく、2月は閏年を考慮して28日または29日であること
+    if (year !== null && month === 2) {
       if (year % 4 === 0) {
         if (day > 29) {
           return false
@@ -308,6 +318,11 @@ export class Birthday {
           return false
         }
       }
+    }
+
+    // 年がnullで、2月は29日以前であること
+    if (year === null && month === 2 && day > 29) {
+      return false
     }
 
     // 4, 6, 9, 11月は30日であること

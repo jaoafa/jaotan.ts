@@ -1,5 +1,6 @@
 import { tmpdir } from 'node:os'
 import { Birthday, IBirthdayDateWithYear } from './birthday'
+import 'jest-expect-message'
 
 describe('Birthday', () => {
   let beforeDataDir: string | undefined
@@ -128,13 +129,10 @@ describe('Birthday', () => {
   })
 
   it('年のない誕生日ユーザーの年齢はnullである', () => {
-    // 年のないテストユーザーを追加
-    birthday.set('testUser', { month: 1, day: 1, year: 0 })
-
     // テストユーザーの年齢を取得
     const age = Birthday.getAge({
       discordId: 'testUser',
-      birthday: { month: 1, day: 1, year: 0 },
+      birthday: { month: 1, day: 1, year: null },
     })
 
     // 年齢がnullであるか確認
@@ -142,19 +140,63 @@ describe('Birthday', () => {
   })
 
   it('年ありの入力日付を正しく解析する', () => {
-    // 年ありの入力日付を解析
-    const parsedDate = Birthday.parseInputDate('2000-01-01')
+    const dates = [
+      '2000-01-01',
+      '2000-1-1',
+      '2000/01/01',
+      '2000/1/1',
+      '2000.01.01',
+      '2000.1.1',
+      '2000年01月01日',
+      '2000年1月1日',
+      '20000101',
+      '2000 01 01',
+    ]
 
-    // 日付が正しく解析されているか確認
-    expect(parsedDate).toEqual({ month: 1, day: 1, year: 2000 })
+    const expectedDate = { month: 1, day: 1, year: 2000 }
+
+    for (const date of dates) {
+      // 年ありの入力日付を解析
+      const parsedDate = Birthday.parseInputDate(date)
+
+      // 日付が正しく解析されているか確認
+      expect(parsedDate, date).toEqual(expectedDate)
+    }
   })
 
   it('年なしの入力日付を正しく解析する', () => {
-    // 年なしの入力日付を解析
-    const parsedDate = Birthday.parseInputDate('01-01')
+    const dates = [
+      '01-01',
+      '1-1',
+      '01/01',
+      '1/1',
+      '01.01',
+      '1.1',
+      '0101',
+      '01 01',
+    ]
 
-    // 日付が正しく解析されているか確認
-    expect(parsedDate).toEqual({ month: 1, day: 1, year: 0 })
+    const expectedDate = { month: 1, day: 1, year: null }
+
+    for (const date of dates) {
+      // 年なしの入力日付を解析
+      const parsedDate = Birthday.parseInputDate(date)
+
+      // 日付が正しく解析されているか確認
+      expect(parsedDate, date).toEqual(expectedDate)
+    }
+  })
+
+  it('不正な入力日付を解析するとnullが返される', () => {
+    const dates = ['1', 'test', '0123456789', 'あ', '0x1']
+
+    for (const date of dates) {
+      // 不正な入力日付を解析
+      const parsedDate = Birthday.parseInputDate(date)
+
+      // nullが返されるか確認
+      expect(parsedDate, date).toBeNull()
+    }
   })
 
   it('年ありの誕生日を正しくフォーマットする', () => {
@@ -167,7 +209,7 @@ describe('Birthday', () => {
 
   it('年なしの誕生日を正しくフォーマットする', () => {
     // 年なしの誕生日をフォーマット
-    const formattedBirthday = Birthday.format({ month: 1, day: 1, year: 0 })
+    const formattedBirthday = Birthday.format({ month: 1, day: 1, year: null })
 
     // 誕生日が正しくフォーマットされているか確認
     expect(formattedBirthday).toBe('01/01')
