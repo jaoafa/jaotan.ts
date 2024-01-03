@@ -115,7 +115,9 @@ export class Discord {
       event.register()
     }
 
-    this.client.login(config.get('discord').token)
+    this.client.login(config.get('discord').token).catch((error) => {
+      Logger.configure('Discord.login').error('❌ login failed', error)
+    })
 
     const tasks: BaseDiscordTask[] = [new MeetingVoteTask(this)]
     for (const task of tasks) {
@@ -138,8 +140,8 @@ export class Discord {
     return this.config
   }
 
-  public close() {
-    this.client.destroy()
+  public async close() {
+    await this.client.destroy()
   }
 
   async onReady() {
