@@ -41,10 +41,11 @@ export class EveryDayJob extends BaseDiscordJob {
     // 年間通算日数
     const yearStart = new Date(today.getFullYear(), 0, 1)
     const yearEnd = new Date(today.getFullYear(), 11, 31)
-    // 今年の経過日数
-    const yearPassed = Math.floor(
-      (today.getTime() - yearStart.getTime()) / (1000 * 60 * 60 * 24)
-    )
+    // 今年の経過日数 (当日を含むため、+1)
+    const yearPassed =
+      Math.floor(
+        (today.getTime() - yearStart.getTime()) / (1000 * 60 * 60 * 24)
+      ) + 1
     // 年日数
     const yearTotal = Math.floor(
       (yearEnd.getTime() - yearStart.getTime()) / (1000 * 60 * 60 * 24)
