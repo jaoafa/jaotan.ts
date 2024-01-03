@@ -1,0 +1,7 @@
+.md-footer__inner {
+  display: none !important;
+}
+
+div.md-sidebar.md-sidebar--primary nav.md-nav--primary > label {
+  display: none !important;
+}

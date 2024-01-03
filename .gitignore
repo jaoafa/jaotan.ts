@@ -132,4 +132,8 @@ dist
 # pnpm
 .pnpm-store
 
+# virtual env
+venv/
+.venv/
+
 data/
