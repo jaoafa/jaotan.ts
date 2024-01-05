@@ -3,7 +3,7 @@ title: birthday
 template: command.html
 ---
 
-`#general` で毎日投稿されるメッセージで掲載される、誕生日関連の設定・確認を行えます。
+[毎日 `#general` に投稿されるメッセージ](../features/everyday.md) で掲載される、誕生日関連の設定・確認を行えます。
 
 ## 使い方
 
