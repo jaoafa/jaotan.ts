@@ -28,8 +28,8 @@ jobs:
 
       - name: Generate list
         run: |
-          chmod +x ./scripts/generate-index-list.sh
-          ./scripts/generate-index-list.sh
+          chmod +x ./scripts/docs/generate-index-list.sh
+          ./scripts/docs/generate-index-list.sh
 
       - name: Build
         run: |

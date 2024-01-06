@@ -18,7 +18,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -32,8 +31,8 @@ jobs:
 
       - name: Generate list
         run: |
-          chmod +x ./scripts/generate-index-list.sh
-          ./scripts/generate-index-list.sh
+          chmod +x ./scripts/docs/generate-index-list.sh
+          ./scripts/docs/generate-index-list.sh
 
       - name: Build
         run: |
