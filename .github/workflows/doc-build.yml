@@ -29,6 +29,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Generate list
+        run: |
+          chmod +x ./scripts/generate-index-list.sh
+          ./scripts/generate-index-list.sh
+
       - name: Build
         run: |
           python -m mkdocs build --verbose --clean --strict
