@@ -15,11 +15,11 @@ export class EveryDayJob extends BaseDiscordJob {
 
   async execute(): Promise<void> {
     const config: Configuration = this.discord.getConfig()
-    const meetingVoteChannelId =
+    const generalChannelId =
       config.get('discord').channel?.general || '1138605147287728150'
 
     const channel =
-      await this.discord.client.channels.fetch(meetingVoteChannelId)
+      await this.discord.client.channels.fetch(generalChannelId)
     if (!channel || channel.type !== ChannelType.GuildText) return
 
     // 誕生日を取得
