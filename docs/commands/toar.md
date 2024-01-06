@@ -16,4 +16,5 @@ Google Translate サービスを利用して、アラビア文字に翻訳しま
 
 ## 関連情報
 
+- 元言語の判定には、[Detect Language API](https://detectlanguage.com/) を使用しています。
 - [ソースコード](https://github.com/jaoafa/jaotan.ts/blob/master/src/commands/toar.ts)

@@ -23,7 +23,8 @@ MARKER='<!-- COMMANDS -->'
 # 引数: 一覧を生成する対象のディレクトリ
 generate_list() {
   local dir=$1
-  local list=$(ls $dir | grep -v $TEMPLATE_FILENAME | sed -e 's/\.md//g')
+  #local list=$(ls $dir | grep -v $TEMPLATE_FILENAME | sed -e 's/\.md//g')
+  local list=$(find $dir -maxdepth 1 -type f -name '*.md' | grep -v $TEMPLATE_FILENAME | grep -v 'index.md' | sed -e 's/\.md//g' | sed -e 's/.*\///g' | sort)
   local result=''
   for item in $list; do
     result="$result- [$item]($item.md)\n"
