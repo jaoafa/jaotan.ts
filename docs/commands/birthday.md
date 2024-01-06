@@ -19,7 +19,7 @@ template: command.html
 
 `/birthday` と実行すると、以下のように現在設定されている誕生日・強制する年齢を表示します。
 
-// TODO 実行結果の画像を添付
+![](assets/image.png)
 
 ### 誕生日を設定
 
@@ -45,7 +45,7 @@ template: command.html
 
 `/birthday help` など、上記以外のサブコマンドで実行すると、以下のようなヘルプが表示されます。
 
-// TODO 実行結果の画像を添付
+![](assets/image-1.png)
 
 ## 必要な権限
 

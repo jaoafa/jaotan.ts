@@ -142,4 +142,4 @@ Google Translate サービスを利用して、翻訳をします。
 ## 関連情報
 
 - 翻訳コマンドは、他に `/to` から始まるコマンドでいくつか実装されています。
-- [ソースコード](https://github.com/jaoafa/jaotan.ts/blob/master/src/commands/bassline.ts)
+- [ソースコード](https://github.com/jaoafa/jaotan.ts/blob/master/src/commands/translate.ts)

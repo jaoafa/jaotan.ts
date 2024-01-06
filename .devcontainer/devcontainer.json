@@ -33,7 +33,10 @@
         }
       },
       "git.branchProtection": ["main", "master"],
-      "editor.formatOnSave": true
+      "editor.formatOnSave": true,
+      "markdown.copyFiles.destination": {
+        "**/*": "assets/"
+      }
     },
     "vscode": {
       "extensions": ["esbenp.prettier-vscode"]

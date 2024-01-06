@@ -2,3 +2,18 @@
 title: toar
 template: command.html
 ---
+
+Google Translate サービスを利用して、アラビア文字に翻訳します。
+
+## 使い方
+
+このコマンドは、`/toar <テキスト>` と実行します。  
+`<テキスト>` には翻訳したい文字列を指定します。
+
+## 必要な権限
+
+誰でも利用できます。
+
+## 関連情報
+
+- [ソースコード](https://github.com/jaoafa/jaotan.ts/blob/master/src/commands/toar.ts)
