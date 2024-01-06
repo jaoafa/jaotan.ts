@@ -16,4 +16,3 @@ template: command.html
 ## 関連情報
 
 - [ソースコード](https://github.com/jaoafa/jaotan.ts/blob/master/src/commands/powa.ts)
- 
