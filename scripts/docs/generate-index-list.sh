@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # /docs/commands/ にあるコマンドの一覧を生成する
 # テンプレートとして /docs/commands/.index-template.md を使用し、<!-- COMMANDS --> に一覧を挿入する
@@ -28,7 +28,7 @@ generate_list() {
   for item in $list; do
     result="$result- [$item]($item.md)\n"
   done
-  echo "$result"
+  echo -e "$result"
 }
 
 # 一覧を生成する
