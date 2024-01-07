@@ -2,7 +2,7 @@ name: Review by jaotan
 
 on:
   issue_comment:
-    types: [ created ]
+    types: [created]
 
 jobs:
   review:
@@ -11,7 +11,6 @@ jobs:
 
     steps:
       - name: Review
-        run:
-          gh pr review ${{ github.event.issue.number }} -R "$GITHUB_REPOSITORY" -a -b "It was reviewed by a request by comment."
+        run: gh pr review ${{ github.event.issue.number }} -R "$GITHUB_REPOSITORY" -a -b "It was reviewed by a request by comment."
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}

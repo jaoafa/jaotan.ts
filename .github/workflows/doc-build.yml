@@ -1,0 +1,48 @@
+name: Doc Build
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.9
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Generate list
+        run: |
+          chmod +x ./scripts/docs/generate-index-list.sh
+          ./scripts/docs/generate-index-list.sh
+
+          # 差分があればエラー
+          git config core.filemode false
+          git diff --exit-code
+
+      - name: Build
+        run: |
+          python -m mkdocs build --verbose --clean --strict
+
+      - name: Upload Pages-artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site

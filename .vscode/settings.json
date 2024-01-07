@@ -6,5 +6,9 @@
     }
   },
   "git.branchProtection": ["main", "master"],
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "markdown.copyFiles.destination": {
+    "**/*": "assets/"
+  },
+  "files.insertFinalNewline": true
 }

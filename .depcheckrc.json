@@ -1,8 +1,3 @@
 {
-  "ignores": [
-    "@types/node",
-    "run-z",
-    "@types/jest",
-    "typescript-json-schema"
-  ]
+  "ignores": ["@types/node", "run-z", "@types/jest", "typescript-json-schema"]
 }
