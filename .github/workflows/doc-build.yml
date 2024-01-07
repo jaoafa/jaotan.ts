@@ -35,6 +35,7 @@ jobs:
           ./scripts/docs/generate-index-list.sh
 
           # 差分があればエラー
+          git config core.filemode false
           git diff --exit-code
 
       - name: Build
