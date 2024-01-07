@@ -34,6 +34,9 @@ jobs:
           chmod +x ./scripts/docs/generate-index-list.sh
           ./scripts/docs/generate-index-list.sh
 
+          # 差分があればエラー
+          git diff --exit-code
+
       - name: Build
         run: |
           python -m mkdocs build --verbose --clean --strict
