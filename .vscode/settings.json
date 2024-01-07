@@ -9,5 +9,6 @@
   "editor.formatOnSave": true,
   "markdown.copyFiles.destination": {
     "**/*": "assets/"
-  }
+  },
+  "files.insertFinalNewline": true
 }
