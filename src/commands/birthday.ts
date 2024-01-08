@@ -165,8 +165,29 @@ export class BirthdayCommand implements BaseCommand {
       await message.channel.send({ embeds: [embed] })
       return
     }
+    if (Number.isNaN(age) || Number.isFinite(age) || age < 0) {
+      const embed = this.createEmbed(
+        'error',
+        '強制する年齢の設定に失敗',
+        new EmbedBuilder().setDescription('年齢は正の整数で指定してください')
+      )
+      await message.channel.send({ embeds: [embed] })
+      return
+    }
 
     const birthday = new Birthday()
+    if (!birthday.getByUser(message.author.id)) {
+      const embed = this.createEmbed(
+        'error',
+        '強制する年齢の設定に失敗',
+        new EmbedBuilder().setDescription(
+          '誕生日が設定されていません。誕生日を設定するには `/birthday set 2000-01-01` のように入力してください'
+        )
+      )
+      await message.channel.send({ embeds: [embed] })
+      return
+    }
+
     birthday.force(message.author.id, age)
 
     const embed = this.createEmbed(

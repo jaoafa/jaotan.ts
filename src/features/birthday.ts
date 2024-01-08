@@ -129,8 +129,13 @@ export class Birthday {
   public force(discordId: string, age: number | undefined) {
     const index = this.birthdays.findIndex((b) => b.discordId === discordId)
     if (index === -1) {
-      throw new Error('Failed to find birthday')
+      throw new Error('誕生日が設定されていない')
     }
+
+    if (Number.isNaN(age) || !Number.isFinite(age) || (age && age < 0)) {
+      throw new TypeError('不正な年齢')
+    }
+
     this.birthdays[index].age = age
 
     this.save()
@@ -164,9 +169,10 @@ export class Birthday {
     }
     const today = new Date()
     const age = today.getFullYear() - birthday.birthday.year
+    const todayMonth = today.getMonth() + 1
     if (
-      today.getMonth() < birthday.birthday.month ||
-      (today.getMonth() === birthday.birthday.month &&
+      todayMonth < birthday.birthday.month ||
+      (todayMonth === birthday.birthday.month &&
         today.getDate() < birthday.birthday.day)
     ) {
       return age - 1

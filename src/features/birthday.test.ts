@@ -81,6 +81,27 @@ describe('Birthday', () => {
     }).toThrow('不正な日付')
   })
 
+  it('指定されたユーザーの誕生日を異常な値で設定して例外が発生する (その他)', () => {
+    // テストユーザーを追加
+    birthday.set('testUser', { month: 1, day: 1, year: 2000 })
+
+    // 異常な値の誕生日を設定
+    const ages = [
+      Number.POSITIVE_INFINITY,
+      Number.NEGATIVE_INFINITY,
+      Number.NaN,
+      -1,
+    ]
+
+    for (const age of ages) {
+      // テストユーザーの強制年齢を異常な値で設定
+      // 「不正な年齢」として例外が発生することを確認
+      expect(() => {
+        birthday.force('testUser', age)
+      }).toThrow(TypeError)
+    }
+  })
+
   it('指定されたユーザーの年齢を強制する', () => {
     // テストユーザーの誕生日を設定
     birthday.set('testUser', { month: 1, day: 1, year: 2000 })
@@ -110,19 +131,75 @@ describe('Birthday', () => {
     expect(testUserBirthday).toBeUndefined()
   })
 
-  it('指定された誕生日ユーザーの年齢を取得する', () => {
-    // 知られた年齢を持つテストユーザーを追加
-    birthday.set('testUser', { month: 1, day: 1, year: 2000 })
+  it('指定された誕生日ユーザーの年齢を取得する (01/01)', () => {
+    const date = { month: 1, day: 1, year: 2000 }
+    // テストユーザーを追加
+    birthday.set('testUser', date)
 
     // テストユーザーの年齢を取得
     const age = Birthday.getAge({
       discordId: 'testUser',
-      birthday: { month: 1, day: 1, year: 2000 },
+      birthday: date,
     })
 
     // 期待される年齢を計算
     const today = new Date()
-    const expectedAge = today.getFullYear() - 2000 - 1
+    const todayMonth = today.getMonth() + 1
+    const isBirthdayPassed =
+      todayMonth > date.month ||
+      (todayMonth === date.month && today.getDate() >= date.day)
+    const expectedAge = today.getFullYear() - 2000 - (isBirthdayPassed ? 0 : 1)
+
+    // 正しい年齢が返されるか確認
+    expect(age).toBe(expectedAge)
+  })
+
+  it('指定された誕生日ユーザーの年齢を取得する (実行日当日)', () => {
+    const today = new Date()
+    const date = {
+      month: today.getMonth() + 1,
+      day: today.getDate(),
+      year: 2000,
+    }
+    // テストユーザーを追加
+    birthday.set('testUser', date)
+
+    // テストユーザーの年齢を取得
+    const age = Birthday.getAge({
+      discordId: 'testUser',
+      birthday: date,
+    })
+
+    // 期待される年齢を計算
+    const todayMonth = today.getMonth() + 1
+    const isBirthdayPassed =
+      todayMonth > date.month ||
+      (todayMonth === date.month && today.getDate() >= date.day)
+
+    const expectedAge = today.getFullYear() - 2000 - (isBirthdayPassed ? 0 : 1)
+
+    // 正しい年齢が返されるか確認
+    expect(age).toBe(expectedAge)
+  })
+
+  it('指定された誕生日ユーザーの年齢を取得する (12/31)', () => {
+    const date = { month: 12, day: 31, year: 2000 }
+    // テストユーザーを追加
+    birthday.set('testUser', date)
+
+    // テストユーザーの年齢を取得
+    const age = Birthday.getAge({
+      discordId: 'testUser',
+      birthday: date,
+    })
+
+    // 期待される年齢を計算
+    const today = new Date()
+    const todayMonth = today.getMonth() + 1
+    const isBirthdayPassed =
+      todayMonth > date.month ||
+      (todayMonth === date.month && today.getDate() >= date.day)
+    const expectedAge = today.getFullYear() - 2000 - (isBirthdayPassed ? 0 : 1)
 
     // 正しい年齢が返されるか確認
     expect(age).toBe(expectedAge)
