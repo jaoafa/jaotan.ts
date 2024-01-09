@@ -4,6 +4,7 @@
 - [bassline](bassline.md): ベースラインパーティー中の臨時ニュースを投稿します。
 - [birthday](birthday.md): [毎日 `#general` に投稿されるメッセージ](../features/everyday.md) で掲載される、誕生日関連の設定・確認を行えます。
 - [controrandja](controrandja.md): [tochaos コマンド](tochaos.md) のエイリアスコマンドです。
+- [getatama](getatama.md): アタマな文章を生成します。
 - [origin](origin.md): [一般社団法人 日本記念日協会](https://www.kinenbi.gr.jp) の記念日について、今日の特定の記念日について詳細を返信します。
 - [ping](ping.md): ピンポンを返します。
 - [potato](potato.md): (╮╯╭)

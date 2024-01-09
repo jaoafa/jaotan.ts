@@ -18,6 +18,7 @@ export interface ConfigInterface {
   }
   translateGasUrl?: string
   detectLanguageApiToken?: string
+  phrasePlusApiUrl?: string
 }
 
 export class Configuration extends ConfigFramework<ConfigInterface> {
@@ -41,6 +42,9 @@ export class Configuration extends ConfigFramework<ConfigInterface> {
       'detectLanguageApiToken must be a string': (config) =>
         config.detectLanguageApiToken === undefined ||
         typeof config.detectLanguageApiToken === 'string',
+      'phrasePlusApiUrl must be a string': (config) =>
+        config.phrasePlusApiUrl === undefined ||
+        typeof config.phrasePlusApiUrl === 'string',
     }
   }
 }
