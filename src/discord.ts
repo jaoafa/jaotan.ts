@@ -47,6 +47,7 @@ import { BaseDiscordJob } from './jobs'
 import nodeCron from 'node-cron'
 import { EveryDayJob } from './jobs/everyday'
 import { BirthdayCommand } from './commands/birthday'
+import { GetAtamaCommand } from './commands/getatama'
 
 export class Discord {
   private config: Configuration
@@ -57,6 +58,7 @@ export class Discord {
     new BasslineCommand(),
     new BirthdayCommand(),
     new ContorandjaCommand(),
+    new GetAtamaCommand(),
     new OriginCommand(),
     new PingCommand(),
     new PotatoCommand(),
