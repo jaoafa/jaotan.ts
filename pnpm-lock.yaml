@@ -6,8 +6,8 @@ settings:
 
 devDependencies:
   '@book000/node-utils':
-    specifier: 1.12.20
-    version: 1.12.20
+    specifier: 1.12.21
+    version: 1.12.21
   '@types/jest':
     specifier: 29.5.11
     version: 29.5.11
@@ -428,8 +428,8 @@ packages:
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
     dev: true
 
-  /@book000/node-utils@1.12.20:
-    resolution: {integrity: sha512-ARJfi8qxbaoYEKJ4KFb39eJRUzgjO2eBgTIOMGZh24sTIAd2PEtBSYZo04jy0oTri9byEkPuxNVRfIJMIfre+A==}
+  /@book000/node-utils@1.12.21:
+    resolution: {integrity: sha512-hX05BPQJEnLjEQY+oQboYrNrTXNyT2OzMJq0KvPcA8L7FPGtFzXERQGx6xmD/1sNaqJcXgfuqYCaEUDWPvjTpg==}
     dependencies:
       axios: 1.6.5
       cycle: 1.0.3
