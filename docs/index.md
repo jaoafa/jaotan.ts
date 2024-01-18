@@ -10,4 +10,4 @@ jaotan.ts は、主に [jao Community](https://jaoafa.com) の公式 Discord サ
 - [コマンド一覧](commands/)
 - [機能一覧](features/)
 
-このドキュメントサイトおよびjaotan.ts のソースコードは、[GitHub](https://github.com/jaoafa/jaotan.ts)で管理しています。
+このドキュメントサイトおよび jaotan.ts のソースコードは、[GitHub のリポジトリ jaoafa/jaotan.ts](https://github.com/jaoafa/jaotan.ts) で管理しています。
