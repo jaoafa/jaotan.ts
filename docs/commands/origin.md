@@ -3,7 +3,7 @@ title: origin
 template: command.html
 ---
 
-[一般社団法人 日本記念日協会](https://www.kinenbi.gr.jp) が認定する記念日のうち、今日の特定の記念日について、詳細を返信します。
+[一般社団法人 日本記念日協会](https://www.kinenbi.gr.jp) が認定する記念日のうち、今日の特定の記念日について詳細を返信します。
 
 ## 使い方
 
