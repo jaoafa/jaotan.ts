@@ -28,7 +28,7 @@
     "generate-schema": "typescript-json-schema --required src/config.ts ConfigInterface -o schema/Configuration.json"
   },
   "devDependencies": {
-    "@book000/node-utils": "1.12.36",
+    "@book000/node-utils": "1.12.37",
     "@types/jest": "29.5.11",
     "@types/node": "20.11.6",
     "@types/node-cron": "3.0.11",
