@@ -38,7 +38,7 @@ export class SetbannerCommand implements BaseCommand {
 
     // テキストの描画位置
     const x = 845
-    const y = 260
+    const y = 265
 
     // 画像を生成
     const fonts = [
@@ -68,7 +68,7 @@ export class SetbannerCommand implements BaseCommand {
 
     // 自動でフォントサイズを調整。フォントサイズ144pxを最大として、縦幅500pxに収まるようにする
     const textLength = text.length
-    const fontSize = Math.min(144, 500 / (textLength * 1.2))
+    const fontSize = Math.min(144, 500 / (textLength * 1.3))
     const fontNames = fonts.map((font) => `'${font.name}'`).join(', ')
     ctx.font = `${fontSize * 1.4}px ${fontNames}`
     ctx.fillStyle = 'black'
@@ -76,7 +76,7 @@ export class SetbannerCommand implements BaseCommand {
     ctx.textBaseline = 'middle'
 
     const characters = [...text]
-    const lineHeight = fontSize * 1.2
+    const lineHeight = fontSize * 1.4
     for (let i = 0; i < characters.length; i++) {
       const char = characters[i]
       const yOffset = (i - (characters.length - 1) / 2) * lineHeight
