@@ -1,4 +1,5 @@
 import axios from 'axios'
+import fs from 'node:fs'
 
 export interface CustomSearchResultItem {
   title: string
@@ -29,6 +30,8 @@ export class GoogleSearch {
   private gcpKey: string
   private cx: string
 
+  private readonly requestLimit = 100
+
   constructor(gcpKey: string, cx: string) {
     this.gcpKey = gcpKey
     this.cx = cx
@@ -43,6 +46,10 @@ export class GoogleSearch {
       throw new Error('Invalid searchType')
     }
 
+    if (this.isRequestLimitExceeded()) {
+      throw new Error('Google Custom Search API request limit exceeded')
+    }
+
     let url = `https://www.googleapis.com/customsearch/v1?key=${this.gcpKey}&cx=${this.cx}&q=${text}`
     if (searchType) {
       url += `&searchType=${searchType}`
@@ -51,6 +58,7 @@ export class GoogleSearch {
     const response = await axios.get(url, {
       validateStatus: () => true,
     })
+    this.incrementRequestCount()
     if (response.status !== 200) {
       throw new Error(`Google Custom Search API failed: ${response.status}`)
     }
@@ -110,5 +118,95 @@ export class GoogleSearch {
     result = result.replaceAll('<b>', '**').replaceAll('</b>', '**')
 
     return result
+  }
+
+  private isRequestLimitExceeded() {
+    const requestCount = this.getRequestCount()
+    return requestCount >= this.requestLimit
+  }
+
+  private incrementRequestCount() {
+    const dataDirectory = process.env.DATA_DIR ?? 'data'
+    const filePath = `${dataDirectory}/google-search-limit.json`
+
+    // リクエスト回数をカウントする
+    // リセットタイミングはPST0時
+    // タイムゾーンを考慮して日付を取得
+    const date = this.getPstDate()
+    let json: { [key: string]: number } = {}
+    if (fs.existsSync(filePath)) {
+      const data = fs.readFileSync(filePath, 'utf8')
+      json = JSON.parse(data)
+    }
+
+    if (!(date in json)) {
+      json[date] = 0
+    }
+    json[date]++
+
+    fs.writeFileSync(filePath, JSON.stringify(json, null, 2))
+  }
+
+  public getRequestCount() {
+    const dataDirectory = process.env.DATA_DIR ?? 'data'
+    const filePath = `${dataDirectory}/google-search-limit.json`
+
+    if (!fs.existsSync(filePath)) {
+      return 0
+    }
+
+    const data = fs.readFileSync(filePath, 'utf8')
+    const json = JSON.parse(data)
+
+    // リセットタイミングはPST0時
+    // タイムゾーンを考慮して日付を取得
+    const date = this.getPstDate()
+    if (!(date in json)) {
+      return 0
+    }
+
+    return json[date]
+  }
+
+  public getRequestLimit() {
+    return this.requestLimit
+  }
+
+  public static getPastRequestCounts(): { [key: string]: number } {
+    const dataDirectory = process.env.DATA_DIR ?? 'data'
+    const filePath = `${dataDirectory}/google-search-limit.json`
+
+    if (!fs.existsSync(filePath)) {
+      return {}
+    }
+
+    const data = fs.readFileSync(filePath, 'utf8')
+    return JSON.parse(data)
+  }
+
+  private getPstDate() {
+    // 現在の日付と時刻を取得する
+    const currentDate = new Date()
+
+    // 現在の日付と時刻をPSTに変換する
+    const pstDate = new Date(
+      currentDate.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' })
+    )
+
+    // PSTの年、月、日を取得する
+    const year = pstDate.getFullYear()
+    const month = pstDate.getMonth() + 1 // 月は0から始まるため、1を加える
+    const day = pstDate.getDate()
+
+    // yyyy-MM-dd形式でPSTの日付を返す
+    return (
+      year +
+      '-' +
+      (month < 10 ? '0' : '') +
+      month +
+      '-' +
+      (day < 10 ? '0' : '') +
+      day
+    )
   }
 }
