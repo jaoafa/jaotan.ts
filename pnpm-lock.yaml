@@ -8,6 +8,9 @@ devDependencies:
   '@book000/node-utils':
     specifier: 1.12.75
     version: 1.12.75
+  '@napi-rs/canvas':
+    specifier: 0.1.50
+    version: 0.1.50
   '@types/jest':
     specifier: 29.5.12
     version: 29.5.12
@@ -1065,6 +1068,102 @@ packages:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
+    dev: true
+
+  /@napi-rs/canvas-android-arm64@0.1.50:
+    resolution: {integrity: sha512-B1FqEd0dMVtdGGAjteqypIKjx+ldLAQYNRgDbZ8IrI+dwLzycdkjH+ISbvR1ilRRk+xnJHPibN9tF+3iW+rAJw==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [android]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@napi-rs/canvas-darwin-arm64@0.1.50:
+    resolution: {integrity: sha512-Kjr/K1ZkgVb3EvG0orpOtTb3eiJJ/azb/btPEedXTJTkmni87+QC2/JMBx+3GG8RApXy7K4f2MFpi3n8VZ1vaA==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [darwin]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@napi-rs/canvas-darwin-x64@0.1.50:
+    resolution: {integrity: sha512-DH7/GWTPmDSvWWwxnlOlE48Hw5NlCDOBxIEOk2Rsw5YpTcpY8rnsWXTcww4ZhZNMFZLPeOKh3mdj8A8VmjisqA==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [darwin]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@napi-rs/canvas-linux-arm-gnueabihf@0.1.50:
+    resolution: {integrity: sha512-kQt6EytreXygKF+lg7id8Hh9S6n8xtzub1xiTSp6i1Wf5dWYQmZI67+GwrAAuEuFeVZCOZSqzwOdjNFylaTX/Q==}
+    engines: {node: '>= 10'}
+    cpu: [arm]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@napi-rs/canvas-linux-arm64-gnu@0.1.50:
+    resolution: {integrity: sha512-nWfz6skJaz50Bu1lvBZohQ5NgrE7BgloSNarCvZyjinKq8aKnUUV4Eu93f4St5c6+ym7JMhqrXq7/+TZXSxUng==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@napi-rs/canvas-linux-arm64-musl@0.1.50:
+    resolution: {integrity: sha512-Wt+oP3h1M9hFLdU03CQdMioCWBZ2Zv6Mu+a+LaD3QZt+cJBpalZxXNoIfYqIpgyfPQBwEFSYoCfCD2bwJKtzSA==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@napi-rs/canvas-linux-x64-gnu@0.1.50:
+    resolution: {integrity: sha512-LzwirZ5vlVILpWW7mtgsTU3kehtXjgkSXuhP2dzzT1PO+8q2jUCqCe4L5AaEzbm+RPWL+BEkV0hD2XiKshw1Eg==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@napi-rs/canvas-linux-x64-musl@0.1.50:
+    resolution: {integrity: sha512-iuESwDgFbaklxUTkwBmlURPC4ySngQYL4AuAU4sGKv9XkIe2H7fyOYPrEpj4F5+beRb4IHyUZ5LHNEkbv4ftdQ==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@napi-rs/canvas-win32-x64-msvc@0.1.50:
+    resolution: {integrity: sha512-ychObhMX9HhaddhUCstaOUhgo+c2T0KJDT+7/QpV9OjVXXnxbJgjkTl+qLYy5KjBNx2IwzIaaqmr20SdsmTPJQ==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [win32]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@napi-rs/canvas@0.1.50:
+    resolution: {integrity: sha512-YgFUR2c/kA5bfHH8X6p+/7+sgZBa4OX6FKU5RjkjqZBCwlQZZ+RswdKZjvPd/UMrq0w0rZPk/RmzLRDSzoVsYg==}
+    engines: {node: '>= 10'}
+    optionalDependencies:
+      '@napi-rs/canvas-android-arm64': 0.1.50
+      '@napi-rs/canvas-darwin-arm64': 0.1.50
+      '@napi-rs/canvas-darwin-x64': 0.1.50
+      '@napi-rs/canvas-linux-arm-gnueabihf': 0.1.50
+      '@napi-rs/canvas-linux-arm64-gnu': 0.1.50
+      '@napi-rs/canvas-linux-arm64-musl': 0.1.50
+      '@napi-rs/canvas-linux-x64-gnu': 0.1.50
+      '@napi-rs/canvas-linux-x64-musl': 0.1.50
+      '@napi-rs/canvas-win32-x64-msvc': 0.1.50
     dev: true
 
   /@nodelib/fs.scandir@2.1.5:
