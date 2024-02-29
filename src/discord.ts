@@ -49,6 +49,8 @@ import { EveryDayJob } from './jobs/everyday'
 import { BirthdayCommand } from './commands/birthday'
 import { GetAtamaCommand } from './commands/getatama'
 import { SetbannerCommand } from './commands/setbanner'
+import { SearchCommand } from './commands/search'
+import { SearchImageCommand } from './commands/searchimg'
 
 export class Discord {
   private config: Configuration
@@ -64,6 +66,8 @@ export class Discord {
     new PingCommand(),
     new PotatoCommand(),
     new PowaCommand(),
+    new SearchCommand(),
+    new SearchImageCommand(),
     new SetbannerCommand(),
     new SuperCommand(),
     new TmttmtCommand(),
