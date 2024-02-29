@@ -51,12 +51,14 @@ import { GetAtamaCommand } from './commands/getatama'
 import { SetbannerCommand } from './commands/setbanner'
 import { SearchCommand } from './commands/search'
 import { SearchImageCommand } from './commands/searchimg'
+import { AkakeseCommand } from './commands/akakese'
 
 export class Discord {
   private config: Configuration
   public readonly client: Client
 
   public static readonly commands: BaseCommand[] = [
+    new AkakeseCommand(),
     new AlphaCommand(),
     new BasslineCommand(),
     new BirthdayCommand(),
