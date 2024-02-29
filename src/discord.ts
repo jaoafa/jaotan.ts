@@ -48,6 +48,7 @@ import nodeCron from 'node-cron'
 import { EveryDayJob } from './jobs/everyday'
 import { BirthdayCommand } from './commands/birthday'
 import { GetAtamaCommand } from './commands/getatama'
+import { SetbannerCommand } from './commands/setbanner'
 
 export class Discord {
   private config: Configuration
@@ -63,6 +64,7 @@ export class Discord {
     new PingCommand(),
     new PotatoCommand(),
     new PowaCommand(),
+    new SetbannerCommand(),
     new SuperCommand(),
     new TmttmtCommand(),
     new ToarCommand(),

@@ -23,10 +23,13 @@ COPY src src
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile --offline
 
+COPY assets /assets
+
 ENV NODE_ENV production
 ENV CONFIG_PATH /data/config.json
 ENV DATA_DIR /data
 ENV LOG_DIR /data/logs
+ENV ASSETS_DIR /assets
 
 VOLUME [ "/data" ]
 
