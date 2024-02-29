@@ -9,6 +9,9 @@ template: command.html
 
 このコマンドは、`/setbanner <テキスト>` と実行します。
 
+フォントサイズは、144px を最大サイズとして、計算式 `500 / (テキストの長さ * 1.3)` で計算されます。  
+フォントは [Noto Serif JP Black](https://fonts.google.com/noto/specimen/Noto+Serif+JP) と [Noto Color Emoji](https://fonts.google.com/noto/specimen/Noto+Color+Emoji) を利用しています。
+
 ## 必要な権限
 
 誰でも利用できます。
