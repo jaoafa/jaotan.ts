@@ -9,6 +9,7 @@
 - [ping](ping.md): ピンポンを返します。
 - [potato](potato.md): (╮╯╭)
 - [powa](powa.md): ポわ～～～～～～～ｗｗｗｗ！！！ｗ！ｗｗ！ｗ！ｗ
+- [setbanner](setbanner.md): 画像テンプレートに引数で指定された文字列を合成し、サーバのバナー画像として設定します。
 - [super](super.md): ｽｩ( ᐛ👐) パァwﾍｸｻｺﾞｫﾝwwﾋﾞｷﾞｨﾝwﾃﾚﾚﾚﾚﾚﾚﾚﾃﾚﾚﾚﾚﾚﾚﾚﾃﾚﾚﾚﾚﾚﾚﾚwwﾃﾚｯﾃﾚｯﾃﾚｯwwʅ(´-౪-)ʃﾃﾞ─ﾝwwｹﾞｪｪﾑｵｰｳﾞｧｰwwwʅ(◜◡‾)ʃ?
 - [tmttmt](tmttmt.md): とまとぉwとまとぉw
 - [toar](toar.md): Google Translate サービスを利用して、アラビア文字に翻訳します。
