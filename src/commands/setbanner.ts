@@ -36,18 +36,26 @@ export class SetbannerCommand implements BaseCommand {
     const assetDirectory = process.env.ASSETS_DIR ?? 'assets'
     const templateImagePath = `${assetDirectory}/setbanner-template.png`
 
-    // フォントファイルのパス
-    const fontPath = `${assetDirectory}/NotoSerifJP-Black.otf`
-
     // テキストの描画位置
-    const x = 855
+    const x = 845
     const y = 260
 
     // 画像を生成
-    const fontName = 'Noto Serif JP Black'
-    const registerResult = GlobalFonts.registerFromPath(fontPath, fontName)
-    if (!registerResult) {
-      throw new Error('フォントの登録に失敗しました')
+    const fonts = [
+      { name: 'Noto Serif JP Black', fontFilename: 'NotoSerifJP-Black.otf' },
+      {
+        name: 'Noto Color Emoji',
+        fontFilename: 'NotoColorEmoji-Regular.ttf',
+      },
+    ]
+    for (const font of fonts) {
+      const registerResult = GlobalFonts.registerFromPath(
+        `${assetDirectory}/${font.fontFilename}`,
+        font.name
+      )
+      if (!registerResult) {
+        throw new Error(`フォントの登録に失敗しました: ${font.name}`)
+      }
     }
 
     const canvas = createCanvas(960, 540)
@@ -61,7 +69,8 @@ export class SetbannerCommand implements BaseCommand {
     // 自動でフォントサイズを調整。フォントサイズ144pxを最大として、縦幅500pxに収まるようにする
     const textLength = text.length
     const fontSize = Math.min(144, 500 / (textLength * 1.2))
-    ctx.font = `${fontSize * 1.4}px '${fontName}'`
+    const fontNames = fonts.map((font) => `'${font.name}'`).join(', ')
+    ctx.font = `${fontSize * 1.4}px ${fontNames}`
     ctx.fillStyle = 'black'
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
