@@ -50,7 +50,7 @@ export class GoogleSearch {
       throw new Error('Google Custom Search API request limit exceeded')
     }
 
-    let url = `https://www.googleapis.com/customsearch/v1?key=${this.gcpKey}&cx=${this.cx}&q=${text}`
+    let url = `https://www.googleapis.com/customsearch/v1/siterestrict?key=${this.gcpKey}&cx=${this.cx}&q=${text}`
     if (searchType) {
       url += `&searchType=${searchType}`
     }
@@ -59,6 +59,7 @@ export class GoogleSearch {
       validateStatus: () => true,
     })
     this.incrementRequestCount()
+    this.saveResponse(response.status, response.data)
     if (response.status !== 200) {
       throw new Error(`Google Custom Search API failed: ${response.status}`)
     }
@@ -88,6 +89,16 @@ export class GoogleSearch {
       totalResult: data.searchInformation.formattedTotalResults,
       items,
     }
+  }
+
+  private saveResponse(statusCode: number, data: any) {
+    const dataDirectory = process.env.DATA_DIR ?? 'data'
+    const saveDirectory = `${dataDirectory}/google-search-response`
+    if (!fs.existsSync(saveDirectory)) {
+      fs.mkdirSync(saveDirectory, { recursive: true })
+    }
+    const filePath = `${saveDirectory}/${Date.now()}-${statusCode}.json`
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2))
   }
 
   private decodeHtml(html: string): string {
