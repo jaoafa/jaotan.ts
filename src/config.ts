@@ -19,6 +19,10 @@ export interface ConfigInterface {
   translateGasUrl?: string
   detectLanguageApiToken?: string
   phrasePlusApiUrl?: string
+  googleSearch: {
+    gcpKey: string
+    cx: string
+  }
 }
 
 export class Configuration extends ConfigFramework<ConfigInterface> {
