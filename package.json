@@ -31,7 +31,7 @@
     "@book000/node-utils": "1.12.76",
     "@napi-rs/canvas": "0.1.50",
     "@types/jest": "29.5.12",
-    "@types/node": "20.11.23",
+    "@types/node": "20.11.24",
     "@types/node-cron": "3.0.11",
     "@typescript-eslint/eslint-plugin": "7.1.0",
     "@typescript-eslint/parser": "7.1.0",

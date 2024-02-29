@@ -50,7 +50,11 @@ export class GoogleSearch {
       throw new Error('Google Custom Search API request limit exceeded')
     }
 
-    let url = `https://www.googleapis.com/customsearch/v1/siterestrict?key=${this.gcpKey}&cx=${this.cx}&q=${text}`
+    if (this.isRequestLimitExceeded()) {
+      throw new Error('Google Custom Search API request limit exceeded')
+    }
+
+    let url = `https://www.googleapis.com/customsearch/v1?key=${this.gcpKey}&cx=${this.cx}&q=${text}`
     if (searchType) {
       url += `&searchType=${searchType}`
     }
