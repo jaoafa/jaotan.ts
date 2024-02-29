@@ -29,6 +29,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Check commands
+        run: |
+          chmod +x ./scripts/docs/check-commands.sh
+          ./scripts/docs/check-commands.sh
+
       - name: Generate list
         run: |
           chmod +x ./scripts/docs/generate-index-list.sh
