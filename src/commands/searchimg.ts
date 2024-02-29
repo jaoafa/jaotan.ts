@@ -70,11 +70,18 @@ export class SearchImageCommand implements BaseCommand {
       })
       .slice(0, 3)
 
+    const requestedCount = googleSearch.getRequestCount()
+    const requestLimit = googleSearch.getRequestLimit()
+    const remainingRequests = requestLimit - requestedCount
+
     const embed = new EmbedBuilder()
       .setTitle(`🔍 「${text}」の画像検索結果`)
       .setDescription(
         `検索時間: ${result.searchTime}, 累計件数: ${result.totalResult}`
       )
+      .setFooter({
+        text: `リクエスト残り回数: ${remainingRequests} / ${requestLimit}`,
+      })
       .setTimestamp(new Date())
       .setColor(Colors.Green)
       .addFields(fields)
