@@ -18,6 +18,7 @@
 - [toar](toar.md): Google Translate サービスを利用して、アラビア文字に翻訳します。
 - [toarja](toarja.md): Google Translate サービスを利用して、アラビア文字に翻訳したうえで、日本語に翻訳します。
 - [tochaos](tochaos.md): Google Translate サービスを利用して、複数回翻訳を行った上で、日本語に翻訳します。
+- [toen](toen.md): Google Translate サービスを利用して、英語に翻訳します。
 - [tohe](tohe.md): Google Translate サービスを利用して、ヘブライ語に翻訳します。
 - [toheja](toheja.md): Google Translate サービスを利用して、ヘブライ語に翻訳したうえで、日本語に翻訳します。
 - [toja](toja.md): Google Translate サービスを利用して、日本語に翻訳します。

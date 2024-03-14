@@ -52,6 +52,7 @@ import { SetbannerCommand } from './commands/setbanner'
 import { SearchCommand } from './commands/search'
 import { SearchImageCommand } from './commands/searchimg'
 import { AkakeseCommand } from './commands/akakese'
+import { ToenCommand } from './commands/toen'
 
 export class Discord {
   private config: Configuration
@@ -76,6 +77,7 @@ export class Discord {
     new ToarCommand(),
     new ToarjaCommand(),
     new TochaosCommand(),
+    new ToenCommand(),
     new ToheCommand(),
     new TohejaCommand(),
     new TojaCommand(),
