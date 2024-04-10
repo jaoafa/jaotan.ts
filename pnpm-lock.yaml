@@ -6,8 +6,8 @@ settings:
 
 devDependencies:
   '@book000/node-utils':
-    specifier: 1.12.121
-    version: 1.12.121
+    specifier: 1.12.122
+    version: 1.12.122
   '@napi-rs/canvas':
     specifier: 0.1.51
     version: 0.1.51
@@ -431,8 +431,8 @@ packages:
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
     dev: true
 
-  /@book000/node-utils@1.12.121:
-    resolution: {integrity: sha512-UnrB8H2d1uti+UEPhEN2qsO5ZIpmr/2MVO2c7gGAoSWdBZ0kVUkkf7wKMr+pbZQz0EAr8Rkr+pihYmL7/tIeZQ==}
+  /@book000/node-utils@1.12.122:
+    resolution: {integrity: sha512-k9w0SpDL4nvu43AeKCpyZ0czG6g3V8hM4txYzmWV3HmRkuTRvB+5YuKSFC+HAFl8fDaqV3Ohk6Ivr7hJFguKjg==}
     dependencies:
       axios: 1.6.8
       cycle: 1.0.3
