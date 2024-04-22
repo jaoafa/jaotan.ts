@@ -28,7 +28,7 @@
     "generate-schema": "typescript-json-schema --required src/config.ts ConfigInterface -o schema/Configuration.json"
   },
   "devDependencies": {
-    "@book000/node-utils": "1.13.5",
+    "@book000/node-utils": "1.13.6",
     "@napi-rs/canvas": "0.1.52",
     "@types/jest": "29.5.12",
     "@types/node": "20.12.7",
