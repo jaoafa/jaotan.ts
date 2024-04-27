@@ -1,3 +1,12 @@
 {
-  "ignores": ["@types/node", "run-z", "@types/jest", "typescript-json-schema"]
+  "ignores": [
+    "@types/node",
+    "run-z",
+    "@types/jest",
+    "typescript-json-schema",
+    "eslint-config-standard",
+    "eslint-plugin-import",
+    "eslint-plugin-n",
+    "eslint-plugin-promise"
+  ]
 }

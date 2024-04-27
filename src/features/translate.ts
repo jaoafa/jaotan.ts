@@ -32,9 +32,7 @@ export class Translate {
   private readonly translateGasUrl: string
   private readonly detectLanguageApiToken: string | null
 
-  private readonly languages: {
-    [key: string]: string
-  } = {
+  private readonly languages: Record<string, string> = {
     af: 'アフリカーンス語',
     sq: 'アルバニア語',
     am: 'アムハラ語',
@@ -155,7 +153,7 @@ export class Translate {
     }
 
     this.translateGasUrl = translateGasUrl
-    this.detectLanguageApiToken = detectLanguageApiToken || null
+    this.detectLanguageApiToken = detectLanguageApiToken ?? null
   }
 
   async translate(
@@ -210,7 +208,7 @@ export class Translate {
   }
 
   public async execute(
-    message: Message<boolean>,
+    message: Message,
     beforeLanguage: string,
     afterLanguages: string[],
     text: string
@@ -328,17 +326,13 @@ export class Translate {
         ? Colors.Green
         : type === 'ERROR'
           ? Colors.Red
-          : type === 'PENDING'
-            ? Colors.Yellow
-            : Colors.Grey
+          : Colors.Yellow
     const emoji =
       type === 'SUCCESS'
         ? ':white_check_mark:'
         : type === 'ERROR'
           ? ':x:'
-          : type === 'PENDING'
-            ? ':hourglass_flowing_sand:'
-            : ':grey_question:'
+          : ':hourglass_flowing_sand:'
 
     const embed = new EmbedBuilder()
       .setTitle(`${emoji} ${title}`)

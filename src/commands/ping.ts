@@ -1,17 +1,12 @@
 import { Discord } from '@/discord'
 import { Message } from 'discord.js'
-import { BaseCommand, Permission } from '.'
+import { BaseCommand } from '.'
 
 export class PingCommand implements BaseCommand {
-  get name(): string {
-    return 'ping'
-  }
+  readonly name = 'ping'
+  readonly permissions = null
 
-  get permissions(): Permission[] | null {
-    return null
-  }
-
-  async execute(_discord: Discord, message: Message<boolean>) {
+  async execute(_discord: Discord, message: Message) {
     await message.reply('pong!')
   }
 }

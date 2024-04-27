@@ -1,17 +1,12 @@
 import { Discord } from '@/discord'
 import { Message } from 'discord.js'
-import { BaseCommand, Permission } from '.'
+import { BaseCommand } from '.'
 
 export class SuperCommand implements BaseCommand {
-  get name(): string {
-    return 'super'
-  }
+  readonly name = 'super'
+  readonly permissions = null
 
-  get permissions(): Permission[] | null {
-    return null
-  }
-
-  async execute(_discord: Discord, message: Message<boolean>): Promise<void> {
+  async execute(_discord: Discord, message: Message): Promise<void> {
     await message.channel.send(
       'ｽｩ( ᐛ👐) パァwﾍｸｻｺﾞｫﾝwwﾋﾞｷﾞｨﾝwﾃﾚﾚﾚﾚﾚﾚﾚﾃﾚﾚﾚﾚﾚﾚﾚﾃﾚﾚﾚﾚﾚﾚﾚwwﾃﾚｯﾃﾚｯﾃﾚｯwwʅ(´-౪-)ʃﾃﾞ─ﾝwwｹﾞｪｪﾑｵｰｳﾞｧｰwwwʅ(◜◡‾)ʃ?'
     )

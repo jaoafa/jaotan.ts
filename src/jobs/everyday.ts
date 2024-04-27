@@ -8,15 +8,12 @@ import { Kinenbi } from '@/features/kinenbi'
  * 毎日0時に#generalへメッセージを送信する
  */
 export class EveryDayJob extends BaseDiscordJob {
-  get schedule(): string {
-    // 毎日0時
-    return '0 0 * * *'
-  }
+  readonly schedule = '0 0 * * *'
 
   async execute(): Promise<void> {
     const config: Configuration = this.discord.getConfig()
     const generalChannelId =
-      config.get('discord').channel?.general || '1138605147287728150'
+      config.get('discord').channel?.general ?? '1138605147287728150'
 
     const channel = await this.discord.client.channels.fetch(generalChannelId)
     if (!channel || channel.type !== ChannelType.GuildText) return

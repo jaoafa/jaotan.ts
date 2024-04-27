@@ -7,14 +7,12 @@ import { MeetingVote } from '../features/meeting-vote'
  * #meeting_vote チャンネルでの新規投票を処理するイベント
  */
 export class MeetingNewVoteEvent extends BaseDiscordEvent<'messageCreate'> {
-  get eventName(): 'messageCreate' {
-    return 'messageCreate'
-  }
+  readonly eventName = 'messageCreate'
 
-  async execute(message: Message<boolean>): Promise<void> {
+  async execute(message: Message): Promise<void> {
     const config: Configuration = this.discord.getConfig()
     const meetingVoteChannelId =
-      config.get('discord').channel?.meetingVote || '1149598703846440960'
+      config.get('discord').channel?.meetingVote ?? '1149598703846440960'
 
     // #meeting_vote チャンネル以外は無視
     if (message.channel.id !== meetingVoteChannelId) return

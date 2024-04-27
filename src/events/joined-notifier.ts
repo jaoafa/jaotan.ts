@@ -8,16 +8,14 @@ import { Configuration } from '@/config'
  * - #greeting で挨拶するよう促す
  */
 export class JoinedNotifierEvent extends BaseDiscordEvent<'guildMemberAdd'> {
-  get eventName(): 'guildMemberAdd' {
-    return 'guildMemberAdd'
-  }
+  readonly eventName = 'guildMemberAdd'
 
   async execute(member: GuildMember): Promise<void> {
     const config: Configuration = this.discord.getConfig()
     const generalChannelId =
-      config.get('discord').channel?.general || '1138605147287728150'
+      config.get('discord').channel?.general ?? '1138605147287728150'
     const greetingChannelId =
-      config.get('discord').channel?.greeting || '1149587870273773569'
+      config.get('discord').channel?.greeting ?? '1149587870273773569'
 
     const generalChannel =
       await this.discord.client.channels.fetch(generalChannelId)

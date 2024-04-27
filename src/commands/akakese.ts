@@ -1,20 +1,15 @@
 import { Discord } from '@/discord'
 import { Message, MessageFlags, User } from 'discord.js'
-import { BaseCommand, Permission } from '.'
+import { BaseCommand } from '.'
 import fs from 'node:fs'
 
 export class AkakeseCommand implements BaseCommand {
-  get name(): string {
-    return 'akakese'
-  }
-
-  get permissions(): Permission[] | null {
-    return null
-  }
+  readonly name = 'akakese'
+  readonly permissions = null
 
   async execute(
     _discord: Discord,
-    message: Message<boolean>,
+    message: Message,
     args: string[]
   ): Promise<void> {
     // GIFファイルのパス

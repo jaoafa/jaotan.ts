@@ -1,17 +1,12 @@
 import { Discord } from '@/discord'
 import { Message } from 'discord.js'
-import { BaseCommand, Permission } from '.'
+import { BaseCommand } from '.'
 
 export class PowaCommand implements BaseCommand {
-  get name(): string {
-    return 'powa'
-  }
+  readonly name = 'powa'
+  readonly permissions = null
 
-  get permissions(): Permission[] | null {
-    return null
-  }
-
-  async execute(_discord: Discord, message: Message<boolean>): Promise<void> {
+  async execute(_discord: Discord, message: Message): Promise<void> {
     await message.channel.send(
       'ポわ～～～～～～～ｗｗｗｗ！！！ｗ！ｗｗ！ｗ！ｗ'
     )

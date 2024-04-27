@@ -127,13 +127,15 @@ export class Discord {
       event.register()
     }
 
-    this.client.login(config.get('discord').token).catch((error) => {
-      Logger.configure('Discord.login').error('❌ login failed', error)
+    this.client.login(config.get('discord').token).catch((error: unknown) => {
+      Logger.configure('Discord.login').error('❌ login failed', error as Error)
     })
 
     const tasks: BaseDiscordTask[] = [new MeetingVoteTask(this)]
     for (const task of tasks) {
-      task.register()
+      task.register().catch((error: unknown) => {
+        Logger.configure('Discord.task').error('❌ task failed', error as Error)
+      })
     }
 
     const crons: BaseDiscordJob[] = [new EveryDayJob(this)]
@@ -156,7 +158,7 @@ export class Discord {
     await this.client.destroy()
   }
 
-  async onReady() {
+  onReady() {
     const logger = Logger.configure('Discord.onReady')
     logger.info(`👌 ready: ${this.client.user?.tag}`)
   }
@@ -225,7 +227,7 @@ export class Discord {
     } catch (error) {
       // エラー処理
       logger.error('❌ Error', error as Error)
-      const stacktrace = (error as Error).stack?.toString() || ''
+      const stacktrace = (error as Error).stack?.toString() ?? ''
       const files = this.getStackTraceTypeScriptFiles(stacktrace)
       await message.reply({
         embeds: [

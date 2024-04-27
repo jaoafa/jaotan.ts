@@ -1,20 +1,21 @@
 import { Discord } from '@/discord'
 import { Message } from 'discord.js'
-import { BaseCommand, Permission } from '.'
+import { BaseCommand } from '.'
 import axios from 'axios'
 
-export class GetAtamaCommand implements BaseCommand {
-  get name(): string {
-    return 'getatama'
-  }
+interface PhrasePlusResponse {
+  results: {
+    full: string
+  }[]
+}
 
-  get permissions(): Permission[] | null {
-    return null
-  }
+export class GetAtamaCommand implements BaseCommand {
+  readonly name = 'getatama'
+  readonly permissions = null
 
   async execute(
     discord: Discord,
-    message: Message<boolean>,
+    message: Message,
     args: string[]
   ): Promise<void> {
     const config = discord.getConfig()
@@ -43,7 +44,7 @@ export class GetAtamaCommand implements BaseCommand {
       return
     }
 
-    const response = await axios.get(apiUrl, {
+    const response = await axios.get<PhrasePlusResponse>(apiUrl, {
       params: {
         count,
       },

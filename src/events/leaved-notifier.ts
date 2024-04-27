@@ -7,14 +7,12 @@ import { Configuration } from '@/config'
  * - #general で退出したことを通知する
  */
 export class LeavedNotififerEvent extends BaseDiscordEvent<'guildMemberRemove'> {
-  get eventName(): 'guildMemberRemove' {
-    return 'guildMemberRemove'
-  }
+  readonly eventName = 'guildMemberRemove'
 
   async execute(member: GuildMember): Promise<void> {
     const config: Configuration = this.discord.getConfig()
     const generalChannelId =
-      config.get('discord').channel?.general || '1138605147287728150'
+      config.get('discord').channel?.general ?? '1138605147287728150'
 
     const generalChannel =
       await this.discord.client.channels.fetch(generalChannelId)

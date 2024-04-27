@@ -1,20 +1,15 @@
 import { Discord } from '@/discord'
 import { Colors, EmbedBuilder, Message } from 'discord.js'
-import { BaseCommand, Permission } from '.'
+import { BaseCommand } from '.'
 import { GoogleSearch } from '@/features/google-search'
 
 export class SearchImageCommand implements BaseCommand {
-  get name(): string {
-    return 'searchimg'
-  }
-
-  get permissions(): Permission[] | null {
-    return null
-  }
+  readonly name = 'searchimg'
+  readonly permissions = null
 
   async execute(
     discord: Discord,
-    message: Message<boolean>,
+    message: Message,
     args: string[]
   ): Promise<void> {
     // 引数がない場合はエラーを返す
@@ -34,11 +29,7 @@ export class SearchImageCommand implements BaseCommand {
 
     // APIキーの取得
     const googleSearchConfig = discord.getConfig().get('googleSearch')
-    if (
-      !googleSearchConfig ||
-      !googleSearchConfig.gcpKey ||
-      !googleSearchConfig.cx
-    ) {
+    if (!googleSearchConfig.gcpKey || !googleSearchConfig.cx) {
       await message.reply({
         embeds: [
           new EmbedBuilder()
