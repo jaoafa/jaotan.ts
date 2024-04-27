@@ -44,7 +44,7 @@ export class Kinenbi {
       }
     )
     if (response.status !== 200) {
-      throw new Error('Failed to get today: ' + response.status)
+      throw new Error('Failed to get today: ' + response.status.toString())
     }
 
     const html = response.data
@@ -55,6 +55,9 @@ export class Kinenbi {
     for (const element of elements) {
       const title = $(element).text()
       const href = $(element).attr('href')
+      if (!href) {
+        continue
+      }
 
       const kinenbiUrlObject = new URL(this.baseUrl + href)
       const filename = kinenbiUrlObject.pathname.split('/').pop()

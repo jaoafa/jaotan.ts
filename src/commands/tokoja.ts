@@ -1,20 +1,15 @@
 import { Discord } from '@/discord'
 import { Message } from 'discord.js'
-import { BaseCommand, Permission } from '.'
+import { BaseCommand } from '.'
 import { Translate } from '@/features/translate'
 
 export class TokojaCommand implements BaseCommand {
-  get name(): string {
-    return 'tokoja'
-  }
-
-  get permissions(): Permission[] | null {
-    return null
-  }
+  readonly name = 'tokoja'
+  readonly permissions = null
 
   async execute(
     discord: Discord,
-    message: Message<boolean>,
+    message: Message,
     args: string[]
   ): Promise<void> {
     const text = args.join(' ')

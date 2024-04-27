@@ -12,9 +12,7 @@ import { BaseDiscordEvent } from '.'
  * ピン絵文字のリアクションをメッセージにつけられた場合、そのメッセージをピン止めする
  */
 export class PinReactionEvent extends BaseDiscordEvent<'messageReactionAdd'> {
-  get eventName(): 'messageReactionAdd' {
-    return 'messageReactionAdd'
-  }
+  readonly eventName = 'messageReactionAdd'
 
   async execute(
     reaction: MessageReaction | PartialMessageReaction,
@@ -41,8 +39,7 @@ export class PinReactionEvent extends BaseDiscordEvent<'messageReactionAdd'> {
       return
     // リアクションしたユーザにメッセージの書き込み権限がない場合は無視
     const permissions = message.channel.permissionsFor(user)
-    if (!permissions || !permissions.has(PermissionFlagsBits.SendMessages))
-      return
+    if (!permissions?.has(PermissionFlagsBits.SendMessages)) return
 
     // すでにピン止めされている場合は無視
     if (message.pinned) return

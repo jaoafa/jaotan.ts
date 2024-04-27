@@ -26,9 +26,7 @@ export interface ConfigInterface {
 }
 
 export class Configuration extends ConfigFramework<ConfigInterface> {
-  protected validates(): {
-    [key: string]: (config: ConfigInterface) => boolean
-  } {
+  protected validates(): Record<string, (config: ConfigInterface) => boolean> {
     return {
       'discord is required': (config) => !!config.discord,
       'discord.token is required': (config) => !!config.discord.token,

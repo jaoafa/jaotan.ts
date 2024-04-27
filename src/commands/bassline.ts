@@ -1,17 +1,12 @@
 import { Discord } from '@/discord'
 import { Message } from 'discord.js'
-import { BaseCommand, Permission } from '.'
+import { BaseCommand } from '.'
 
 export class BasslineCommand implements BaseCommand {
-  get name(): string {
-    return 'bassline'
-  }
+  readonly name = 'bassline'
+  readonly permissions = null
 
-  get permissions(): Permission[] | null {
-    return null
-  }
-
-  getBasslineText(text: string = '221498004505362433'): string {
+  getBasslineText(text = '221498004505362433'): string {
     const suspectName = /^\d+$/.test(text) ? `<@${text}>` : text
     return [
       'ベースラインパーティーの途中ですが、ここで臨時ニュースをお伝えします。今日昼頃、わりとキモく女性にナンパをしたうえ、路上で爆睡をしたとして、',
@@ -22,7 +17,7 @@ export class BasslineCommand implements BaseCommand {
 
   async execute(
     _discord: Discord,
-    message: Message<boolean>,
+    message: Message,
     args: string[]
   ): Promise<void> {
     await message.channel.send(

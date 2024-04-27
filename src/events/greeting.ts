@@ -18,18 +18,16 @@ import { Configuration } from '@/config'
  *  - メッセージを削除
  */
 export class GreetingEvent extends BaseDiscordEvent<'messageCreate'> {
-  private jaoPostedUsers: Set<string> = new Set()
+  private jaoPostedUsers = new Set<string>()
 
-  get eventName(): 'messageCreate' {
-    return 'messageCreate'
-  }
+  readonly eventName = 'messageCreate'
 
-  async execute(message: Message<boolean>): Promise<void> {
+  async execute(message: Message): Promise<void> {
     const config: Configuration = this.discord.getConfig()
     const greetingChannelId =
-      config.get('discord').channel?.greeting || '1149587870273773569'
+      config.get('discord').channel?.greeting ?? '1149587870273773569'
     const verifiedRoleId =
-      config.get('discord').role?.verified || '1149583365708709940'
+      config.get('discord').role?.verified ?? '1149583365708709940'
 
     // #greeting チャンネル以外は無視
     if (message.channel.id !== greetingChannelId) return

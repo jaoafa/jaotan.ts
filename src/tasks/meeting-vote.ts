@@ -15,7 +15,7 @@ export class MeetingVoteTask extends BaseDiscordTask {
   async execute(): Promise<void> {
     const config: Configuration = this.discord.getConfig()
     const meetingVoteChannelId =
-      config.get('discord').channel?.meetingVote || '1149598703846440960'
+      config.get('discord').channel?.meetingVote ?? '1149598703846440960'
 
     const channel =
       await this.discord.client.channels.fetch(meetingVoteChannelId)

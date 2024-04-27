@@ -1,20 +1,15 @@
 import { Discord } from '@/discord'
 import { Message } from 'discord.js'
-import { BaseCommand, Permission } from '.'
+import { BaseCommand } from '.'
 import { Translate } from '@/features/translate'
 
 export class TranslateCommand implements BaseCommand {
-  get name(): string {
-    return 'translate'
-  }
-
-  get permissions(): Permission[] | null {
-    return null
-  }
+  readonly name = 'translate'
+  readonly permissions = null
 
   async execute(
     discord: Discord,
-    message: Message<boolean>,
+    message: Message,
     args: string[]
   ): Promise<void> {
     // 引数は最低3つ必要

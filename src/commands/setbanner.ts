@@ -1,20 +1,15 @@
 import { Discord } from '@/discord'
 import { Colors, EmbedBuilder, Message } from 'discord.js'
-import { BaseCommand, Permission } from '.'
+import { BaseCommand } from '.'
 import { createCanvas, loadImage, GlobalFonts } from '@napi-rs/canvas'
 
 export class SetbannerCommand implements BaseCommand {
-  get name(): string {
-    return 'setbanner'
-  }
-
-  get permissions(): Permission[] | null {
-    return null
-  }
+  readonly name = 'setbanner'
+  readonly permissions = null
 
   async execute(
     _discord: Discord,
-    message: Message<boolean>,
+    message: Message,
     args: string[]
   ): Promise<void> {
     if (!message.guild) {

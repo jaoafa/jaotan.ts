@@ -5,9 +5,7 @@ import { BaseDiscordEvent } from '.'
  * discussionフォーラムチャンネルでスレッドが新規作成された場合、Adminにメンションする
  */
 export class NewDiscussionMention extends BaseDiscordEvent<'threadCreate'> {
-  get eventName(): 'threadCreate' {
-    return 'threadCreate'
-  }
+  readonly eventName = 'threadCreate'
 
   async execute(
     thread: AnyThreadChannel,
@@ -15,7 +13,7 @@ export class NewDiscussionMention extends BaseDiscordEvent<'threadCreate'> {
   ): Promise<void> {
     const config = this.discord.getConfig()
     const discussionChannelId =
-      config.get('discord').channel?.discussion || '1149596420207284234'
+      config.get('discord').channel?.discussion ?? '1149596420207284234'
 
     // discussionフォーラムチャンネル以外は無視
     if (thread.parentId !== discussionChannelId) return
@@ -27,7 +25,7 @@ export class NewDiscussionMention extends BaseDiscordEvent<'threadCreate'> {
     if (!newlyCreated) return
 
     const adminRoleId =
-      config.get('discord').role?.admin || '1138605444600963163'
+      config.get('discord').role?.admin ?? '1138605444600963163'
 
     // メッセージを送信する
     await thread.send({

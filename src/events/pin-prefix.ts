@@ -5,11 +5,9 @@ import { BaseDiscordEvent } from '.'
  * ピン絵文字がメッセージ本文の先頭につけられた場合、そのメッセージをピン止めする
  */
 export class PinPrefixEvent extends BaseDiscordEvent<'messageCreate'> {
-  get eventName(): 'messageCreate' {
-    return 'messageCreate'
-  }
+  readonly eventName = 'messageCreate'
 
-  async execute(message: Message<boolean>): Promise<void> {
+  async execute(message: Message): Promise<void> {
     // サーバ以外は無視 & メンバーが取得できない場合は無視
     if (!message.guild || !message.member) return
     // Botは無視

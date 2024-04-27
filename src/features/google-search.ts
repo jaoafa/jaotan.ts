@@ -1,6 +1,23 @@
 import axios from 'axios'
 import fs from 'node:fs'
 
+interface GoogleCustomSearchResponse {
+  searchInformation?: {
+    formattedSearchTime: string
+    formattedTotalResults: string
+  }
+  items?: {
+    title: string
+    htmlTitle: string
+    link: string
+    htmlLink: string
+    htmlSnippet: string
+    image?: {
+      contextLink: string
+    }
+  }[]
+}
+
 export interface CustomSearchResultItem {
   title: string
   htmlTitle: string
@@ -59,7 +76,7 @@ export class GoogleSearch {
       url += `&searchType=${searchType}`
     }
 
-    const response = await axios.get(url, {
+    const response = await axios.get<GoogleCustomSearchResponse>(url, {
       validateStatus: () => true,
     })
     this.incrementRequestCount()
@@ -75,7 +92,7 @@ export class GoogleSearch {
       throw new Error('Invalid response')
     }
 
-    const items = data.items.map((item: any) => {
+    const items = data.items.map((item) => {
       return {
         title: item.title,
         htmlTitle: item.htmlTitle,
@@ -148,7 +165,7 @@ export class GoogleSearch {
     // リセットタイミングはPST0時
     // タイムゾーンを考慮して日付を取得
     const date = this.getPstDate()
-    let json: { [key: string]: number } = {}
+    let json: Record<string, number> = {}
     if (fs.existsSync(filePath)) {
       const data = fs.readFileSync(filePath, 'utf8')
       json = JSON.parse(data)
@@ -171,7 +188,7 @@ export class GoogleSearch {
     }
 
     const data = fs.readFileSync(filePath, 'utf8')
-    const json = JSON.parse(data)
+    const json: Record<string, number> = JSON.parse(data)
 
     // リセットタイミングはPST0時
     // タイムゾーンを考慮して日付を取得
@@ -187,7 +204,7 @@ export class GoogleSearch {
     return this.requestLimit
   }
 
-  public static getPastRequestCounts(): { [key: string]: number } {
+  public static getPastRequestCounts(): Record<string, number> {
     const dataDirectory = process.env.DATA_DIR ?? 'data'
     const filePath = `${dataDirectory}/google-search-limit.json`
 
@@ -196,7 +213,7 @@ export class GoogleSearch {
     }
 
     const data = fs.readFileSync(filePath, 'utf8')
-    return JSON.parse(data)
+    return JSON.parse(data) as Record<string, number>
   }
 
   private getPstDate() {
@@ -215,13 +232,13 @@ export class GoogleSearch {
 
     // yyyy-MM-dd形式でPSTの日付を返す
     return (
-      year +
+      year.toString() +
       '-' +
       (month < 10 ? '0' : '') +
-      month +
+      month.toString() +
       '-' +
       (day < 10 ? '0' : '') +
-      day
+      day.toString()
     )
   }
 }

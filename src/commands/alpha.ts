@@ -1,17 +1,12 @@
 import { Discord } from '@/discord'
 import { Message } from 'discord.js'
-import { BaseCommand, Permission } from '.'
+import { BaseCommand } from '.'
 
 export class AlphaCommand implements BaseCommand {
-  get name(): string {
-    return 'alpha'
-  }
+  readonly name = 'alpha'
+  readonly permissions = null
 
-  get permissions(): Permission[] | null {
-    return null
-  }
-
-  async execute(_discord: Discord, message: Message<boolean>): Promise<void> {
+  async execute(_discord: Discord, message: Message): Promise<void> {
     await message.channel.send(
       'オ、オオwwwwwwwwオレアルファwwwwwwww最近めっちょふぁぼられてんねんオレwwwwwwwwエゴサとかかけるとめっちょ人気やねんwwwwァァァァァァァwwwクソアルファを見下しながら食べるエビフィレオは一段とウメェなァァァァwwwwwwww'
     )

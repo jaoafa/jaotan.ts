@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unified-signatures */
 // @napi-rs/canvas references a lot of dom types so I have copied them here to prevent
 // incorrect dom global pollution. This is not ideal but better than having to rely
 
