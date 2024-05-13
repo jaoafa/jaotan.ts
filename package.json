@@ -49,7 +49,7 @@
     "prettier": "3.2.5",
     "run-z": "2.0.0",
     "ts-jest": "29.1.2",
-    "tsx": "4.10.1",
+    "tsx": "4.10.2",
     "typescript": "5.4.5",
     "typescript-json-schema": "0.63.0"
   },
