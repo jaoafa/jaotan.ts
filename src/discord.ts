@@ -110,7 +110,14 @@ export class Discord {
       ],
     })
     this.client.on('ready', this.onReady.bind(this))
-    this.client.on('messageCreate', this.onMessageCreate.bind(this))
+    this.client.on('messageCreate', (message) => {
+      this.onMessageCreate(message).catch((error: unknown) => {
+        Logger.configure('Discord.onMessageCreate').error(
+          '❌ Error',
+          error as Error
+        )
+      })
+    })
 
     const events: BaseDiscordEvent<any>[] = [
       new GreetingEvent(this),
