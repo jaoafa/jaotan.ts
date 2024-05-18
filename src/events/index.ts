@@ -1,4 +1,5 @@
 import { Discord } from '@/discord'
+import { Logger } from '@book000/node-utils'
 import { ClientEvents } from 'discord.js'
 
 export abstract class BaseDiscordEvent<T extends keyof ClientEvents> {
@@ -11,7 +12,12 @@ export abstract class BaseDiscordEvent<T extends keyof ClientEvents> {
   abstract get eventName(): T
 
   register(): void {
-    this.discord.client.on(this.eventName, this.execute.bind(this))
+    this.discord.client.on(this.eventName, (...eventArguments) => {
+      this.execute(...eventArguments).catch((error: unknown) => {
+        const logger = Logger.configure('BaseDiscordEvent')
+        logger.error('❌ Error', error as Error)
+      })
+    })
   }
 
   abstract execute(...eventArguments: ClientEvents[T]): Promise<void>
