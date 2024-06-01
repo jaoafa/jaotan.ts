@@ -58,7 +58,7 @@ export class EveryDayJob extends BaseDiscordJob {
 
     const otherCongratulation = [
       ':congratulations: __**その他の今日の記念日**__ :congratulations:',
-      '',
+      '(`/birthday set <日付>` と実行すると、誕生日を設定できます。詳しくは [こちら](https://jaoafa.github.io/jaotan.ts/commands/birthday/))',
       ...todayBirthdays.map((birthday) => {
         const age = Birthday.getAge(birthday)
         const ageText = !!age && age < 23 ? `(${age}歳)` : ''
