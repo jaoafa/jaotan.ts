@@ -53,6 +53,7 @@ import { SearchCommand } from './commands/search'
 import { SearchImageCommand } from './commands/searchimg'
 import { AkakeseCommand } from './commands/akakese'
 import { ToenCommand } from './commands/toen'
+import { UnmuteCommand } from './commands/unmute'
 
 export class Discord {
   private config: Configuration
@@ -88,6 +89,7 @@ export class Discord {
     new TozhCommand(),
     new TozhjaCommand(),
     new TranslateCommand(),
+    new UnmuteCommand(),
   ]
 
   constructor(config: Configuration) {

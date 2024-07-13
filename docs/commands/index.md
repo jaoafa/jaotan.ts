@@ -29,3 +29,4 @@
 - [tozh](tozh.md): Google Translate サービスを利用して、中国語（簡体）に翻訳します。
 - [tozhja](tozhja.md): Google Translate サービスを利用して、中国語（簡体）に翻訳したうえで、日本語に翻訳します。
 - [translate](translate.md): Google Translate サービスを利用して、翻訳をします。
+- [unmute](unmute.md): サーバミュートを解除します。
