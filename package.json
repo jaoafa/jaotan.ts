@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@book000/eslint-config": "1.7.22",
-    "@book000/node-utils": "1.13.179",
+    "@book000/node-utils": "1.13.183",
     "@napi-rs/canvas": "0.1.53",
     "@types/jest": "29.5.12",
     "@types/node": "20.14.11",
