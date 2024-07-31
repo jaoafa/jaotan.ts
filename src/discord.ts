@@ -10,7 +10,6 @@ import { Logger } from '@book000/node-utils'
 import { BaseDiscordEvent } from './events'
 import { Configuration } from './config'
 import { BaseCommand } from './commands'
-import { BasslineCommand } from './commands/bassline'
 import { PingCommand } from './commands/ping'
 import { TmttmtCommand } from './commands/tmttmt'
 import { PotatoCommand } from './commands/potato'
@@ -62,7 +61,6 @@ export class Discord {
   public static readonly commands: BaseCommand[] = [
     new AkakeseCommand(),
     new AlphaCommand(),
-    new BasslineCommand(),
     new BirthdayCommand(),
     new ContorandjaCommand(),
     new GetAtamaCommand(),
