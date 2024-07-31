@@ -2,7 +2,6 @@
 
 - [akakese](akakese.md): 垢消せ。
 - [alpha](alpha.md): オ、オオwwwwwwwwオレアルファwwwwwwww最近めっちょふぁぼられてんねんオレwwwwwwwwエゴサとかかけるとめっちょ人気やねんwwwwァァァァァァァwwwクソアルファを見下しながら食べるエビフィレオは一段とウメェなァァァァwwwwwwww
-- [bassline](bassline.md): ベースラインパーティー中の臨時ニュースを投稿します。
 - [birthday](birthday.md): [毎日 `#general` に投稿されるメッセージ](../features/everyday.md) で掲載される、誕生日関連の設定・確認を行えます。
 - [controrandja](controrandja.md): [tochaos コマンド](tochaos.md) のエイリアスコマンドです。
 - [getatama](getatama.md): アタマな文章を生成します。
