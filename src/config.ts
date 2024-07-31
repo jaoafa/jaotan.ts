@@ -10,10 +10,12 @@ export interface ConfigInterface {
       meetingVote?: string
       vcSpeechLog?: string
       discussion?: string
+      other?: string
     }
     role?: {
       admin?: string
       verified?: string
+      nitrotan?: string
     }
   }
   translateGasUrl?: string

@@ -53,10 +53,16 @@ import { SearchImageCommand } from './commands/searchimg'
 import { AkakeseCommand } from './commands/akakese'
 import { ToenCommand } from './commands/toen'
 import { UnmuteCommand } from './commands/unmute'
+import { NitrotanReactionEvent } from './events/nitrotan-reaction'
+import { NitrotanMessageEvent } from './events/nitrotan-message'
+import { NitrotanOptimizeTask } from './tasks/nitrotan-optimize'
+import { NitrotanProfileTask } from './tasks/nitrotan-profile'
 
 export class Discord {
   private config: Configuration
   public readonly client: Client
+
+  private readonly tasks: BaseDiscordTask[] = []
 
   public static readonly commands: BaseCommand[] = [
     new AkakeseCommand(),
@@ -126,6 +132,8 @@ export class Discord {
       new MeetingNewVoteEvent(this),
       new MeetingReactionVoteEvent(this),
       new NewDiscussionMention(this),
+      new NitrotanMessageEvent(this),
+      new NitrotanReactionEvent(this),
       new PinPrefixEvent(this),
       new PinReactionEvent(this),
       new VCSpeechLogMessageUrlEvent(this),
@@ -138,10 +146,17 @@ export class Discord {
       Logger.configure('Discord.login').error('❌ login failed', error as Error)
     })
 
-    const tasks: BaseDiscordTask[] = [new MeetingVoteTask(this)]
-    for (const task of tasks) {
+    this.tasks = [
+      new MeetingVoteTask(this),
+      new NitrotanOptimizeTask(this),
+      new NitrotanProfileTask(this),
+    ]
+    for (const task of this.tasks) {
       task.register().catch((error: unknown) => {
-        Logger.configure('Discord.task').error('❌ task failed', error as Error)
+        Logger.configure('Discord.task').error(
+          '❌ task register failed',
+          error as Error
+        )
       })
     }
 
@@ -168,6 +183,12 @@ export class Discord {
   onReady() {
     const logger = Logger.configure('Discord.onReady')
     logger.info(`👌 ready: ${this.client.user?.tag}`)
+
+    for (const task of this.tasks) {
+      task.execute().catch((error: unknown) => {
+        logger.error('❌ task execute failed', error as Error)
+      })
+    }
   }
 
   async onMessageCreate(message: Message) {
