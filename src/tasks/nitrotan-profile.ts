@@ -21,7 +21,10 @@ export class NitrotanProfileTask extends BaseDiscordTask {
 
     const members = await guild.members.fetch()
     for (const [, member] of members) {
-      if (nitrotan.isNitrotan(member.id)) continue
+      if (nitrotan.isNitrotan(member.id)) {
+        nitrotan.check(member.id)
+        continue
+      }
 
       const reason = this.getNitrotanReason(member)
       if (!reason) continue
