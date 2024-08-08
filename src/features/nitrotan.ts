@@ -267,6 +267,20 @@ export class Nitrotan {
     }
   }
 
+  public check(discordId: string) {
+    this.load()
+
+    const nitrotan = Nitrotan.nitrotans.find(
+      (nitrotan) => nitrotan.discordId === discordId
+    )
+    if (!nitrotan) {
+      return
+    }
+
+    nitrotan.lastChecked = new Date()
+    this.save()
+  }
+
   /**
    * Nitrotanの一覧を取得する
    */

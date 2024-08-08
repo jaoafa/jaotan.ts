@@ -20,7 +20,10 @@ export class NitrotanMessageEvent extends BaseDiscordEvent<'messageCreate'> {
     const userId = message.author.id
 
     const nitrotan = await Nitrotan.of(this.discord)
-    if (nitrotan.isNitrotan(userId)) return
+    if (nitrotan.isNitrotan(userId)) {
+      nitrotan.check(userId)
+      return
+    }
 
     const reason = this.getNitrotanReason(message)
     if (!reason) return

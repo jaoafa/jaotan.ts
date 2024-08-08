@@ -35,7 +35,10 @@ export class NitrotanReactionEvent extends BaseDiscordEvent<'messageReactionAdd'
     if (!message.guild) return
 
     const nitrotan = await Nitrotan.of(this.discord)
-    if (nitrotan.isNitrotan(user.id)) return
+    if (nitrotan.isNitrotan(user.id)) {
+      nitrotan.check(user.id)
+      return
+    }
 
     const reason = this.getNitrotanReason(reaction)
     if (!reason) return
