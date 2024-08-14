@@ -53,7 +53,7 @@
     "typescript": "5.4.5",
     "typescript-json-schema": "0.64.0"
   },
-  "packageManager": "pnpm@9.7.0",
+  "packageManager": "pnpm@9.7.1",
   "jest": {
     "moduleFileExtensions": [
       "js",
