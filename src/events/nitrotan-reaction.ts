@@ -32,7 +32,7 @@ export class NitrotanReactionEvent extends BaseDiscordEvent<'messageReactionAdd'
     const message = reaction.message.partial
       ? await reaction.message.fetch()
       : reaction.message
-    if (!message.guild) return
+    if (!message.inGuild()) return
 
     const nitrotan = await Nitrotan.of(this.discord)
     if (nitrotan.isNitrotan(user.id)) {

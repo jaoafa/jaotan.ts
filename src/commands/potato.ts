@@ -6,7 +6,7 @@ export class PotatoCommand implements BaseCommand {
   readonly name = 'potato'
   readonly permissions = null
 
-  async execute(_discord: Discord, message: Message): Promise<void> {
+  async execute(_discord: Discord, message: Message<true>): Promise<void> {
     await message.channel.send('(╮╯╭)')
   }
 }

@@ -10,7 +10,7 @@ export class BirthdayCommand implements BaseCommand {
 
   async execute(
     discord: Discord,
-    message: Message,
+    message: Message<true>,
     args: string[]
   ): Promise<void> {
     // birthday: 設定されている誕生日を表示
@@ -45,7 +45,7 @@ export class BirthdayCommand implements BaseCommand {
     }
   }
 
-  async executeGet(_discord: Discord, message: Message): Promise<void> {
+  async executeGet(_discord: Discord, message: Message<true>): Promise<void> {
     const birthday = new Birthday()
 
     const userBirthday = birthday.getByUser(message.author.id)
@@ -86,7 +86,7 @@ export class BirthdayCommand implements BaseCommand {
 
   async executeSet(
     _discord: Discord,
-    message: Message,
+    message: Message<true>,
     args: string[]
   ): Promise<void> {
     // birthday set 2000-01-01
@@ -141,7 +141,7 @@ export class BirthdayCommand implements BaseCommand {
 
   async executeForce(
     _discord: Discord,
-    message: Message,
+    message: Message<true>,
     args: string[]
   ): Promise<void> {
     // birthday force 20
@@ -195,7 +195,10 @@ export class BirthdayCommand implements BaseCommand {
     await message.channel.send({ embeds: [embed] })
   }
 
-  async executeDelete(_discord: Discord, message: Message): Promise<void> {
+  async executeDelete(
+    _discord: Discord,
+    message: Message<true>
+  ): Promise<void> {
     // birthday delete
 
     const birthday = new Birthday()
@@ -209,7 +212,7 @@ export class BirthdayCommand implements BaseCommand {
     await message.channel.send({ embeds: [embed] })
   }
 
-  async executeHelp(_discord: Discord, message: Message): Promise<void> {
+  async executeHelp(_discord: Discord, message: Message<true>): Promise<void> {
     const embed = this.createEmbed(
       'info',
       '誕生日コマンドヘルプ',

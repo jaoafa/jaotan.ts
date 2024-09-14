@@ -6,7 +6,7 @@ export class UnmuteCommand implements BaseCommand {
   readonly name = 'unmute'
   readonly permissions = null
 
-  async execute(_discord: Discord, message: Message): Promise<void> {
+  async execute(_discord: Discord, message: Message<true>): Promise<void> {
     // サーバミュートを解除する
     const member = message.member
     if (!member) {

@@ -9,7 +9,7 @@ export class ContorandjaCommand implements BaseCommand {
 
   async execute(
     discord: Discord,
-    message: Message,
+    message: Message<true>,
     args: string[]
   ): Promise<void> {
     await new TochaosCommand().execute(discord, message, args)

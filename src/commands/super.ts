@@ -6,7 +6,7 @@ export class SuperCommand implements BaseCommand {
   readonly name = 'super'
   readonly permissions = null
 
-  async execute(_discord: Discord, message: Message): Promise<void> {
+  async execute(_discord: Discord, message: Message<true>): Promise<void> {
     await message.channel.send(
       'ｽｩ( ᐛ👐) パァwﾍｸｻｺﾞｫﾝwwﾋﾞｷﾞｨﾝwﾃﾚﾚﾚﾚﾚﾚﾚﾃﾚﾚﾚﾚﾚﾚﾚﾃﾚﾚﾚﾚﾚﾚﾚwwﾃﾚｯﾃﾚｯﾃﾚｯwwʅ(´-౪-)ʃﾃﾞ─ﾝwwｹﾞｪｪﾑｵｰｳﾞｧｰwwwʅ(◜◡‾)ʃ?'
     )

@@ -9,7 +9,7 @@ export class TranslateCommand implements BaseCommand {
 
   async execute(
     discord: Discord,
-    message: Message,
+    message: Message<true>,
     args: string[]
   ): Promise<void> {
     // 引数は最低3つ必要
