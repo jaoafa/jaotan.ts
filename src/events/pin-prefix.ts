@@ -7,9 +7,9 @@ import { BaseDiscordEvent } from '.'
 export class PinPrefixEvent extends BaseDiscordEvent<'messageCreate'> {
   readonly eventName = 'messageCreate'
 
-  async execute(message: Message): Promise<void> {
-    // サーバ以外は無視 & メンバーが取得できない場合は無視
-    if (!message.guild || !message.member) return
+  async execute(message: Message<true>): Promise<void> {
+    // メンバーが取得できない場合は無視
+    if (!message.member) return
     // Botは無視
     if (message.author.bot) return
     // サーバのテキストチャンネルとスレッド以外は無視

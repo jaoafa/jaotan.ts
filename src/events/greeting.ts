@@ -22,7 +22,7 @@ export class GreetingEvent extends BaseDiscordEvent<'messageCreate'> {
 
   readonly eventName = 'messageCreate'
 
-  async execute(message: Message): Promise<void> {
+  async execute(message: Message<true>): Promise<void> {
     const config: Configuration = this.discord.getConfig()
     const greetingChannelId =
       config.get('discord').channel?.greeting ?? '1149587870273773569'
@@ -31,8 +31,8 @@ export class GreetingEvent extends BaseDiscordEvent<'messageCreate'> {
 
     // #greeting チャンネル以外は無視
     if (message.channel.id !== greetingChannelId) return
-    // サーバ以外は無視 & メンバーが取得できない場合は無視
-    if (!message.guild || !message.member) return
+    // メンバーが取得できない場合は無視
+    if (!message.member) return
     // Botは無視
     if (message.author.bot) return
 

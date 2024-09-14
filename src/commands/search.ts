@@ -9,7 +9,7 @@ export class SearchCommand implements BaseCommand {
 
   async execute(
     discord: Discord,
-    message: Message,
+    message: Message<true>,
     args: string[]
   ): Promise<void> {
     // 引数がない場合はエラーを返す

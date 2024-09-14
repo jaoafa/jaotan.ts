@@ -67,7 +67,7 @@ export class MeetingReactionVoteEvent extends BaseDiscordEvent<'messageReactionA
   }
 
   async executeMultipleVote(
-    message: Message,
+    message: Message<true>,
     reaction: MessageReaction | PartialMessageReaction,
     user: User
   ) {
@@ -102,7 +102,7 @@ export class MeetingReactionVoteEvent extends BaseDiscordEvent<'messageReactionA
   }
 
   async executeUserHasNoVoteRight(
-    message: Message,
+    message: Message<true>,
     reaction: MessageReaction | PartialMessageReaction,
     user: User
   ) {

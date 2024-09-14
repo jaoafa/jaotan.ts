@@ -6,7 +6,7 @@ export class TmttmtCommand implements BaseCommand {
   readonly name = 'tmttmt'
   readonly permissions = null
 
-  async execute(_discord: Discord, message: Message): Promise<void> {
+  async execute(_discord: Discord, message: Message<true>): Promise<void> {
     await message.channel.send(
       'とまとぉwとまとぉw ( https://youtu.be/v372aagNItc )'
     )
