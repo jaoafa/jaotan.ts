@@ -12,8 +12,8 @@ importers:
         specifier: 1.7.52
         version: 1.7.52(eslint-config-standard@17.1.0(eslint-plugin-import@2.30.0(@typescript-eslint/parser@8.5.0(eslint@9.10.0)(typescript@5.6.2))(eslint@9.10.0))(eslint-plugin-n@17.10.2(eslint@9.10.0))(eslint-plugin-promise@7.1.0(eslint@9.10.0))(eslint@9.10.0))(eslint@9.10.0)(typescript@5.6.2)
       '@book000/node-utils':
-        specifier: 1.13.246
-        version: 1.13.246
+        specifier: 1.13.249
+        version: 1.13.249
       '@napi-rs/canvas':
         specifier: 0.1.55
         version: 0.1.55
@@ -260,8 +260,8 @@ packages:
       eslint: 9.10.0
       eslint-config-standard: 17.1.0
 
-  '@book000/node-utils@1.13.246':
-    resolution: {integrity: sha512-QRXsiYQBOsLPEiCk/RXO8eeTCSOAn216Cn/rBVJbrQh74kqnt4V4RgQF8rlXb7f5gAZ1NoVyaWqbGnpyRaKGZw==}
+  '@book000/node-utils@1.13.249':
+    resolution: {integrity: sha512-S6tzIWGEBQjzO0ZjsrE8Bg3sYAzV0QSEI7sl/3AWbUGOKvbYpIrE9Be+o1mQq1x55gvnJRF9Mhv/JYICp/1J3Q==}
 
   '@colors/colors@1.6.0':
     resolution: {integrity: sha512-Ir+AOibqzrIsL6ajt3Rz3LskB7OiMVHqltZmspbW/TJuTVuyOMirVqAkjfY6JISiLHgyNqicAC8AyHHGzNd/dA==}
@@ -891,9 +891,6 @@ packages:
   arraybuffer.prototype.slice@1.0.3:
     resolution: {integrity: sha512-bMxMKAjg13EBSVscxTaYA4mRc5t1UAXa2kXiGTNfZ079HIWXEkKmkgFrh/nJqamaLSrXO5H4WFFkPEaLJWbs3A==}
     engines: {node: '>= 0.4'}
-
-  async@3.2.5:
-    resolution: {integrity: sha512-baNZyqaaLhyLVKm/DlvdW051MSgO6b8eVfIezl9E5PqWxFgzLm/wQntEW4zOytVburDEr0JlALEpdOFwvErLsg==}
 
   async@3.2.6:
     resolution: {integrity: sha512-htCUDlxyyCLMgaM3xXg0C0LW2xqfuQ6p05pCEIsXuyQ+a1koYKTuBMzRNwmybfLgvJDMd0r1LTn4+E0Ti6C2AA==}
@@ -3045,7 +3042,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@book000/node-utils@1.13.246':
+  '@book000/node-utils@1.13.249':
     dependencies:
       axios: 1.7.7
       cycle: 1.0.3
@@ -3755,8 +3752,6 @@ snapshots:
       get-intrinsic: 1.2.4
       is-array-buffer: 3.0.4
       is-shared-array-buffer: 1.0.3
-
-  async@3.2.5: {}
 
   async@3.2.6: {}
 
@@ -4817,7 +4812,7 @@ snapshots:
 
   jake@10.9.1:
     dependencies:
-      async: 3.2.5
+      async: 3.2.6
       chalk: 4.1.2
       filelist: 1.0.4
       minimatch: 3.1.2
