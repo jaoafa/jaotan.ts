@@ -12,8 +12,8 @@ importers:
         specifier: 1.7.55
         version: 1.7.55(eslint-config-standard@17.1.0(eslint-plugin-import@2.30.0(@typescript-eslint/parser@8.6.0(eslint@9.10.0)(typescript@5.6.2))(eslint@9.10.0))(eslint-plugin-n@17.10.3(eslint@9.10.0))(eslint-plugin-promise@7.1.0(eslint@9.10.0))(eslint@9.10.0))(eslint@9.10.0)(typescript@5.6.2)
       '@book000/node-utils':
-        specifier: 1.13.253
-        version: 1.13.253
+        specifier: 1.13.255
+        version: 1.13.255
       '@napi-rs/canvas':
         specifier: 0.1.56
         version: 0.1.56
@@ -260,8 +260,8 @@ packages:
       eslint: 9.11.0
       eslint-config-standard: 17.1.0
 
-  '@book000/node-utils@1.13.253':
-    resolution: {integrity: sha512-kpyoYvIr2+FezwutityjdCpmRFELoJULC7IVI3UBef7RmL2ROThh3XUUVYS4UoXfzpq4QJp2LADRIkrzl7xznA==}
+  '@book000/node-utils@1.13.255':
+    resolution: {integrity: sha512-o8XtCG3k+mwmErixh3MWBJdENn/MlgXLKhiTuoqq/IX55gu9zufkrbUzRAWgsAUIGNdS9sZ5EsdE1RBsfL1Rzg==}
 
   '@colors/colors@1.6.0':
     resolution: {integrity: sha512-Ir+AOibqzrIsL6ajt3Rz3LskB7OiMVHqltZmspbW/TJuTVuyOMirVqAkjfY6JISiLHgyNqicAC8AyHHGzNd/dA==}
@@ -3038,7 +3038,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@book000/node-utils@1.13.253':
+  '@book000/node-utils@1.13.255':
     dependencies:
       axios: 1.7.7
       cycle: 1.0.3
