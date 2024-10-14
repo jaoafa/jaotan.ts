@@ -57,6 +57,7 @@ import { NitrotanReactionEvent } from './events/nitrotan-reaction'
 import { NitrotanMessageEvent } from './events/nitrotan-message'
 import { NitrotanOptimizeTask } from './tasks/nitrotan-optimize'
 import { NitrotanProfileTask } from './tasks/nitrotan-profile'
+import { ReplyEvent } from './events/reply'
 
 export class Discord {
   private config: Configuration
@@ -139,6 +140,7 @@ export class Discord {
       new NitrotanReactionEvent(this),
       new PinPrefixEvent(this),
       new PinReactionEvent(this),
+      new ReplyEvent(this),
       new VCSpeechLogMessageUrlEvent(this),
     ]
     for (const event of events) {
