@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios'
+import axios from 'axios'
 
 interface MeboOptions {
   utterance: string
@@ -35,17 +35,17 @@ export class Mebo {
     const utterance = options.utterance
     const uid = options.uid
 
-    try {
-      const response = await axios.post<MeboResponse>(this.apiUrl, {
+    const response = await axios
+      .post<MeboResponse>(this.apiUrl, {
         api_key: this.apiKey,
         agent_id: this.agentId,
         utterance,
         uid: `jaotan-reply-${uid}`,
       })
-      return response.data
-    } catch (error) {
-      console.log((error as AxiosError).response?.data)
+      .catch(() => null)
+    if (!response) {
+      return null
     }
-    return null
+    return response.data
   }
 }
