@@ -28,7 +28,7 @@
     "generate-schema": "typescript-json-schema --required src/config.ts ConfigInterface -o schema/Configuration.json"
   },
   "devDependencies": {
-    "@book000/eslint-config": "1.7.84",
+    "@book000/eslint-config": "1.7.85",
     "@book000/node-utils": "1.13.261",
     "@napi-rs/canvas": "0.1.59",
     "@types/jest": "29.5.14",
