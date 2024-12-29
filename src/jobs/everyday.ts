@@ -30,25 +30,30 @@ export class EveryDayJob extends BaseDiscordJob {
     // 記念日を取得
     const kinenbiContents = await this.getKinenbiContents(today)
 
+    const todayYear = today.getFullYear()
+
     // メッセージに必要な情報を取得
     // 今日の日付 (yyyy年mm月dd日)と曜日
-    const todayString = `${today.getFullYear()}年${
+    const todayString = `${todayYear}年${
       today.getMonth() + 1
     }月${today.getDate()}日`
     const todayWeek = ['日', '月', '火', '水', '木', '金', '土'][today.getDay()]
 
-    // 年間通算日数
-    const yearStart = new Date(today.getFullYear(), 0, 1)
-    const yearEnd = new Date(today.getFullYear(), 11, 31)
+    const daysInMonth = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+    if (
+      (todayYear % 4 === 0 && todayYear % 100 !== 0) ||
+      todayYear % 400 === 0
+    ) {
+      daysInMonth[2] = 29
+    }
+
     // 今年の経過日数 (当日を含むため、+1)
     const yearPassed =
-      Math.floor(
-        (today.getTime() - yearStart.getTime()) / (1000 * 60 * 60 * 24)
-      ) + 1
+      daysInMonth.slice(1, today.getMonth()).reduce((a, b) => a + b, 0) + // 1 月から先月までの日数
+      today.getDate() // 今月の日数
     // 年日数
-    const yearTotal = Math.floor(
-      (yearEnd.getTime() - yearStart.getTime()) / (1000 * 60 * 60 * 24)
-    )
+    const yearTotal = daysInMonth.reduce((a, b) => a + b, 0)
     // 残り日数
     const yearLeft = yearTotal - yearPassed
     // 残りパーセント (小数点以下2桁切り捨て)
