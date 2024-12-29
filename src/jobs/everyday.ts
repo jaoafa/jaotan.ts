@@ -39,7 +39,7 @@ export class EveryDayJob extends BaseDiscordJob {
     }月${today.getDate()}日`
     const todayWeek = ['日', '月', '火', '水', '木', '金', '土'][today.getDay()]
 
-    const daysInMonth = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
     if (
       (todayYear % 4 === 0 && todayYear % 100 !== 0) ||
@@ -50,7 +50,7 @@ export class EveryDayJob extends BaseDiscordJob {
 
     // 今年の経過日数 (当日を含むため、+1)
     const yearPassed =
-      daysInMonth.slice(1, today.getMonth()).reduce((a, b) => a + b, 0) + // 1 月から先月までの日数
+      daysInMonth.slice(0, today.getMonth()).reduce((a, b) => a + b, 0) + // 1 月から先月までの日数
       today.getDate() // 今月の日数
     // 年日数
     const yearTotal = daysInMonth.reduce((a, b) => a + b, 0)
