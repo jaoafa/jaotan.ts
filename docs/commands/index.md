@@ -1,0 +1,31 @@
+# コマンド一覧
+
+- [akakese](akakese.md): 垢消せ。
+- [alpha](alpha.md): オ、オオwwwwwwwwオレアルファwwwwwwww最近めっちょふぁぼられてんねんオレwwwwwwwwエゴサとかかけるとめっちょ人気やねんwwwwァァァァァァァwwwクソアルファを見下しながら食べるエビフィレオは一段とウメェなァァァァwwwwwwww
+- [birthday](birthday.md): [毎日 `#general` に投稿されるメッセージ](../features/everyday.md) で掲載される、誕生日関連の設定・確認を行えます。
+- [controrandja](controrandja.md): [tochaos コマンド](tochaos.md) のエイリアスコマンドです。
+- [getatama](getatama.md): アタマな文章を生成します。
+- [origin](origin.md): [一般社団法人 日本記念日協会](https://www.kinenbi.gr.jp) が認定する記念日のうち、今日の特定の記念日について詳細を返信します。
+- [ping](ping.md): ピンポンを返します。
+- [potato](potato.md): (╮╯╭)
+- [powa](powa.md): ポわ～～～～～～～ｗｗｗｗ！！！ｗ！ｗｗ！ｗ！ｗ
+- [search](search.md): [Google Custom Search JSON API](https://developers.google.com/custom-search/v1/overview) を利用して、Google 検索を行います。
+- [searchimg](searchimg.md): [Google Custom Search JSON API](https://developers.google.com/custom-search/v1/overview) を利用して、Google 画像検索を行います。
+- [setbanner](setbanner.md): 画像テンプレートに引数で指定された文字列を合成し、サーバのバナー画像として設定します。
+- [super](super.md): ｽｩ( ᐛ👐) パァwﾍｸｻｺﾞｫﾝwwﾋﾞｷﾞｨﾝwﾃﾚﾚﾚﾚﾚﾚﾚﾃﾚﾚﾚﾚﾚﾚﾚﾃﾚﾚﾚﾚﾚﾚﾚwwﾃﾚｯﾃﾚｯﾃﾚｯwwʅ(´-౪-)ʃﾃﾞ─ﾝwwｹﾞｪｪﾑｵｰｳﾞｧｰwwwʅ(◜◡‾)ʃ?
+- [tmttmt](tmttmt.md): とまとぉwとまとぉw
+- [toar](toar.md): Google Translate サービスを利用して、アラビア文字に翻訳します。
+- [toarja](toarja.md): Google Translate サービスを利用して、アラビア文字に翻訳したうえで、日本語に翻訳します。
+- [tochaos](tochaos.md): Google Translate サービスを利用して、複数回翻訳を行った上で、日本語に翻訳します。
+- [toen](toen.md): Google Translate サービスを利用して、英語に翻訳します。
+- [tohe](tohe.md): Google Translate サービスを利用して、ヘブライ語に翻訳します。
+- [toheja](toheja.md): Google Translate サービスを利用して、ヘブライ語に翻訳したうえで、日本語に翻訳します。
+- [toja](toja.md): Google Translate サービスを利用して、日本語に翻訳します。
+- [tojaen](tojaen.md): Google Translate サービスを利用して、日本語に翻訳したうえで、英語に翻訳します。
+- [tokoja](tokoja.md): Google Translate サービスを利用して、韓国語に翻訳したうえで、日本語に翻訳します。
+- [torandja](torandja.md): Google Translate サービスを利用して、一度ランダムな言語に翻訳したうえで、日本語に翻訳します。
+- [toswja](toswja.md): Google Translate サービスを利用して、スワヒリ語に翻訳したうえで、日本語に翻訳します。
+- [tozh](tozh.md): Google Translate サービスを利用して、中国語（簡体）に翻訳します。
+- [tozhja](tozhja.md): Google Translate サービスを利用して、中国語（簡体）に翻訳したうえで、日本語に翻訳します。
+- [translate](translate.md): Google Translate サービスを利用して、翻訳をします。
+- [unmute](unmute.md): サーバミュートを解除します。

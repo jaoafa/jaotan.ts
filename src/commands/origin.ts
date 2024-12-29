@@ -1,20 +1,15 @@
 import { Discord } from '@/discord'
 import { EmbedBuilder, Message } from 'discord.js'
-import { BaseCommand, Permission } from '.'
+import { BaseCommand } from '.'
 import { Kinenbi } from '@/features/kinenbi'
 
 export class OriginCommand implements BaseCommand {
-  get name(): string {
-    return 'origin'
-  }
-
-  get permissions(): Permission[] | null {
-    return null
-  }
+  readonly name = 'origin'
+  readonly permissions = null
 
   async execute(
     _discord: Discord,
-    message: Message<boolean>,
+    message: Message<true>,
     args: string[]
   ): Promise<void> {
     if (args.length === 0) {
@@ -35,14 +30,22 @@ export class OriginCommand implements BaseCommand {
     const kinenbi = new Kinenbi()
     const results = await kinenbi.get(new Date())
 
-    const result = results[index - 1]
-    if (!result) {
+    // resultsにindex - 1の要素が存在しない場合、エラーを返す
+    if (index < 1) {
+      await message.reply(
+        ':x: 引数が間違っています。`/origin <記念日ナンバー>` の形式で入力してください。記念日ナンバーは1以上の半角数字です。'
+      )
+      return
+    }
+
+    if (index > results.length) {
       await message.reply(
         ':x: 指定された記念日ナンバーの記念日は見つかりませんでした。origin コマンドでは、当日の記念日のみ表示できます。'
       )
       return
     }
 
+    const result = results[index - 1]
     const detail = await kinenbi.getDetail(result.detail)
     await message.reply({
       embeds: [

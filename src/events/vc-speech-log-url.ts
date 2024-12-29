@@ -9,17 +9,15 @@ export class VCSpeechLogMessageUrlEvent extends BaseDiscordEvent<'messageCreate'
   private readonly messageUrlRegex =
     /^https:\/\/.*?discord(?:app)?\.com\/channels\/(\d+)\/(\d+)\/(\d+)\??(.*)$/i
 
-  get eventName(): 'messageCreate' {
-    return 'messageCreate'
-  }
+  readonly eventName = 'messageCreate'
 
-  async execute(message: Message<boolean>): Promise<void> {
+  async execute(message: Message<true>): Promise<void> {
     const config: Configuration = this.discord.getConfig()
     const vcSpeechLogChannelId =
-      config.get('discord').channel?.vcSpeechLog || '1149606247314767993'
+      config.get('discord').channel?.vcSpeechLog ?? '1149606247314767993'
 
-    // サーバ以外は無視 & メンバーが取得できない場合は無視
-    if (!message.guild || !message.member) return
+    // メンバーが取得できない場合は無視
+    if (!message.member) return
     // Botは無視
     if (message.author.bot) return
 
@@ -43,7 +41,6 @@ export class VCSpeechLogMessageUrlEvent extends BaseDiscordEvent<'messageCreate'
 
     const vcSpeechLogMessage =
       await vcSpeechLogChannel.messages.fetch(urlMessageId)
-    if (!vcSpeechLogMessage) return
 
     // メッセージを引用
     const embed = new EmbedBuilder()

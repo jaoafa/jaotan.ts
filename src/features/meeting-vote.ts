@@ -60,7 +60,7 @@ export class MeetingVote {
    *
    * @param message メッセージ
    */
-  public async newVoteMessage(message: Message) {
+  public async newVoteMessage(message: Message<true>) {
     if (message.channel.id !== this.channel.id) {
       throw new Error('This message is not in the vote channel.')
     }
@@ -123,7 +123,7 @@ export class MeetingVote {
       .setColor(Colors.Yellow)
       .setTimestamp(new Date())
 
-    this.channel.send({
+    await this.channel.send({
       embeds: [embed],
       reply: {
         messageReference: message,
@@ -139,7 +139,7 @@ export class MeetingVote {
    * @param message
    * @param user
    */
-  public async isMultipleVote(message: Message, user: User) {
+  public async isMultipleVote(message: Message<true>, user: User) {
     const goodUsers = await VoteReactionType.Good.getUsers(message, true)
     const badUsers = await VoteReactionType.Bad.getUsers(message, true)
     const whiteUsers = await VoteReactionType.White.getUsers(message, true)
@@ -173,7 +173,7 @@ export class MeetingVote {
    *
    * @param message メッセージ
    */
-  public async runMessage(message: Message) {
+  public async runMessage(message: Message<true>) {
     if (message.channel.id !== this.channel.id) {
       throw new Error('This message is not in the vote channel.')
     }
@@ -245,7 +245,7 @@ export class MeetingVote {
    * @param whiteUsers 白票を投票したユーザーのコレクション
    */
   private async approval(
-    message: Message,
+    message: Message<true>,
     goodUsers: Collection<string, User>,
     badUsers: Collection<string, User>,
     whiteUsers: Collection<string, User>
@@ -272,7 +272,7 @@ export class MeetingVote {
    * @param reason 否認理由
    */
   private async disapproval(
-    message: Message,
+    message: Message<true>,
     goodUsers: Collection<string, User>,
     badUsers: Collection<string, User>,
     whiteUsers: Collection<string, User>,
@@ -299,7 +299,7 @@ export class MeetingVote {
    * @param whiteUsers 白票を投票したユーザーのコレクション
    */
   private async remind(
-    message: Message,
+    message: Message<true>,
     goodUsers: Collection<string, User>,
     badUsers: Collection<string, User>,
     whiteUsers: Collection<string, User>
@@ -353,7 +353,7 @@ export class MeetingVote {
    * @param reason 否認理由
    */
   private async sendEndMessage(
-    message: Message,
+    message: Message<true>,
     goodUsers: Collection<string, User>,
     badUsers: Collection<string, User>,
     whiteUsers: Collection<string, User>,
@@ -463,7 +463,7 @@ export class MeetingVote {
    * @param whiteUsers 白票を投票したユーザーのコレクション
    */
   private calculateBorder(
-    message: Message,
+    message: Message<true>,
     whiteUsers: Collection<string, User> = new Collection<string, User>()
   ) {
     const match = message.content.match(this.borderRegex)
@@ -493,7 +493,7 @@ export class MeetingVote {
    * @param message メッセージ
    * @returns リマインド日時
    */
-  private getVoteRemindDateTime(message: Message) {
+  private getVoteRemindDateTime(message: Message<true>) {
     const createdAt = message.createdAt
     createdAt.setDate(createdAt.getDate() + 7)
     return createdAt
@@ -505,7 +505,7 @@ export class MeetingVote {
    * @param message メッセージ
    * @returns 有効審議期限
    */
-  private getVoteEndDateTime(message: Message) {
+  private getVoteEndDateTime(message: Message<true>) {
     const createdAt = message.createdAt
     createdAt.setDate(createdAt.getDate() + 14)
     return createdAt
@@ -544,7 +544,7 @@ class VoteReaction {
    *
    * @param message メッセージ
    */
-  public async addReaction(message: Message): Promise<void> {
+  public async addReaction(message: Message<true>): Promise<void> {
     await message.react(this.unicode)
   }
 
@@ -556,19 +556,16 @@ class VoteReaction {
    * @returns ユーザーのコレクション
    */
   public async getUsers(
-    message: Message,
+    message: Message<true>,
     excludeBot = false
   ): Promise<Collection<string, User>> {
-    if (message.partial) {
-      message = await message.fetch()
-    }
-    const reactions = message.reactions.cache.find(
-      (reaction) => reaction.emoji.name === this.unicode
-    )
-    if (!reactions) {
+    message = await message.fetch()
+
+    const reaction = message.reactions.resolve(this.unicode)
+    if (!reaction) {
       return new Collection<string, User>()
     }
-    const users = await reactions.users.fetch()
+    const users = await reaction.users.fetch()
     return excludeBot ? users.filter((user: User) => !user.bot) : users
   }
 
@@ -579,7 +576,10 @@ class VoteReaction {
    * @param userId ユーザーID
    * @returns リアクションをつけているかどうか
    */
-  public async isReacted(message: Message, userId: string): Promise<boolean> {
+  public async isReacted(
+    message: Message<true>,
+    userId: string
+  ): Promise<boolean> {
     const users = await this.getUsers(message)
     return users.some((user: User) => user.id === userId)
   }

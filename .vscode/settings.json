@@ -2,9 +2,13 @@
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.codeActionsOnSave": {
-      "source.organizeImports": false
+      "source.organizeImports": "never"
     }
   },
   "git.branchProtection": ["main", "master"],
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "markdown.copyFiles.destination": {
+    "**/*": "assets/"
+  },
+  "files.insertFinalNewline": true
 }

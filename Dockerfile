@@ -1,31 +1,35 @@
-FROM node:18-alpine
+FROM node:20-alpine
 
-SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME/bin:$PATH"
 
 # hadolint ignore=DL3018
 RUN apk update && \
   apk upgrade && \
-  apk add --update --no-cache curl tzdata && \
+  apk add --update --no-cache tzdata && \
   cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
   echo "Asia/Tokyo" > /etc/timezone && \
   apk del tzdata && \
-  curl -f https://get.pnpm.io/v6.32.js | \
-  node - add --global pnpm
+  corepack enable
 
 WORKDIR /app
 
 COPY pnpm-lock.yaml ./
 
-RUN pnpm fetch
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm fetch
 
 COPY package.json tsconfig.json ./
 COPY src src
 
-RUN pnpm install --frozen-lockfile --offline
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile --offline
 
-ENV NODE_ENV production
-ENV CONFIG_PATH /data/config.json
-ENV LOG_DIR /data/logs
+COPY assets /assets
+
+ENV NODE_ENV=production
+ENV CONFIG_PATH=/data/config.json
+ENV DATA_DIR=/data
+ENV LOG_DIR=/data/logs
+ENV ASSETS_DIR=/assets
 
 VOLUME [ "/data" ]
 

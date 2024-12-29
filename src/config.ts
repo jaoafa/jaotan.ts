@@ -9,19 +9,30 @@ export interface ConfigInterface {
       greeting?: string
       meetingVote?: string
       vcSpeechLog?: string
+      discussion?: string
+      other?: string
     }
     role?: {
+      admin?: string
       verified?: string
+      nitrotan?: string
     }
   }
   translateGasUrl?: string
   detectLanguageApiToken?: string
+  phrasePlusApiUrl?: string
+  googleSearch: {
+    gcpKey: string
+    cx: string
+  }
+  mebo: {
+    apiKey: string
+    agentId: string
+  }
 }
 
 export class Configuration extends ConfigFramework<ConfigInterface> {
-  protected validates(): {
-    [key: string]: (config: ConfigInterface) => boolean
-  } {
+  protected validates(): Record<string, (config: ConfigInterface) => boolean> {
     return {
       'discord is required': (config) => !!config.discord,
       'discord.token is required': (config) => !!config.discord.token,
@@ -39,6 +50,9 @@ export class Configuration extends ConfigFramework<ConfigInterface> {
       'detectLanguageApiToken must be a string': (config) =>
         config.detectLanguageApiToken === undefined ||
         typeof config.detectLanguageApiToken === 'string',
+      'phrasePlusApiUrl must be a string': (config) =>
+        config.phrasePlusApiUrl === undefined ||
+        typeof config.phrasePlusApiUrl === 'string',
     }
   }
 }

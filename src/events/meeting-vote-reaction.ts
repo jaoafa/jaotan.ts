@@ -11,14 +11,14 @@ import {
 import { BaseDiscordEvent } from '.'
 import { Configuration } from '../config'
 import { MeetingVote } from '../features/meeting-vote'
+import { setTimeout } from 'node:timers/promises'
+import { Logger } from '@book000/node-utils'
 
 /**
  * #meeting_vote チャンネルでのリアクションを処理するイベント
  */
 export class MeetingReactionVoteEvent extends BaseDiscordEvent<'messageReactionAdd'> {
-  get eventName(): 'messageReactionAdd' {
-    return 'messageReactionAdd'
-  }
+  readonly eventName = 'messageReactionAdd'
 
   async execute(
     reaction: MessageReaction | PartialMessageReaction,
@@ -26,7 +26,7 @@ export class MeetingReactionVoteEvent extends BaseDiscordEvent<'messageReactionA
   ): Promise<void> {
     const config: Configuration = this.discord.getConfig()
     const meetingVoteChannelId =
-      config.get('discord').channel?.meetingVote || '1149598703846440960'
+      config.get('discord').channel?.meetingVote ?? '1149598703846440960'
 
     const message = reaction.message.partial
       ? await reaction.message.fetch()
@@ -34,7 +34,7 @@ export class MeetingReactionVoteEvent extends BaseDiscordEvent<'messageReactionA
     // #meeting_vote チャンネル以外は無視
     if (message.channel.id !== meetingVoteChannelId) return
     // サーバ以外は無視 & メンバーが取得できない場合は無視
-    if (!message.guild || !message.member) return
+    if (!message.inGuild() || !message.member) return
     // Botは無視
     if (user.bot) return
     // サーバのテキストチャンネル以外は無視
@@ -67,10 +67,11 @@ export class MeetingReactionVoteEvent extends BaseDiscordEvent<'messageReactionA
   }
 
   async executeMultipleVote(
-    message: Message,
+    message: Message<true>,
     reaction: MessageReaction | PartialMessageReaction,
     user: User
   ) {
+    const logger = Logger.configure('MeetingReactionVoteEvent')
     await reaction.users.remove(user)
     const embed = new EmbedBuilder()
       .setDescription(
@@ -91,16 +92,21 @@ export class MeetingReactionVoteEvent extends BaseDiscordEvent<'messageReactionA
       },
     })
 
-    setTimeout(async () => {
-      await reply.delete()
-    }, 60_000)
+    setTimeout(60_000)
+      .then(async () => {
+        await reply.delete()
+      })
+      .catch((error: unknown) => {
+        logger.error('Failed to delete message', error as Error)
+      })
   }
 
   async executeUserHasNoVoteRight(
-    message: Message,
+    message: Message<true>,
     reaction: MessageReaction | PartialMessageReaction,
     user: User
   ) {
+    const logger = Logger.configure('MeetingReactionVoteEvent')
     await reaction.users.remove(user)
     const embed = new EmbedBuilder()
       .setDescription('あなたには投票権利がありません。')
@@ -119,8 +125,12 @@ export class MeetingReactionVoteEvent extends BaseDiscordEvent<'messageReactionA
       },
     })
 
-    setTimeout(async () => {
-      await reply.delete()
-    }, 60_000)
+    setTimeout(60_000)
+      .then(async () => {
+        await reply.delete()
+      })
+      .catch((error: unknown) => {
+        logger.error('Failed to delete message', error as Error)
+      })
   }
 }

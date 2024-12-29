@@ -1,10 +1,22 @@
 {
   "name": "jaoafa/jaotan.ts",
-  "image": "mcr.microsoft.com/devcontainers/typescript-node:0-18",
+  "build": {
+    "context": "..",
+    "dockerfile": "Dockerfile"
+  },
   // コンテナ作成時、依存パッケージをインストールする
-  "postCreateCommand": "pnpm install",
+  "postCreateCommand": "sh ./.devcontainer/postCreateCommand.sh",
+  "postAttachCommand": "sh ./.devcontainer/postAttachCommand.sh",
   // コンテナ作成が終了するまで待機する
   "waitFor": "postCreateCommand",
+  // 転送するポートを定義
+  "forwardPorts": [8080],
+  "portsAttributes": {
+    "8080": {
+      "label": "Preview",
+      "onAutoForward": "openPreview"
+    }
+  },
   // 定義外のポートは通知しない
   "otherPortsAttributes": {
     "onAutoForward": "silent"
@@ -21,12 +33,13 @@
         }
       },
       "git.branchProtection": ["main", "master"],
-      "editor.formatOnSave": true
-	},
-	"vscode": {
-		"extensions": [
-			"esbenp.prettier-vscode"
-		]
-	}
+      "editor.formatOnSave": true,
+      "markdown.copyFiles.destination": {
+        "**/*": "assets/"
+      }
+    },
+    "vscode": {
+      "extensions": ["esbenp.prettier-vscode"]
+    }
   }
 }

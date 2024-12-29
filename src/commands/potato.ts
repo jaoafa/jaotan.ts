@@ -1,17 +1,12 @@
 import { Discord } from '@/discord'
 import { Message } from 'discord.js'
-import { BaseCommand, Permission } from '.'
+import { BaseCommand } from '.'
 
 export class PotatoCommand implements BaseCommand {
-  get name(): string {
-    return 'potato'
-  }
+  readonly name = 'potato'
+  readonly permissions = null
 
-  get permissions(): Permission[] | null {
-    return null
-  }
-
-  async execute(_discord: Discord, message: Message<boolean>): Promise<void> {
+  async execute(_discord: Discord, message: Message<true>): Promise<void> {
     await message.channel.send('(╮╯╭)')
   }
 }

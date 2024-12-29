@@ -1,5 +1,4 @@
 {
-  "ts-node": { "files": true },
   "compilerOptions": {
     "target": "es2020",
     "module": "commonjs",
@@ -28,5 +27,5 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "src/**/*.test.ts"]
 }
