@@ -55,7 +55,7 @@ export class EveryDayJob extends BaseDiscordJob {
     // 年日数
     const yearTotal = daysInMonth.reduce((a, b) => a + b, 0)
     // 残り日数
-    const yearLeft = yearTotal - yearPassed
+    const yearLeft = yearTotal - yearPassed + 1
     // 残りパーセント (小数点以下2桁切り捨て)
     const yearLeftPercent = Math.floor((yearLeft / yearTotal) * 10_000) / 100
 
