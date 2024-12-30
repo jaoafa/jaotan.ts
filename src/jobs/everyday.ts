@@ -45,7 +45,7 @@ export class EveryDayJob extends BaseDiscordJob {
       (todayYear % 4 === 0 && todayYear % 100 !== 0) ||
       todayYear % 400 === 0
     ) {
-      daysInMonth[2] = 29
+      daysInMonth[1] = 29
     }
 
     // 今年の経過日数 (当日を含むため、+1)
