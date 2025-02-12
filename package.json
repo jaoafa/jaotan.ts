@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@book000/eslint-config": "1.7.144",
-    "@book000/node-utils": "1.13.451",
+    "@book000/node-utils": "1.13.458",
     "@napi-rs/canvas": "0.1.67",
     "@types/jest": "29.5.14",
     "@types/node": "22.6.1",
@@ -37,8 +37,8 @@
     "axios": "1.7.9",
     "cheerio": "1.0.0",
     "detectlanguage": "2.1.0",
-    "discord.js": "14.17.3",
-    "eslint": "9.20.0",
+    "discord.js": "14.18.0",
+    "eslint": "9.20.1",
     "eslint-config-standard": "17.1.0",
     "eslint-plugin-import": "2.31.0",
     "eslint-plugin-n": "17.15.1",
@@ -53,7 +53,7 @@
     "typescript": "5.6.3",
     "typescript-json-schema": "0.65.1"
   },
-  "packageManager": "pnpm@10.2.1+sha512.398035c7bd696d0ba0b10a688ed558285329d27ea994804a52bad9167d8e3a72bcb993f9699585d3ca25779ac64949ef422757a6c31102c12ab932e5cbe5cc92",
+  "packageManager": "pnpm@10.3.0+sha512.ee592eda8815a8a293c206bb0917c4bb0ff274c50def7cbc17be05ec641fc2d1b02490ce660061356bd0d126a4d7eb2ec8830e6959fb8a447571c631d5a2442d",
   "jest": {
     "moduleFileExtensions": [
       "js",
