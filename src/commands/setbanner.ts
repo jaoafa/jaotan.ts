@@ -57,6 +57,7 @@ export class SetbannerCommand implements BaseCommand {
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
 
+    // eslint-disable-next-line @typescript-eslint/no-misused-spread -- unicorn/prefer-spread と競合
     const characters = [...text]
     const lineHeight = fontSize * 1.4
     for (let i = 0; i < characters.length; i++) {
