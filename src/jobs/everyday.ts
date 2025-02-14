@@ -91,7 +91,7 @@ export class EveryDayJob extends BaseDiscordJob {
 
   private async getKinenbiContents(date: Date): Promise<string[]> {
     const kinenbi = new Kinenbi()
-    const todayKinenbi = await kinenbi.get(date)
+    const todayKinenbi = await kinenbi.get(date, true)
     const contents = []
 
     let isAlreadyAddedDetail = false
@@ -104,23 +104,29 @@ export class EveryDayJob extends BaseDiscordJob {
     let num = 0
     for (const result of todayKinenbi) {
       num++
+      const newSuffix = result.isNew ? ':new:' : ''
+
       if (result.title.includes('えのすいクラゲ')) {
-        contents.push(`${num}. ${result.title} <@372701608053833730>`)
+        contents.push(
+          `${num}. ${result.title} <@372701608053833730> ${newSuffix}`
+        )
         continue
       }
 
       if (isAlreadyAddedDetail) {
-        contents.push(`${num}. ${result.title}`)
+        contents.push(`${num}. ${result.title} ${newSuffix}`)
         continue
       }
 
       const detail = await kinenbi.getDetail(result.detail)
       if (detail.description.includes('毎月')) {
-        contents.push(`${num}. ${result.title}`)
+        contents.push(`${num}. ${result.title} ${newSuffix}`)
         continue
       }
 
-      contents.push(`${num}. ${result.title} \`\`\`${detail.description}\`\`\``)
+      contents.push(
+        `${num}. ${result.title} ${newSuffix}\`\`\`${detail.description}\`\`\``
+      )
       isAlreadyAddedDetail = true
     }
 

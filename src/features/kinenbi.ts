@@ -1,9 +1,10 @@
 import axios from 'axios'
 import { load } from 'cheerio'
+import fs from 'node:fs'
 
 export interface KinenbiDetailOptions {
   filename: string
-  query: URLSearchParams
+  query: Record<string, string>
 }
 
 export interface KinenbiResult {
@@ -11,9 +12,19 @@ export interface KinenbiResult {
   detail: KinenbiDetailOptions
 }
 
+export interface KinenbiResultWithCustom extends KinenbiResult {
+  foundDate: Date
+  isNew: boolean
+}
+
 export interface KinenbiDetail {
   title: string
   description: string
+}
+
+interface KinenbiCache {
+  cachedDate: string
+  results: KinenbiResultWithCustom[]
 }
 
 /**
@@ -26,9 +37,22 @@ export class Kinenbi {
    * 指定した日付の記念日一覧を取得します。
    *
    * @param date 日付
+   * @param force キャッシュを無視して強制的に取得するかどうか
    * @returns 記念日一覧
    */
-  public async get(date: Date): Promise<KinenbiResult[]> {
+  public async get(
+    date: Date,
+    force = false
+  ): Promise<KinenbiResultWithCustom[]> {
+    const cachePath = this.getCachePath(date)
+    const prevData: KinenbiCache | null = fs.existsSync(cachePath)
+      ? JSON.parse(fs.readFileSync(cachePath, 'utf8'))
+      : null
+
+    if (!force && prevData) {
+      return prevData.results
+    }
+
     const response = await axios.post<string>(
       this.baseUrl,
       {
@@ -51,7 +75,7 @@ export class Kinenbi {
     const $ = load(html)
     const elements = $('div.today_kinenbilist a.winDetail')
 
-    const results: KinenbiResult[] = []
+    const results: KinenbiResultWithCustom[] = []
     for (const element of elements) {
       const title = $(element).text()
       const href = $(element).attr('href')
@@ -65,14 +89,35 @@ export class Kinenbi {
         continue
       }
 
+      const searchParamsObject = this.searchParamsToObject(
+        kinenbiUrlObject.searchParams
+      )
+      const lastFoundDate = prevData?.results.find(
+        (result) =>
+          result.detail.filename === filename &&
+          result.detail.query.TYPE === searchParamsObject.TYPE &&
+          result.detail.query.MD === searchParamsObject.MD &&
+          result.detail.query.NM === searchParamsObject.NM
+      )?.foundDate
+      const foundDate = lastFoundDate ?? date // キャッシュがある場合は前回の日付を使う
+      const isNew = prevData !== null && lastFoundDate === undefined // キャッシュがある場合は新規かどうかを判定
+
       results.push({
         title,
         detail: {
           filename,
-          query: kinenbiUrlObject.searchParams,
+          query: searchParamsObject,
         },
+        foundDate,
+        isNew,
       })
     }
+
+    const cacheData: KinenbiCache = {
+      cachedDate: date.toISOString(),
+      results,
+    }
+    fs.writeFileSync(cachePath, JSON.stringify(cacheData, null, 2), 'utf8')
 
     return results
   }
@@ -81,7 +126,7 @@ export class Kinenbi {
     options: KinenbiDetailOptions
   ): Promise<KinenbiDetail> {
     const urlObject = new URL(this.baseUrl + options.filename)
-    urlObject.search = options.query.toString()
+    urlObject.search = this.objectToSearchParams(options.query).toString()
 
     const response = await axios.get<string>(urlObject.toString(), {
       validateStatus: () => true,
@@ -101,5 +146,35 @@ export class Kinenbi {
       title,
       description,
     }
+  }
+
+  private getCachePath(date: Date): string {
+    const dataDir = process.env.DATA_DIR ?? 'data/'
+    const cacheDir = `${dataDir}/kinenbi-cache/`
+    const cacheFile = `${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}.json`
+
+    if (!fs.existsSync(cacheDir)) {
+      fs.mkdirSync(cacheDir, { recursive: true })
+    }
+
+    return `${cacheDir}${cacheFile}`
+  }
+
+  private searchParamsToObject(
+    searchParams: URLSearchParams
+  ): Record<string, string> {
+    const result: Record<string, string> = {}
+    for (const [key, value] of searchParams) {
+      result[key] = value
+    }
+    return result
+  }
+
+  private objectToSearchParams(obj: Record<string, string>): URLSearchParams {
+    const searchParams = new URLSearchParams()
+    for (const key in obj) {
+      searchParams.append(key, obj[key])
+    }
+    return searchParams
   }
 }
