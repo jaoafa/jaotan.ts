@@ -83,7 +83,6 @@ export class Kinenbi {
         continue
       }
 
-      console.log('href', href)
       const kinenbiUrlObject = new URL(this.baseUrl + href)
       const filename = kinenbiUrlObject.pathname.split('/').pop()
       if (!filename) {
