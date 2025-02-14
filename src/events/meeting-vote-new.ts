@@ -9,15 +9,15 @@ import { MeetingVote } from '../features/meeting-vote'
 export class MeetingNewVoteEvent extends BaseDiscordEvent<'messageCreate'> {
   readonly eventName = 'messageCreate'
 
-  async execute(message: Message): Promise<void> {
+  async execute(message: Message<true>): Promise<void> {
     const config: Configuration = this.discord.getConfig()
     const meetingVoteChannelId =
       config.get('discord').channel?.meetingVote ?? '1149598703846440960'
 
     // #meeting_vote チャンネル以外は無視
     if (message.channel.id !== meetingVoteChannelId) return
-    // サーバ以外は無視 & メンバーが取得できない場合は無視
-    if (!message.guild || !message.member) return
+    // メンバーが取得できない場合は無視
+    if (!message.member) return
     // Botは無視
     if (message.author.bot) return
     // サーバのテキストチャンネル以外は無視

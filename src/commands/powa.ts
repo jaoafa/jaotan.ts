@@ -6,7 +6,7 @@ export class PowaCommand implements BaseCommand {
   readonly name = 'powa'
   readonly permissions = null
 
-  async execute(_discord: Discord, message: Message): Promise<void> {
+  async execute(_discord: Discord, message: Message<true>): Promise<void> {
     await message.channel.send(
       'ポわ～～～～～～～ｗｗｗｗ！！！ｗ！ｗｗ！ｗ！ｗ'
     )

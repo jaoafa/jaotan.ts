@@ -186,9 +186,21 @@ export class Nitrotan {
     )
 
     const reasonText = NitrotanReasonText[reason]
-    await this.channel.send(
-      `\`${member.user.username}\` (${discordId}) を Nitrotan として認識しました。\n理由: ${reasonText}`
-    )
+    await this.channel.send({
+      embeds: [
+        {
+          title: 'Nitrotanロールを付与',
+          description: `<@${discordId}> を Nitrotan として認識しました。`,
+          fields: [
+            {
+              name: '理由',
+              value: reasonText,
+            },
+          ],
+          color: 0x00_ff_00,
+        },
+      ],
+    })
 
     logger.info(`Added role ${member.user.username} [${discordId}] (${reason})`)
   }
@@ -235,9 +247,15 @@ export class Nitrotan {
         'Nitroではなくなったと見なされたため'
       )
 
-      await this.channel.send(
-        `\`${member.user.username}\` (${nitrotan.discordId}) は Nitro ではなくなったと見なされました。`
-      )
+      await this.channel.send({
+        embeds: [
+          {
+            title: 'Nitrotanロールを剥奪',
+            description: `<@${nitrotan.discordId}> は Nitro が行える操作を1週間以上行っていないため、Nitrotan ではなくなったと見なされました。`,
+            color: 0x00_ff_00,
+          },
+        ],
+      })
 
       logger.info(
         `Removed role ${member.user.username} [${nitrotan.discordId}] (${nitrotan.reason})`
@@ -265,6 +283,20 @@ export class Nitrotan {
         `Added role ${member.user.username} [${nitrotan.discordId}] (${nitrotan.reason})`
       )
     }
+  }
+
+  public check(discordId: string) {
+    this.load()
+
+    const nitrotan = Nitrotan.nitrotans.find(
+      (nitrotan) => nitrotan.discordId === discordId
+    )
+    if (!nitrotan) {
+      return
+    }
+
+    nitrotan.lastChecked = new Date()
+    this.save()
   }
 
   /**

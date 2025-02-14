@@ -9,7 +9,7 @@ export class AkakeseCommand implements BaseCommand {
 
   async execute(
     _discord: Discord,
-    message: Message,
+    message: Message<true>,
     args: string[]
   ): Promise<void> {
     // GIFファイルのパス

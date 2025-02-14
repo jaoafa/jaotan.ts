@@ -57,6 +57,7 @@ import { NitrotanReactionEvent } from './events/nitrotan-reaction'
 import { NitrotanMessageEvent } from './events/nitrotan-message'
 import { NitrotanOptimizeTask } from './tasks/nitrotan-optimize'
 import { NitrotanProfileTask } from './tasks/nitrotan-profile'
+import { ReplyEvent } from './events/reply'
 
 export class Discord {
   private config: Configuration
@@ -117,6 +118,9 @@ export class Discord {
     })
     this.client.on('ready', this.onReady.bind(this))
     this.client.on('messageCreate', (message) => {
+      if (!message.inGuild()) {
+        return
+      }
       this.onMessageCreate(message).catch((error: unknown) => {
         Logger.configure('Discord.onMessageCreate').error(
           '❌ Error',
@@ -136,6 +140,7 @@ export class Discord {
       new NitrotanReactionEvent(this),
       new PinPrefixEvent(this),
       new PinReactionEvent(this),
+      new ReplyEvent(this),
       new VCSpeechLogMessageUrlEvent(this),
     ]
     for (const event of events) {
@@ -191,7 +196,7 @@ export class Discord {
     }
   }
 
-  async onMessageCreate(message: Message) {
+  async onMessageCreate(message: Message<true>) {
     const logger = Logger.configure('Discord.onMessageCreate')
     // Botのメッセージは無視
     if (message.author.bot) {
@@ -200,7 +205,7 @@ export class Discord {
 
     // guildIdが設定されている場合、そのサーバ以外のメッセージは無視
     const onlyGuildId = this.config.get('discord').guildId
-    if (onlyGuildId && message.guild?.id !== onlyGuildId) {
+    if (onlyGuildId && message.guild.id !== onlyGuildId) {
       return
     }
 

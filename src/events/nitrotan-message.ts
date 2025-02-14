@@ -14,13 +14,14 @@ export class NitrotanMessageEvent extends BaseDiscordEvent<'messageCreate'> {
 
   private emojiRegex = /<(?<animated>a?):(?<name>\w+):(?<id>\d+)>/g
 
-  async execute(message: Message): Promise<void> {
-    if (!message.guild) return
-
+  async execute(message: Message<true>): Promise<void> {
     const userId = message.author.id
 
     const nitrotan = await Nitrotan.of(this.discord)
-    if (nitrotan.isNitrotan(userId)) return
+    if (nitrotan.isNitrotan(userId)) {
+      nitrotan.check(userId)
+      return
+    }
 
     const reason = this.getNitrotanReason(message)
     if (!reason) return
@@ -31,7 +32,7 @@ export class NitrotanMessageEvent extends BaseDiscordEvent<'messageCreate'> {
   /**
    * Nitroユーザーが取れる行動かどうか。かつどんな操作であるか
    */
-  private getNitrotanReason(message: Message): NitrotanReasonType | null {
+  private getNitrotanReason(message: Message<true>): NitrotanReasonType | null {
     if (this.isAnimationEmojiMessage(message)) {
       return NitrotanReason.USE_ANIMATION_EMOJI_MESSAGE
     }
@@ -57,7 +58,7 @@ export class NitrotanMessageEvent extends BaseDiscordEvent<'messageCreate'> {
    * @param message メッセージ
    * @returns アニメーション絵文字を使用したメッセージを送信したか
    */
-  private isAnimationEmojiMessage(message: Message): boolean {
+  private isAnimationEmojiMessage(message: Message<true>): boolean {
     const matches = message.content.matchAll(this.emojiRegex)
 
     return [...matches].some((match) => match.groups?.animated === 'a')
@@ -69,10 +70,10 @@ export class NitrotanMessageEvent extends BaseDiscordEvent<'messageCreate'> {
    * @param message メッセージ
    * @returns 他サーバーの絵文字を使用したメッセージを送信したか
    */
-  private isOtherServerEmojiMessage(message: Message): boolean {
+  private isOtherServerEmojiMessage(message: Message<true>): boolean {
     const matches = message.content.matchAll(this.emojiRegex)
 
-    const guildEmojis = message.guild?.emojis.cache ?? new Map<string, string>()
+    const guildEmojis = message.guild.emojis.cache
 
     return [...matches].some((match) => {
       const emojiId = match.groups?.id
@@ -87,12 +88,10 @@ export class NitrotanMessageEvent extends BaseDiscordEvent<'messageCreate'> {
    * @param message メッセージ
    * @returns サーバにないカスタムスタンプを使用したか
    */
-  private isCustomStickerMessage(message: Message): boolean {
+  private isCustomStickerMessage(message: Message<true>): boolean {
     const stickers = message.stickers
 
-    const guildStickers =
-      message.guild?.stickers.cache ?? new Map<string, string>()
-
+    const guildStickers = message.guild.stickers.cache
     return stickers.some((sticker) => {
       const stickerId = sticker.id
       if (!stickerId) return false
@@ -106,9 +105,8 @@ export class NitrotanMessageEvent extends BaseDiscordEvent<'messageCreate'> {
    * @param message メッセージ
    * @returns ブーストによる上限値より大きなファイルを送信したか
    */
-  private isOverBoostFileMessage(message: Message): boolean {
-    const premiumTier = message.guild?.premiumTier ?? 0
-
+  private isOverBoostFileMessage(message: Message<true>): boolean {
+    const premiumTier = message.guild.premiumTier
     const maxFileSize = (() => {
       switch (premiumTier) {
         case GuildPremiumTier.Tier2: {
@@ -134,7 +132,7 @@ export class NitrotanMessageEvent extends BaseDiscordEvent<'messageCreate'> {
    * @param message メッセージ
    * @returns 2000文字より多い文章を投稿したか
    */
-  private isOver2000CharactersMessage(message: Message): boolean {
+  private isOver2000CharactersMessage(message: Message<true>): boolean {
     return message.content.length > 2000
   }
 }

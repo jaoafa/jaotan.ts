@@ -11,13 +11,13 @@ export class VCSpeechLogMessageUrlEvent extends BaseDiscordEvent<'messageCreate'
 
   readonly eventName = 'messageCreate'
 
-  async execute(message: Message): Promise<void> {
+  async execute(message: Message<true>): Promise<void> {
     const config: Configuration = this.discord.getConfig()
     const vcSpeechLogChannelId =
       config.get('discord').channel?.vcSpeechLog ?? '1149606247314767993'
 
-    // サーバ以外は無視 & メンバーが取得できない場合は無視
-    if (!message.guild || !message.member) return
+    // メンバーが取得できない場合は無視
+    if (!message.member) return
     // Botは無視
     if (message.author.bot) return
 

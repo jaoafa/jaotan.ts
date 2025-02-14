@@ -9,7 +9,7 @@ export class TochaosCommand implements BaseCommand {
 
   async execute(
     discord: Discord,
-    message: Message,
+    message: Message<true>,
     args: string[]
   ): Promise<void> {
     const text = args.join(' ')

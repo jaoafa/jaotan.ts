@@ -208,7 +208,7 @@ export class Translate {
   }
 
   public async execute(
-    message: Message,
+    message: Message<true>,
     beforeLanguage: string,
     afterLanguages: string[],
     text: string

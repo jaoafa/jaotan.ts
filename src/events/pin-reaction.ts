@@ -27,7 +27,7 @@ export class PinReactionEvent extends BaseDiscordEvent<'messageReactionAdd'> {
     }
 
     // サーバ以外は無視 & メンバーが取得できない場合は無視
-    if (!message.guild || !message.member) return
+    if (!message.inGuild() || !message.member) return
     // Botは無視
     if (user.bot) return
     // サーバのテキストチャンネルとスレッド以外は無視

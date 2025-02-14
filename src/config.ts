@@ -25,6 +25,10 @@ export interface ConfigInterface {
     gcpKey: string
     cx: string
   }
+  mebo: {
+    apiKey: string
+    agentId: string
+  }
 }
 
 export class Configuration extends ConfigFramework<ConfigInterface> {

@@ -9,22 +9,9 @@ export class SetbannerCommand implements BaseCommand {
 
   async execute(
     _discord: Discord,
-    message: Message,
+    message: Message<true>,
     args: string[]
   ): Promise<void> {
-    if (!message.guild) {
-      await message.reply({
-        embeds: [
-          new EmbedBuilder()
-            .setTitle('❌ サーバー情報の取得失敗')
-            .setDescription('このコマンドはサーバでのみ実行できます')
-            .setTimestamp(new Date())
-            .setColor(Colors.Red),
-        ],
-      })
-      return
-    }
-
     const { author } = message
 
     // テンプレートファイルのパス
@@ -70,6 +57,7 @@ export class SetbannerCommand implements BaseCommand {
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
 
+    // eslint-disable-next-line @typescript-eslint/no-misused-spread -- unicorn/prefer-spread と競合
     const characters = [...text]
     const lineHeight = fontSize * 1.4
     for (let i = 0; i < characters.length; i++) {

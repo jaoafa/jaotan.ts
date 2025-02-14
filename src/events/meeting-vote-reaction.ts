@@ -34,7 +34,7 @@ export class MeetingReactionVoteEvent extends BaseDiscordEvent<'messageReactionA
     // #meeting_vote チャンネル以外は無視
     if (message.channel.id !== meetingVoteChannelId) return
     // サーバ以外は無視 & メンバーが取得できない場合は無視
-    if (!message.guild || !message.member) return
+    if (!message.inGuild() || !message.member) return
     // Botは無視
     if (user.bot) return
     // サーバのテキストチャンネル以外は無視
@@ -67,7 +67,7 @@ export class MeetingReactionVoteEvent extends BaseDiscordEvent<'messageReactionA
   }
 
   async executeMultipleVote(
-    message: Message,
+    message: Message<true>,
     reaction: MessageReaction | PartialMessageReaction,
     user: User
   ) {
@@ -102,7 +102,7 @@ export class MeetingReactionVoteEvent extends BaseDiscordEvent<'messageReactionA
   }
 
   async executeUserHasNoVoteRight(
-    message: Message,
+    message: Message<true>,
     reaction: MessageReaction | PartialMessageReaction,
     user: User
   ) {
