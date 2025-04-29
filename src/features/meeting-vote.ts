@@ -10,6 +10,89 @@ import {
 } from 'discord.js'
 
 /**
+ * 投票用リアクション
+ */
+class VoteReaction {
+  public unicode: string
+
+  /**
+   * コンストラクタ
+   *
+   * @param unicode リアクションのUnicode
+   */
+  constructor(unicode: string) {
+    this.unicode = unicode
+  }
+
+  /**
+   * メッセージにリアクションを付与します。
+   *
+   * @param message メッセージ
+   */
+  public async addReaction(message: Message<true>): Promise<void> {
+    await message.react(this.unicode)
+  }
+
+  /**
+   * 指定したメッセージでこのリアクションをつけたユーザーを取得します。
+   *
+   * @param message メッセージ
+   * @param excludeBot Botを除外するかどうか
+   * @returns ユーザーのコレクション
+   */
+  public async getUsers(
+    message: Message<true>,
+    excludeBot = false
+  ): Promise<Collection<string, User>> {
+    message = await message.fetch()
+
+    const reaction = message.reactions.resolve(this.unicode)
+    if (!reaction) {
+      return new Collection<string, User>()
+    }
+    const users = await reaction.users.fetch()
+    return excludeBot ? users.filter((user: User) => !user.bot) : users
+  }
+
+  /**
+   * ユーザーが指定したメッセージにこのリアクションをつけているかどうかを取得します。
+   *
+   * @param message メッセージ
+   * @param userId ユーザーID
+   * @returns リアクションをつけているかどうか
+   */
+  public async isReacted(
+    message: Message<true>,
+    userId: string
+  ): Promise<boolean> {
+    const users = await this.getUsers(message)
+    return users.some((user: User) => user.id === userId)
+  }
+}
+
+/**
+ * 投票に利用するリアクション種別
+ */
+export const VoteReactionType = {
+  /**
+   * 賛成
+   */
+  Good: new VoteReaction('\uD83D\uDC4D'),
+  /**
+   * 反対
+   */
+  Bad: new VoteReaction('\uD83D\uDC4E'),
+  /**
+   * 白票
+   */
+  White: new VoteReaction('\uD83C\uDFF3'),
+  /**
+   * リマインド済み
+   */
+  Remind: new VoteReaction('\uD83D\uDCF3'),
+} as const
+
+/**
  * 否認理由
  */
 const DisapprovalReason = {
@@ -523,86 +606,3 @@ export class MeetingVote {
     }/${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
   }
 }
-
-/**
- * 投票用リアクション
- */
-class VoteReaction {
-  public unicode: string
-
-  /**
-   * コンストラクタ
-   *
-   * @param unicode リアクションのUnicode
-   */
-  constructor(unicode: string) {
-    this.unicode = unicode
-  }
-
-  /**
-   * メッセージにリアクションを付与します。
-   *
-   * @param message メッセージ
-   */
-  public async addReaction(message: Message<true>): Promise<void> {
-    await message.react(this.unicode)
-  }
-
-  /**
-   * 指定したメッセージでこのリアクションをつけたユーザーを取得します。
-   *
-   * @param message メッセージ
-   * @param excludeBot Botを除外するかどうか
-   * @returns ユーザーのコレクション
-   */
-  public async getUsers(
-    message: Message<true>,
-    excludeBot = false
-  ): Promise<Collection<string, User>> {
-    message = await message.fetch()
-
-    const reaction = message.reactions.resolve(this.unicode)
-    if (!reaction) {
-      return new Collection<string, User>()
-    }
-    const users = await reaction.users.fetch()
-    return excludeBot ? users.filter((user: User) => !user.bot) : users
-  }
-
-  /**
-   * ユーザーが指定したメッセージにこのリアクションをつけているかどうかを取得します。
-   *
-   * @param message メッセージ
-   * @param userId ユーザーID
-   * @returns リアクションをつけているかどうか
-   */
-  public async isReacted(
-    message: Message<true>,
-    userId: string
-  ): Promise<boolean> {
-    const users = await this.getUsers(message)
-    return users.some((user: User) => user.id === userId)
-  }
-}
-
-/**
- * 投票に利用するリアクション種別
- */
-export const VoteReactionType = {
-  /**
-   * 賛成
-   */
-  Good: new VoteReaction('\uD83D\uDC4D'),
-  /**
-   * 反対
-   */
-  Bad: new VoteReaction('\uD83D\uDC4E'),
-  /**
-   * 白票
-   */
-  White: new VoteReaction('\uD83C\uDFF3'),
-  /**
-   * リマインド済み
-   */
-  Remind: new VoteReaction('\uD83D\uDCF3'),
-} as const
