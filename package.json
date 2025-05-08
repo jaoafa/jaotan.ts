@@ -32,7 +32,7 @@
     "@book000/node-utils": "1.15.9",
     "@napi-rs/canvas": "0.1.68",
     "@types/jest": "29.5.14",
-    "@types/node": "22.15.15",
+    "@types/node": "22.15.16",
     "@types/node-cron": "3.0.11",
     "axios": "1.9.0",
     "cheerio": "1.0.0",
