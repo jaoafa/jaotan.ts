@@ -12,8 +12,8 @@ importers:
         specifier: 1.9.2
         version: 1.9.2(eslint-config-standard@17.1.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.33.1(eslint@9.29.0)(typescript@5.8.3))(eslint@9.29.0))(eslint-plugin-n@17.20.0(eslint@9.29.0)(typescript@5.8.3))(eslint-plugin-promise@7.2.1(eslint@9.29.0))(eslint@9.29.0))(eslint@9.29.0)(typescript@5.8.3)
       '@book000/node-utils':
-        specifier: 1.18.10
-        version: 1.18.10
+        specifier: 1.18.11
+        version: 1.18.11
       '@napi-rs/canvas':
         specifier: 0.1.68
         version: 0.1.68
@@ -317,8 +317,8 @@ packages:
       eslint: 9.28.0
       eslint-config-standard: 17.1.0
 
-  '@book000/node-utils@1.18.10':
-    resolution: {integrity: sha512-/zIrFDgqyI+Yfd2QjlktHixmSJPAkO6yRc7VJ/Brrny/bMnA+7ehHWJY5D57w9L+sGZ7cl/2vrfi1JRzAitTaQ==}
+  '@book000/node-utils@1.18.11':
+    resolution: {integrity: sha512-dForjODcVvgV7uTXOTPvs271gYpqO7E+j0j9A7Krb9dMtk+T45CXXwluGB/83xtb23nT5BkrF8Sy73W39IReHw==}
 
   '@colors/colors@1.6.0':
     resolution: {integrity: sha512-Ir+AOibqzrIsL6ajt3Rz3LskB7OiMVHqltZmspbW/TJuTVuyOMirVqAkjfY6JISiLHgyNqicAC8AyHHGzNd/dA==}
@@ -1812,10 +1812,6 @@ packages:
   foreground-child@3.3.1:
     resolution: {integrity: sha512-gIXjKqtFuWEgzFRJA9WCQeSJLZDjgJUOMCMzxtvFq/37KojM1BFGufqsCy0r4qSQmYLsZYMeyRqzIWOMup03sw==}
     engines: {node: '>=14'}
-
-  form-data@4.0.2:
-    resolution: {integrity: sha512-hGfm/slu0ZabnNt4oaRZ6uREyfCj6P4fT/n6A1rGV+Z0VdGXjfOhVUpkn6qVQONHGIFwmveGXyDs75+nr6FM8w==}
-    engines: {node: '>= 6'}
 
   form-data@4.0.3:
     resolution: {integrity: sha512-qsITQPfmvMOSAdeyZ+12I1c+CKSstAFAwu+97zrnWAbIr5u8wfsExUzCesVLC8NgHuRUqNN4Zy6UPWUTRGslcA==}
@@ -3527,7 +3523,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@book000/node-utils@1.18.10':
+  '@book000/node-utils@1.18.11':
     dependencies:
       axios: 1.9.0
       cycle: 1.0.3
@@ -4484,7 +4480,7 @@ snapshots:
   axios@1.9.0:
     dependencies:
       follow-redirects: 1.15.9
-      form-data: 4.0.2
+      form-data: 4.0.3
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
@@ -5291,13 +5287,6 @@ snapshots:
     dependencies:
       cross-spawn: 7.0.6
       signal-exit: 4.1.0
-
-  form-data@4.0.2:
-    dependencies:
-      asynckit: 0.4.0
-      combined-stream: 1.0.8
-      es-set-tostringtag: 2.1.0
-      mime-types: 2.1.35
 
   form-data@4.0.3:
     dependencies:
