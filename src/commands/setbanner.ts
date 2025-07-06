@@ -46,7 +46,7 @@ export class SetbannerCommand implements BaseCommand {
     ctx.drawImage(templateImage, 0, 0, 960, 540)
 
     // テキストを描画
-    const text = args.join(' ')
+    const text = args.join(' ').replaceAll('ー', '┃')
 
     // 自動でフォントサイズを調整。フォントサイズ144pxを最大として、縦幅500pxに収まるようにする
     const textLength = text.length

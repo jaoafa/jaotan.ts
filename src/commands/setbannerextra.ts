@@ -38,11 +38,11 @@ export class SetbannerExtraCommand implements BaseCommand {
 
     // 左側絵文字の描画位置
     const leftEmojiX = 300
-    const leftEmojiY = 300
+    const leftEmojiY = 280
 
     // 右側絵文字の描画位置
     const rightEmojiX = 600
-    const rightEmojiY = 300
+    const rightEmojiY = 280
 
     // 右側テキストの描画位置
     const rightX = 845
@@ -92,11 +92,11 @@ export class SetbannerExtraCommand implements BaseCommand {
     }
 
     // 左側テキストと絵文字
-    const leftText = args[0]
+    const leftText = args[0].replaceAll('ー', '┃')
     const leftEmoji = args[1]
     // 右側絵文字とテキスト
     const rightEmoji = args[2]
-    const rightText = args[3]
+    const rightText = args[3].replaceAll('ー', '┃')
 
     // 絵文字文字列をパース
     const leftEmojiParsed = await this.parseEmojiText(leftEmoji)
