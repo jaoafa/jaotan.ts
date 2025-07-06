@@ -12,6 +12,7 @@
 - [search](search.md): [Google Custom Search JSON API](https://developers.google.com/custom-search/v1/overview) を利用して、Google 検索を行います。
 - [searchimg](searchimg.md): [Google Custom Search JSON API](https://developers.google.com/custom-search/v1/overview) を利用して、Google 画像検索を行います。
 - [setbanner](setbanner.md): 画像テンプレートに引数で指定された文字列を合成し、サーバのバナー画像として設定します。
+- [setbannerextra](setbannerextra.md): 画像テンプレートに引数で指定された文字列を複数合成し、サーバのバナー画像として設定します。
 - [super](super.md): ｽｩ( ᐛ👐) パァwﾍｸｻｺﾞｫﾝwwﾋﾞｷﾞｨﾝwﾃﾚﾚﾚﾚﾚﾚﾚﾃﾚﾚﾚﾚﾚﾚﾚﾃﾚﾚﾚﾚﾚﾚﾚwwﾃﾚｯﾃﾚｯﾃﾚｯwwʅ(´-౪-)ʃﾃﾞ─ﾝwwｹﾞｪｪﾑｵｰｳﾞｧｰwwwʅ(◜◡‾)ʃ?
 - [tmttmt](tmttmt.md): とまとぉwとまとぉw
 - [toar](toar.md): Google Translate サービスを利用して、アラビア文字に翻訳します。
