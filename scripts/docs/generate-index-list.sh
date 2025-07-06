@@ -70,7 +70,7 @@ get_first_line() {
       echo "$line"
       return
     fi
-      
+
     # h1 を見つけた
     if [ "${line:0:2}" = "# " ]; then
       after_h1=1
@@ -95,7 +95,7 @@ generate_list() {
       result="$result- [$item]($item.md) - $description\n"
       continue
     fi
-    local first_line=$(get_first_line "$dir/$item.md")
+    local first_line=$(get_first_line "$dir/$item.md" | xargs)
     if [ -n "$first_line" ]; then
       result="$result- [$item]($item.md): $first_line\n"
       continue
@@ -114,7 +114,7 @@ generate() {
     local template="$dir/$TEMPLATE_FILENAME"
     local output="$OUTPUT_DIR/$(basename $dir)/index.md"
     local list=$(generate_list $dir)
-  
+
     # 一覧を一時ファイルに書き出す
     local tmpfile=$(mktemp)
     echo "$list" > $tmpfile
