@@ -58,6 +58,7 @@ import { NitrotanMessageEvent } from './events/nitrotan-message'
 import { NitrotanOptimizeTask } from './tasks/nitrotan-optimize'
 import { NitrotanProfileTask } from './tasks/nitrotan-profile'
 import { ReplyEvent } from './events/reply'
+import { SetbannerExtraCommand } from './commands/setbannerextra'
 
 export class Discord {
   private config: Configuration
@@ -78,6 +79,7 @@ export class Discord {
     new SearchCommand(),
     new SearchImageCommand(),
     new SetbannerCommand(),
+    new SetbannerExtraCommand(),
     new SuperCommand(),
     new TmttmtCommand(),
     new ToarCommand(),
