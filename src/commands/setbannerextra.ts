@@ -150,7 +150,7 @@ export class SetbannerExtraCommand implements BaseCommand {
     const buffer = canvas.toBuffer('image/png')
     await message.guild.setBanner(
       buffer,
-      `Updated by setbanner command : ${author.tag}`
+      `Updated by setbannerextra command : ${author.tag}`
     )
 
     // 画像を送信
