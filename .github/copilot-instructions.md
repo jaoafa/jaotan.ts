@@ -74,32 +74,6 @@ src/
 - 権限チェックの実装
 - 適切な Discord API レート制限の考慮
 
-## プロジェクト固有のパターン
-
-### Configuration
-
-```typescript
-const config: Configuration = this.discord.getConfig()
-const channelId = config.get('discord').channel?.general
-```
-
-### Nitrotan システム
-
-Discord Nitro 利用者を自動判別するシステム。以下のパターンを検出:
-
-- アニメーション絵文字の使用
-- 他サーバ絵文字/スタンプの使用
-- 大容量ファイルの送信
-- プロフィール機能の使用
-
-### 翻訳機能
-
-Google Apps Script API と DetectLanguage API を使用した自動翻訳システム。
-
-### 誕生日機能
-
-ユーザーの誕生日を管理し、自動お祝いメッセージを送信。
-
 ## コメントとドキュメント
 
 ### 言語
