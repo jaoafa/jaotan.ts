@@ -51,7 +51,7 @@ src/
 ### TypeScript
 
 - 厳密な型付けを使用
-- インターface は `I` プレフィックスを使用する場合がある
+- インターフェース は `I` プレフィックスを使用する場合がある
 - `const` assertions を適切に使用
 - `as const` でオブジェクトを immutable にする
 
