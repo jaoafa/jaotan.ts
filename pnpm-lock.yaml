@@ -10,7 +10,7 @@ importers:
     devDependencies:
       '@book000/eslint-config':
         specifier: 1.9.19
-        version: 1.9.19(eslint-config-standard@17.1.0(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.35.1(eslint@9.32.0)(typescript@5.8.3))(eslint@9.32.0))(eslint-plugin-n@17.21.0(eslint@9.32.0)(typescript@5.8.3))(eslint-plugin-promise@7.2.1(eslint@9.32.0))(eslint@9.32.0))(eslint@9.32.0)(typescript@5.8.3)
+        version: 1.9.19(eslint-config-standard@17.1.0(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.35.1(eslint@9.32.0)(typescript@5.8.3))(eslint@9.32.0))(eslint-plugin-n@17.21.1(eslint@9.32.0)(typescript@5.8.3))(eslint-plugin-promise@7.2.1(eslint@9.32.0))(eslint@9.32.0))(eslint@9.32.0)(typescript@5.8.3)
       '@book000/node-utils':
         specifier: 1.18.50
         version: 1.18.50
@@ -43,13 +43,13 @@ importers:
         version: 9.32.0
       eslint-config-standard:
         specifier: 17.1.0
-        version: 17.1.0(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.35.1(eslint@9.32.0)(typescript@5.8.3))(eslint@9.32.0))(eslint-plugin-n@17.21.0(eslint@9.32.0)(typescript@5.8.3))(eslint-plugin-promise@7.2.1(eslint@9.32.0))(eslint@9.32.0)
+        version: 17.1.0(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.35.1(eslint@9.32.0)(typescript@5.8.3))(eslint@9.32.0))(eslint-plugin-n@17.21.1(eslint@9.32.0)(typescript@5.8.3))(eslint-plugin-promise@7.2.1(eslint@9.32.0))(eslint@9.32.0)
       eslint-plugin-import:
         specifier: 2.32.0
         version: 2.32.0(@typescript-eslint/parser@8.35.1(eslint@9.32.0)(typescript@5.8.3))(eslint@9.32.0)
       eslint-plugin-n:
-        specifier: 17.21.0
-        version: 17.21.0(eslint@9.32.0)(typescript@5.8.3)
+        specifier: 17.21.1
+        version: 17.21.1(eslint@9.32.0)(typescript@5.8.3)
       eslint-plugin-promise:
         specifier: 7.2.1
         version: 7.2.1(eslint@9.32.0)
@@ -1588,8 +1588,8 @@ packages:
     peerDependencies:
       eslint: '>=8.23.0'
 
-  eslint-plugin-n@17.21.0:
-    resolution: {integrity: sha512-1+iZ8We4ZlwVMtb/DcHG3y5/bZOdazIpa/4TySo22MLKdwrLcfrX0hbadnCvykSQCCmkAnWmIP8jZVb2AAq29A==}
+  eslint-plugin-n@17.21.1:
+    resolution: {integrity: sha512-Q4UBK4U3cXTUga/HjL0Ua4VFmUOI0XHF4K6gaRQ6Ly7Mwp/HcTR9cad2l93blemJbWK7JqqvF62BqzrCQ8BqmQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: '>=8.23.0'
@@ -1836,6 +1836,9 @@ packages:
   globalthis@1.0.4:
     resolution: {integrity: sha512-DpLKbNU4WylpxJykQujfCcwYWiV/Jhm50Goo0wrVILAv5jOr9d+H+UR3PhSCD2rCCEIg0uc+G+muBTwD54JhDQ==}
     engines: {node: '>= 0.4'}
+
+  globrex@0.1.2:
+    resolution: {integrity: sha512-uHJgbwAMwNFf5mLst7IWLNg14x1CkeqglJb/K3doi4dw6q2IvAAmM/Y81kevy83wP+Sst+nutFTYOGg3d1lsxg==}
 
   gopd@1.2.0:
     resolution: {integrity: sha512-ZUKRh6/kUFoAiTAtTYPZJ3hw9wNxx+BIBOijnlG9PnrJsCcSjs1wyyD6vJpaYtgnzDrKYRSqf3OO6Rfa93xsRg==}
@@ -3341,13 +3344,13 @@ snapshots:
 
   '@bcoe/v8-coverage@0.2.3': {}
 
-  '@book000/eslint-config@1.9.19(eslint-config-standard@17.1.0(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.35.1(eslint@9.32.0)(typescript@5.8.3))(eslint@9.32.0))(eslint-plugin-n@17.21.0(eslint@9.32.0)(typescript@5.8.3))(eslint-plugin-promise@7.2.1(eslint@9.32.0))(eslint@9.32.0))(eslint@9.32.0)(typescript@5.8.3)':
+  '@book000/eslint-config@1.9.19(eslint-config-standard@17.1.0(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.35.1(eslint@9.32.0)(typescript@5.8.3))(eslint@9.32.0))(eslint-plugin-n@17.21.1(eslint@9.32.0)(typescript@5.8.3))(eslint-plugin-promise@7.2.1(eslint@9.32.0))(eslint@9.32.0))(eslint@9.32.0)(typescript@5.8.3)':
     dependencies:
       '@eslint/eslintrc': 3.3.1
       '@typescript-eslint/parser': 8.35.1(eslint@9.32.0)(typescript@5.8.3)
       eslint: 9.32.0
       eslint-config-prettier: 10.1.5(eslint@9.32.0)
-      eslint-config-standard: 17.1.0(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.35.1(eslint@9.32.0)(typescript@5.8.3))(eslint@9.32.0))(eslint-plugin-n@17.21.0(eslint@9.32.0)(typescript@5.8.3))(eslint-plugin-promise@7.2.1(eslint@9.32.0))(eslint@9.32.0)
+      eslint-config-standard: 17.1.0(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.35.1(eslint@9.32.0)(typescript@5.8.3))(eslint@9.32.0))(eslint-plugin-n@17.21.1(eslint@9.32.0)(typescript@5.8.3))(eslint-plugin-promise@7.2.1(eslint@9.32.0))(eslint@9.32.0)
       eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.35.1(eslint@9.32.0)(typescript@5.8.3))(eslint@9.32.0)
       eslint-plugin-n: 17.20.0(eslint@9.32.0)(typescript@5.8.3)
       eslint-plugin-promise: 7.2.1(eslint@9.32.0)
@@ -4834,11 +4837,11 @@ snapshots:
     dependencies:
       eslint: 9.32.0
 
-  eslint-config-standard@17.1.0(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.35.1(eslint@9.32.0)(typescript@5.8.3))(eslint@9.32.0))(eslint-plugin-n@17.21.0(eslint@9.32.0)(typescript@5.8.3))(eslint-plugin-promise@7.2.1(eslint@9.32.0))(eslint@9.32.0):
+  eslint-config-standard@17.1.0(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.35.1(eslint@9.32.0)(typescript@5.8.3))(eslint@9.32.0))(eslint-plugin-n@17.21.1(eslint@9.32.0)(typescript@5.8.3))(eslint-plugin-promise@7.2.1(eslint@9.32.0))(eslint@9.32.0):
     dependencies:
       eslint: 9.32.0
       eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.35.1(eslint@9.32.0)(typescript@5.8.3))(eslint@9.32.0)
-      eslint-plugin-n: 17.21.0(eslint@9.32.0)(typescript@5.8.3)
+      eslint-plugin-n: 17.21.1(eslint@9.32.0)(typescript@5.8.3)
       eslint-plugin-promise: 7.2.1(eslint@9.32.0)
 
   eslint-import-resolver-node@0.3.9:
@@ -4912,7 +4915,7 @@ snapshots:
       - supports-color
       - typescript
 
-  eslint-plugin-n@17.21.0(eslint@9.32.0)(typescript@5.8.3):
+  eslint-plugin-n@17.21.1(eslint@9.32.0)(typescript@5.8.3):
     dependencies:
       '@eslint-community/eslint-utils': 4.7.0(eslint@9.32.0)
       enhanced-resolve: 5.18.2
@@ -4920,6 +4923,7 @@ snapshots:
       eslint-plugin-es-x: 7.8.0(eslint@9.32.0)
       get-tsconfig: 4.10.1
       globals: 15.15.0
+      globrex: 0.1.2
       ignore: 5.3.2
       minimatch: 9.0.5
       semver: 7.7.2
@@ -5234,6 +5238,8 @@ snapshots:
     dependencies:
       define-properties: 1.2.1
       gopd: 1.2.0
+
+  globrex@0.1.2: {}
 
   gopd@1.2.0: {}
 
