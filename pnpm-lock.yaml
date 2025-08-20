@@ -33,8 +33,8 @@ importers:
         specifier: 1.1.2
         version: 1.1.2
       detectlanguage:
-        specifier: 2.1.0
-        version: 2.1.0
+        specifier: 3.0.0
+        version: 3.0.0
       discord.js:
         specifier: 14.21.0
         version: 14.21.0
@@ -1130,9 +1130,6 @@ packages:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
     engines: {node: '>= 0.4'}
 
-  axios@0.21.4:
-    resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
-
   axios@1.10.0:
     resolution: {integrity: sha512-/1xYAC4MP/HEG+3duIhFr4ZQXR4sQXOIe+o6sdqzeykGLx6Upp/1p8MHqhINOvGeP7xyNHe7tsiJByc4SSVUxw==}
 
@@ -1388,8 +1385,8 @@ packages:
     resolution: {integrity: sha512-TLz+x/vEXm/Y7P7wn1EJFNLxYpUD4TgMosxY6fAVJUnJMbupHBOncxyWUG9OpTaH9EBD7uFI5LfEgmMOc54DsA==}
     engines: {node: '>=8'}
 
-  detectlanguage@2.1.0:
-    resolution: {integrity: sha512-EbLGyZxiQJeur5a+GNOzBV9xL/r/7GfvRALSHAKepw38UAvCssn7obVvhsioRIV+uDj3IQtXzL7iNkwu0oCp7g==}
+  detectlanguage@3.0.0:
+    resolution: {integrity: sha512-Lh0c3XYs6+l0XjdOmhIz0MWiUYmau1Q98Ygs9YtBCakOUvdpTTtuoOG0qFQ6EvT7pmiNswT+QUXSn/KzT4xYxw==}
 
   diff@4.0.2:
     resolution: {integrity: sha512-58lmxKSA4BNyLz+HHMUzlOEpg09FV+ev6ZMe3vJihgdxzgcwZ8VoEEPmALCZG9LmqfVoNMMKpttIYTVG6uDY7A==}
@@ -4312,12 +4309,6 @@ snapshots:
     dependencies:
       possible-typed-array-names: 1.1.0
 
-  axios@0.21.4:
-    dependencies:
-      follow-redirects: 1.15.9
-    transitivePeerDependencies:
-      - debug
-
   axios@1.10.0:
     dependencies:
       follow-redirects: 1.15.9
@@ -4613,11 +4604,7 @@ snapshots:
 
   detect-newline@3.1.0: {}
 
-  detectlanguage@2.1.0:
-    dependencies:
-      axios: 0.21.4
-    transitivePeerDependencies:
-      - debug
+  detectlanguage@3.0.0: {}
 
   diff@4.0.2: {}
 
