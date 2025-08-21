@@ -245,9 +245,9 @@ export class MeetingVote {
    * ピン留めされているすべての投票メッセージをチェック処理します。
    */
   public async run() {
-    const pinnedMessages = await this.channel.messages.fetchPinned()
-    for (const message of pinnedMessages.values()) {
-      await this.runMessage(message)
+    const pinnedMessages = await this.channel.messages.fetchPins()
+    for (const messagePin of pinnedMessages.items) {
+      await this.runMessage(messagePin.message)
     }
   }
 
