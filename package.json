@@ -48,7 +48,7 @@
     "node-cron": "4.2.1",
     "prettier": "3.6.2",
     "run-z": "2.1.0",
-    "ts-jest": "29.4.1",
+    "ts-jest": "29.4.2",
     "tsx": "4.20.5",
     "typescript": "5.9.2",
     "typescript-json-schema": "0.65.1"
