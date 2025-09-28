@@ -12,8 +12,8 @@ importers:
         specifier: 1.9.19
         version: 1.9.19(eslint-config-standard@17.1.0(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.35.1(eslint@9.36.0)(typescript@5.9.2))(eslint@9.36.0))(eslint-plugin-n@17.23.1(eslint@9.36.0)(typescript@5.9.2))(eslint-plugin-promise@7.2.1(eslint@9.36.0))(eslint@9.36.0))(eslint@9.36.0)(typescript@5.9.2)
       '@book000/node-utils':
-        specifier: 1.18.50
-        version: 1.18.50
+        specifier: 1.18.125
+        version: 1.18.125
       '@napi-rs/canvas':
         specifier: 0.1.80
         version: 0.1.80
@@ -258,8 +258,8 @@ packages:
       eslint: 9.30.0
       eslint-config-standard: 17.1.0
 
-  '@book000/node-utils@1.18.50':
-    resolution: {integrity: sha512-daaKDfk4JFYbwVNYDdXCTSrisQVAbe5K5konqIbqNrAMjhP8IxtQRFhVYaetOuqHFaoLIPlv1JXahzaRWqfDZQ==}
+  '@book000/node-utils@1.18.125':
+    resolution: {integrity: sha512-cr+ORUKTQ5IwnpFaAsXADAv/NoqC2Fntogg3tv4U9fS8EOulVrbN9iABKMas12io+9AIeGhxw2sCuerBvhEkWg==}
 
   '@colors/colors@1.6.0':
     resolution: {integrity: sha512-Ir+AOibqzrIsL6ajt3Rz3LskB7OiMVHqltZmspbW/TJuTVuyOMirVqAkjfY6JISiLHgyNqicAC8AyHHGzNd/dA==}
@@ -1140,8 +1140,8 @@ packages:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
     engines: {node: '>= 0.4'}
 
-  axios@1.10.0:
-    resolution: {integrity: sha512-/1xYAC4MP/HEG+3duIhFr4ZQXR4sQXOIe+o6sdqzeykGLx6Upp/1p8MHqhINOvGeP7xyNHe7tsiJByc4SSVUxw==}
+  axios@1.11.0:
+    resolution: {integrity: sha512-1Lx3WLFQWm3ooKDYZD1eXmoGO9fxYQjrycfHFC8P0sCfQVXyROp0p9PFWBehewBOdCwHc+f/b8I0fMto5eSfwA==}
 
   axios@1.12.2:
     resolution: {integrity: sha512-vMJzPewAlRyOgxV2dU0Cuz2O8zzzx9VYtbJOaBgXFeLc4IV/Eg50n4LowmehOOR61S8ZMpc2K5Sa7g6A4jfkUw==}
@@ -1742,10 +1742,6 @@ packages:
   foreground-child@3.3.1:
     resolution: {integrity: sha512-gIXjKqtFuWEgzFRJA9WCQeSJLZDjgJUOMCMzxtvFq/37KojM1BFGufqsCy0r4qSQmYLsZYMeyRqzIWOMup03sw==}
     engines: {node: '>=14'}
-
-  form-data@4.0.3:
-    resolution: {integrity: sha512-qsITQPfmvMOSAdeyZ+12I1c+CKSstAFAwu+97zrnWAbIr5u8wfsExUzCesVLC8NgHuRUqNN4Zy6UPWUTRGslcA==}
-    engines: {node: '>= 6'}
 
   form-data@4.0.4:
     resolution: {integrity: sha512-KrGhL9Q4zjj0kiUt5OO4Mr/A/jlI2jDYs5eHBpYHPcBEVSiipAvn2Ko2HnPe20rmcuuvMHNdZFp+4IlGTMF0Ow==}
@@ -3369,11 +3365,11 @@ snapshots:
       - supports-color
       - typescript
 
-  '@book000/node-utils@1.18.50':
+  '@book000/node-utils@1.18.125':
     dependencies:
-      axios: 1.10.0
+      axios: 1.11.0
       cycle: 1.0.3
-      form-data: 4.0.3
+      form-data: 4.0.4
       jsonc-parser: 3.3.1
       moment-timezone: 0.6.0
       winston: 3.17.0
@@ -4326,7 +4322,7 @@ snapshots:
     dependencies:
       possible-typed-array-names: 1.1.0
 
-  axios@1.10.0:
+  axios@1.11.0:
     dependencies:
       follow-redirects: 1.15.9
       form-data: 4.0.4
@@ -5121,14 +5117,6 @@ snapshots:
     dependencies:
       cross-spawn: 7.0.6
       signal-exit: 4.1.0
-
-  form-data@4.0.3:
-    dependencies:
-      asynckit: 0.4.0
-      combined-stream: 1.0.8
-      es-set-tostringtag: 2.1.0
-      hasown: 2.0.2
-      mime-types: 2.1.35
 
   form-data@4.0.4:
     dependencies:
