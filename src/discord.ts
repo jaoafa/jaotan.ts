@@ -214,7 +214,7 @@ export class Discord {
     // 対応するコマンドを探す
     // コマンドは長い順にソートしておく
     const command = Discord.commands
-      .sort((a, b) => b.name.length - a.name.length)
+      .toSorted((a, b) => b.name.length - a.name.length)
       .find((command) => message.content.startsWith(`/${command.name}`))
     if (!command) {
       // コマンドが見つからない場合は無視
