@@ -37,7 +37,7 @@
     "axios": "1.13.1",
     "cheerio": "1.1.2",
     "detectlanguage": "3.0.0",
-    "discord.js": "14.24.1",
+    "discord.js": "14.24.2",
     "eslint": "9.38.0",
     "eslint-config-standard": "17.1.0",
     "eslint-plugin-import": "2.32.0",
