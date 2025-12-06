@@ -30,7 +30,7 @@
   "devDependencies": {
     "@book000/eslint-config": "1.12.12",
     "@book000/node-utils": "1.18.174",
-    "@napi-rs/canvas": "0.1.83",
+    "@napi-rs/canvas": "0.1.84",
     "@types/jest": "30.0.0",
     "@types/node": "24.10.1",
     "@types/node-cron": "3.0.11",
