@@ -59,6 +59,7 @@ import { NitrotanOptimizeTask } from './tasks/nitrotan-optimize'
 import { NitrotanProfileTask } from './tasks/nitrotan-profile'
 import { ReplyEvent } from './events/reply'
 import { SetbannerExtraCommand } from './commands/setbannerextra'
+import { GreetingTimeoutTask } from './tasks/greeting-timeout'
 
 export class Discord {
   private config: Configuration
@@ -157,6 +158,7 @@ export class Discord {
       new MeetingVoteTask(this),
       new NitrotanOptimizeTask(this),
       new NitrotanProfileTask(this),
+      new GreetingTimeoutTask(this),
     ]
     for (const task of this.tasks) {
       task.register().catch((error: unknown) => {
