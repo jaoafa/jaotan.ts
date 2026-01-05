@@ -22,15 +22,9 @@ export class GreetingTimeoutTask extends BaseDiscordTask {
   async execute(): Promise<void> {
     const logger = Logger.configure('GreetingTimeoutTask.execute')
     const config = this.discord.getConfig()
-    const guildId = config.get('discord').guildId
+    const guildId = config.get('discord').guildId ?? '1138605145660326040'
 
     try {
-      // Guild ID が未設定の場合は処理を中止
-      if (!guildId) {
-        logger.warn('⚠️ Guild ID is not configured')
-        return
-      }
-
       // ギルドを取得
       const guild = await this.discord.client.guilds.fetch(guildId)
 
