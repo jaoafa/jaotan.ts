@@ -9,10 +9,14 @@ import { Logger } from '@book000/node-utils'
  * - 1分間隔でメンバーを走査
  */
 export class GreetingTimeoutTask extends BaseDiscordTask {
-  // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+  // 挨拶タイムアウトの時間（ミリ秒）
+  private static readonly GREETING_TIMEOUT_MS = 10 * 60 * 1000 // 10分
+
+  // タスク実行間隔（秒）
+  private static readonly INTERVAL_SECONDS = 60 // 1分
+
   get interval(): number {
-    // 1分毎に実行
-    return 60
+    return GreetingTimeoutTask.INTERVAL_SECONDS
   }
 
   async execute(): Promise<void> {
@@ -32,9 +36,9 @@ export class GreetingTimeoutTask extends BaseDiscordTask {
       }
 
       // メンバー一覧を取得
+      // Note: guild.members.fetch() は全メンバーを取得するため、大規模サーバでは負荷が高くなる可能性がある
       const members = await guild.members.fetch()
       const now = Date.now()
-      const tenMinutesInMs = 10 * 60 * 1000
 
       let checkedCount = 0
       let kickedCount = 0
@@ -67,7 +71,7 @@ export class GreetingTimeoutTask extends BaseDiscordTask {
         const joinedAtMs = member.joinedAt.getTime()
         const elapsedMs = now - joinedAtMs
 
-        if (elapsedMs >= tenMinutesInMs) {
+        if (elapsedMs >= GreetingTimeoutTask.GREETING_TIMEOUT_MS) {
           // キック可能か確認
           if (!member.kickable) {
             logger.warn(
@@ -94,11 +98,9 @@ export class GreetingTimeoutTask extends BaseDiscordTask {
         }
       }
 
-      if (kickedCount > 0) {
-        logger.info(
-          `✅ Greeting timeout check completed: checked ${checkedCount} members, kicked ${kickedCount}`
-        )
-      }
+      logger.info(
+        `✅ Greeting timeout check completed: checked ${checkedCount} members, kicked ${kickedCount}`
+      )
     } catch (error) {
       logger.error('❌ Error in greeting timeout task', error as Error)
     }
