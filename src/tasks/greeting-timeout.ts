@@ -25,15 +25,14 @@ export class GreetingTimeoutTask extends BaseDiscordTask {
     const guildId = config.get('discord').guildId
 
     try {
-      // ギルドを取得
-      const guild = guildId
-        ? await this.discord.client.guilds.fetch(guildId)
-        : this.discord.client.guilds.cache.first()
-
-      if (!guild) {
-        logger.warn('⚠️ Guild not found')
+      // Guild ID が未設定の場合は処理を中止
+      if (!guildId) {
+        logger.warn('⚠️ Guild ID is not configured')
         return
       }
+
+      // ギルドを取得
+      const guild = await this.discord.client.guilds.fetch(guildId)
 
       // メンバー一覧を取得
       // Note: guild.members.fetch() は全メンバーを取得するため、大規模サーバでは負荷が高くなる可能性がある
