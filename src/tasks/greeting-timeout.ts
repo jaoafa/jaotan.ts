@@ -9,7 +9,11 @@ import { Logger } from '@book000/node-utils'
  * - 1分間隔でメンバーを走査
  */
 export class GreetingTimeoutTask extends BaseDiscordTask {
-  readonly interval = 60
+  // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+  get interval(): number {
+    // 1分毎に実行
+    return 60
+  }
 
   async execute(): Promise<void> {
     const logger = Logger.configure('GreetingTimeoutTask.execute')
