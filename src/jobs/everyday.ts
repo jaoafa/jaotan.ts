@@ -16,7 +16,7 @@ export class EveryDayJob extends BaseDiscordJob {
       config.get('discord').channel?.general ?? '1138605147287728150'
 
     const channel = await this.discord.client.channels.fetch(generalChannelId)
-    if (!channel || channel.type !== ChannelType.GuildText) return
+    if (channel?.type !== ChannelType.GuildText) return
 
     // 誕生日を取得
     const birthday = new Birthday()

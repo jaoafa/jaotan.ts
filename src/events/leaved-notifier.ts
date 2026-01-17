@@ -16,7 +16,7 @@ export class LeavedNotififerEvent extends BaseDiscordEvent<'guildMemberRemove'> 
 
     const generalChannel =
       await this.discord.client.channels.fetch(generalChannelId)
-    if (!generalChannel || generalChannel.type !== ChannelType.GuildText) {
+    if (generalChannel?.type !== ChannelType.GuildText) {
       throw new Error('generalChannel is not found')
     }
 

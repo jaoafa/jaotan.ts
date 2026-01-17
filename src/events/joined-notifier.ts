@@ -19,12 +19,12 @@ export class JoinedNotifierEvent extends BaseDiscordEvent<'guildMemberAdd'> {
 
     const generalChannel =
       await this.discord.client.channels.fetch(generalChannelId)
-    if (!generalChannel || generalChannel.type !== ChannelType.GuildText) {
+    if (generalChannel?.type !== ChannelType.GuildText) {
       throw new Error('generalChannel is not found')
     }
     const greetingChannel =
       await this.discord.client.channels.fetch(greetingChannelId)
-    if (!greetingChannel || greetingChannel.type !== ChannelType.GuildText) {
+    if (greetingChannel?.type !== ChannelType.GuildText) {
       throw new Error('greetingChannel is not found')
     }
 

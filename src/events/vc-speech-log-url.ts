@@ -33,11 +33,7 @@ export class VCSpeechLogMessageUrlEvent extends BaseDiscordEvent<'messageCreate'
 
     // メッセージを取得
     const vcSpeechLogChannel = await message.guild.channels.fetch(urlChannelId)
-    if (
-      !vcSpeechLogChannel ||
-      vcSpeechLogChannel.type !== ChannelType.GuildText
-    )
-      return
+    if (vcSpeechLogChannel?.type !== ChannelType.GuildText) return
 
     const vcSpeechLogMessage =
       await vcSpeechLogChannel.messages.fetch(urlMessageId)

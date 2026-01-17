@@ -19,7 +19,7 @@ export class MeetingVoteTask extends BaseDiscordTask {
 
     const channel =
       await this.discord.client.channels.fetch(meetingVoteChannelId)
-    if (!channel || channel.type !== ChannelType.GuildText) return
+    if (channel?.type !== ChannelType.GuildText) return
 
     const meetingVoteFeature = new MeetingVote(channel)
     await meetingVoteFeature.run()
