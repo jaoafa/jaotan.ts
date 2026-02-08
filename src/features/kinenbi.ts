@@ -2,6 +2,7 @@ import axios from 'axios'
 import { load } from 'cheerio'
 import fs from 'node:fs'
 import fsp from 'node:fs/promises'
+import { Logger } from '@book000/node-utils'
 
 export interface KinenbiDetailOptions {
   filename: string
@@ -160,6 +161,8 @@ export class Kinenbi {
     rank: number
     totalDays: number
   } | null> {
+    const logger = Logger.configure('Kinenbi.getRanking')
+
     try {
       const dataDir = process.env.DATA_DIR ?? 'data/'
       const cacheDir = `${dataDir}/kinenbi-cache/`
@@ -178,12 +181,7 @@ export class Kinenbi {
       const todayCacheData: unknown = JSON.parse(
         await fsp.readFile(todayCachePath, 'utf8')
       )
-      if (
-        !todayCacheData ||
-        typeof todayCacheData !== 'object' ||
-        !('results' in todayCacheData) ||
-        !Array.isArray(todayCacheData.results)
-      ) {
+      if (!this.hasResultsArray(todayCacheData)) {
         return null
       }
 
@@ -203,12 +201,7 @@ export class Kinenbi {
             await fsp.readFile(filePath, 'utf8')
           )
 
-          if (
-            fileData &&
-            typeof fileData === 'object' &&
-            'results' in fileData &&
-            Array.isArray(fileData.results)
-          ) {
+          if (this.hasResultsArray(fileData)) {
             counts.push(fileData.results.length)
           }
         } catch {
@@ -232,9 +225,27 @@ export class Kinenbi {
       }
     } catch (error) {
       // エラーが発生した場合は null を返す
-      console.error('Failed to get ranking:', error)
+      logger.error(
+        'Failed to get ranking',
+        error instanceof Error ? error : undefined
+      )
       return null
     }
+  }
+
+  /**
+   * 指定したオブジェクトが results 配列を持つかどうかを判定する型ガード
+   *
+   * @param value - チェックする値
+   * @returns results 配列を持つ場合は true
+   */
+  private hasResultsArray(value: unknown): value is { results: unknown[] } {
+    return (
+      value !== null &&
+      typeof value === 'object' &&
+      'results' in value &&
+      Array.isArray((value as Record<string, unknown>).results)
+    )
   }
 
   private getCachePath(date: Date): string {

@@ -34,7 +34,7 @@ export class EveryDayJob extends BaseDiscordJob {
     // 記念日のランキングを取得
     const ranking = await kinenbi.getRanking(today)
     const rankingText = ranking
-      ? `今日は記念日が ${ranking.todayCount} 個あり、${ranking.totalDays} 日中 ${ranking.rank} 位です！`
+      ? `今日は記念日が ${ranking.todayCount} 個あり、${ranking.totalDays} 日中 ${ranking.rank} 位です。`
       : null
 
     const todayYear = today.getFullYear()
@@ -86,8 +86,8 @@ export class EveryDayJob extends BaseDiscordJob {
       '',
       ':birthday: __**今日の記念日 (一般社団法人 日本記念日協会)**__ :birthday:',
       '記念日名の前にある番号(記念日ナンバー)を使って、記念日を詳しく調べられます。`/origin <記念日ナンバー>`を実行して下さい。(当日のみ)',
-      '',
       ...(rankingText ? [rankingText, ''] : []),
+      '',
       ...kinenbiContents,
       '',
       todayBirthdays.length > 0 ? otherCongratulation.join('\n') : '',
