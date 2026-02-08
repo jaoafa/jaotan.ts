@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { load } from 'cheerio'
 import fs from 'node:fs'
+import fsp from 'node:fs/promises'
+import { Logger } from '@book000/node-utils'
 
 export interface KinenbiDetailOptions {
   filename: string
@@ -146,6 +148,104 @@ export class Kinenbi {
       title,
       description,
     }
+  }
+
+  /**
+   * 指定した日付の記念日個数のランキングを取得する
+   *
+   * @param date - ランキングを取得する日付
+   * @returns ランキング情報（記念日個数、順位、総日数）、取得できない場合は null
+   */
+  public async getRanking(date: Date): Promise<{
+    todayCount: number
+    rank: number
+    totalDays: number
+  } | null> {
+    const logger = Logger.configure('Kinenbi.getRanking')
+
+    try {
+      const dataDir = process.env.DATA_DIR ?? 'data/'
+      const cacheDir = `${dataDir}/kinenbi-cache/`
+
+      // キャッシュディレクトリの存在確認
+      if (!fs.existsSync(cacheDir)) {
+        return null
+      }
+
+      // 今日のキャッシュファイルを読み込む
+      const todayCachePath = this.getCachePath(date)
+      if (!fs.existsSync(todayCachePath)) {
+        return null
+      }
+
+      const todayCacheData: unknown = JSON.parse(
+        await fsp.readFile(todayCachePath, 'utf8')
+      )
+      if (!this.hasResultsArray(todayCacheData)) {
+        return null
+      }
+
+      const todayCount = todayCacheData.results.length
+
+      // すべてのキャッシュファイルを読み込んで記念日個数をカウント
+      // 今日のファイルも counts に含めて集計する
+      const files = await fsp.readdir(cacheDir)
+      const jsonFiles = files.filter((file) => file.endsWith('.json'))
+
+      const counts: number[] = []
+
+      for (const file of jsonFiles) {
+        try {
+          const filePath = `${cacheDir}${file}`
+          const fileData: unknown = JSON.parse(
+            await fsp.readFile(filePath, 'utf8')
+          )
+
+          if (this.hasResultsArray(fileData)) {
+            counts.push(fileData.results.length)
+          }
+        } catch {
+          // JSON パースエラーやファイル読み込みエラーはスキップ
+          continue
+        }
+      }
+
+      if (counts.length === 0) {
+        return null
+      }
+
+      // 順位を計算: 今日より記念日が多い日数 + 1
+      // 同率の場合は同じ順位となる
+      const rank = counts.filter((count) => count > todayCount).length + 1
+
+      return {
+        todayCount,
+        rank,
+        totalDays: counts.length,
+      }
+    } catch (error) {
+      // エラーが発生した場合は null を返す
+      logger.error(
+        'Failed to get ranking',
+        error instanceof Error ? error : undefined
+      )
+      return null
+    }
+  }
+
+  /**
+   * 指定したオブジェクトが results 配列を持つかどうかを判定する型ガード
+   *
+   * @param value - チェックする値
+   * @returns results 配列を持つ場合は true
+   */
+  private hasResultsArray(value: unknown): value is { results: unknown[] } {
+    return (
+      value !== null &&
+      typeof value === 'object' &&
+      'results' in value &&
+      Array.isArray((value as Record<string, unknown>).results)
+    )
   }
 
   private getCachePath(date: Date): string {
