@@ -2,7 +2,6 @@ import axios from 'axios'
 import { load } from 'cheerio'
 import fs from 'node:fs'
 import fsp from 'node:fs/promises'
-import path from 'node:path'
 
 export interface KinenbiDetailOptions {
   filename: string
@@ -163,7 +162,7 @@ export class Kinenbi {
   } | null> {
     try {
       const dataDir = process.env.DATA_DIR ?? 'data/'
-      const cacheDir = path.join(dataDir, 'kinenbi-cache')
+      const cacheDir = `${dataDir}/kinenbi-cache/`
 
       // キャッシュディレクトリの存在確認
       if (!fs.existsSync(cacheDir)) {
@@ -191,6 +190,7 @@ export class Kinenbi {
       const todayCount = todayCacheData.results.length
 
       // すべてのキャッシュファイルを読み込んで記念日個数をカウント
+      // 今日のファイルも counts に含めて集計する
       const files = await fsp.readdir(cacheDir)
       const jsonFiles = files.filter((file) => file.endsWith('.json'))
 
@@ -198,7 +198,7 @@ export class Kinenbi {
 
       for (const file of jsonFiles) {
         try {
-          const filePath = path.join(cacheDir, file)
+          const filePath = `${cacheDir}${file}`
           const fileData: unknown = JSON.parse(
             await fsp.readFile(filePath, 'utf8')
           )
@@ -221,7 +221,8 @@ export class Kinenbi {
         return null
       }
 
-      // 順位を計算: count > todayCount の日数 + 1
+      // 順位を計算: 今日より記念日が多い日数 + 1
+      // 同率の場合は同じ順位となる
       const rank = counts.filter((count) => count > todayCount).length + 1
 
       return {

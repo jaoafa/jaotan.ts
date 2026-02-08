@@ -28,10 +28,10 @@ export class EveryDayJob extends BaseDiscordJob {
     })
 
     // 記念日を取得
-    const kinenbiContents = await this.getKinenbiContents(today)
+    const kinenbi = new Kinenbi()
+    const kinenbiContents = await this.getKinenbiContents(today, kinenbi)
 
     // 記念日のランキングを取得
-    const kinenbi = new Kinenbi()
     const ranking = await kinenbi.getRanking(today)
     const rankingText = ranking
       ? `今日は記念日が ${ranking.todayCount} 個あり、${ranking.totalDays} 日中 ${ranking.rank} 位です！`
@@ -97,8 +97,10 @@ export class EveryDayJob extends BaseDiscordJob {
     await channel.send(content.join('\n').trim())
   }
 
-  private async getKinenbiContents(date: Date): Promise<string[]> {
-    const kinenbi = new Kinenbi()
+  private async getKinenbiContents(
+    date: Date,
+    kinenbi: Kinenbi
+  ): Promise<string[]> {
     const todayKinenbi = await kinenbi.get(date, true)
     const contents = []
 
