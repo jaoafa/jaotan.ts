@@ -116,13 +116,6 @@ export class EveryDayJob extends BaseDiscordJob {
       num++
       const newSuffix = result.isNew ? ':new:' : ''
 
-      if (result.title.includes('えのすいクラゲ')) {
-        contents.push(
-          `${num}. ${result.title} <@372701608053833730> ${newSuffix}`
-        )
-        continue
-      }
-
       if (isAlreadyAddedDetail) {
         contents.push(`${num}. ${result.title} ${newSuffix}`)
         continue
