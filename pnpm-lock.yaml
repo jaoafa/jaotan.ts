@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       '@book000/eslint-config':
-        specifier: 1.13.23
-        version: 1.13.23(eslint@10.1.0)(typescript@5.9.3)
+        specifier: 1.13.24
+        version: 1.13.24(eslint@10.1.0)(typescript@5.9.3)
       '@book000/node-utils':
         specifier: 1.24.104
         version: 1.24.104
@@ -248,10 +248,10 @@ packages:
   '@bcoe/v8-coverage@0.2.3':
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
 
-  '@book000/eslint-config@1.13.23':
-    resolution: {integrity: sha512-c+vrh/aQrOojQtYQFEmLnkfGY3TDimwTPKiuGAY2/55Hu2fwqL/AAahlphnRPJISXCEZmsLqHUalDRsJdh9HzA==}
+  '@book000/eslint-config@1.13.24':
+    resolution: {integrity: sha512-u3tmTG9xWWP74Ra1kG3IDLsC/twvfdJc+yEKx6Y0S7YBjunnWc+O8KkAq5q6yLA2rZyICtcIQREsFeQIHL5Ihw==}
     peerDependencies:
-      eslint: 10.0.3
+      eslint: 10.1.0
 
   '@book000/node-utils@1.24.104':
     resolution: {integrity: sha512-RsF1FED2kxXRFC3SSMna0ukRz+k/wfNAsMjj0Ru2QJH6YBDdqqgO5ro/obEJ1GjdPtALqskGDAbrMVH6pKYdtw==}
@@ -3382,7 +3382,7 @@ snapshots:
 
   '@bcoe/v8-coverage@0.2.3': {}
 
-  '@book000/eslint-config@1.13.23(eslint@10.1.0)(typescript@5.9.3)':
+  '@book000/eslint-config@1.13.24(eslint@10.1.0)(typescript@5.9.3)':
     dependencies:
       '@typescript-eslint/parser': 8.57.1(eslint@10.1.0)(typescript@5.9.3)
       eslint: 10.1.0
