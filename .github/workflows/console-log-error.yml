@@ -41,8 +41,9 @@ jobs:
   check-import:
     runs-on: ubuntu-latest
     needs: post-approval-request
-    # post-approval-request が skipped（同一リポジトリ PR 等）または success（フォーク PR）のときのみ実行する
-    if: always() && (needs.post-approval-request.result == 'success' || needs.post-approval-request.result == 'skipped')
+    # post-approval-request の結果に関わらず常に実行する
+    # セキュリティゲートは environment: が担保するため、コメント投稿の失敗でスキップされてはならない
+    if: always()
     # フォーク PR の場合のみ Environment で手動承認が必要（同一リポジトリからの PR は不要）
     environment: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository && 'fork-pr-build' || null }}
     permissions:
