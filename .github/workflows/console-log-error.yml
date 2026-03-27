@@ -1,14 +1,53 @@
 name: Check using console.log
 
-on: [pull_request_target]
+on:
+  pull_request_target:
 
 jobs:
+  # フォーク PR の場合、承認リクエストコメントを投稿する
+  post-approval-request:
+    name: Post approval request
+    runs-on: ubuntu-latest
+    # フォーク PR のときのみ承認リクエストを投稿する（同一リポジトリからの PR は不要）
+    if: github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Find existing approval request comment
+        id: find-comment
+        uses: peter-evans/find-comment@v3
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: github-actions[bot]
+          body-includes: Environment 承認待ち
+
+      - name: Post or update approval request comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          edit-mode: replace
+          body: |
+            ## Environment 承認待ち
+
+            この PR のチェックを実行するには、Environment `fork-pr-build` の承認が必要です。
+
+            [Actions run を確認して承認してください](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}?pr=${{ github.event.pull_request.number }})
+
   check-import:
     runs-on: ubuntu-latest
+    needs: post-approval-request
+    # post-approval-request が skipped（同一リポジトリ PR 等）または success（フォーク PR）のときのみ実行する
+    if: always() && (needs.post-approval-request.result == 'success' || needs.post-approval-request.result == 'skipped')
+    # フォーク PR の場合のみ Environment で手動承認が必要（同一リポジトリからの PR は不要）
+    environment: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository && 'fork-pr-build' || null }}
+    permissions:
+      contents: read
+      pull-requests: write
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
