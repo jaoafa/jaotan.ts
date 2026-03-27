@@ -3,6 +3,9 @@ name: Check using console.log
 on:
   pull_request_target:
 
+# ワークフロー全体のデフォルト権限を無効化（各ジョブで最小権限を明示する）
+permissions: {}
+
 jobs:
   # フォーク PR の場合、承認リクエストコメントを投稿する
   post-approval-request:

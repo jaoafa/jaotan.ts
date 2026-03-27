@@ -26,6 +26,9 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.merged == true && github.base_ref || github.event.pull_request.head.sha }}
 
+# ワークフロー全体のデフォルト権限を無効化（各ジョブで最小権限を明示する）
+permissions: {}
+
 jobs:
   # フォーク PR の場合、承認リクエストコメントを投稿する
   post-approval-request:
@@ -68,6 +71,7 @@ jobs:
     if: always() && (needs.post-approval-request.result == 'success' || needs.post-approval-request.result == 'skipped')
     # フォーク PR かつ closed でない場合のみ Environment で手動承認が必要
     environment: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository && github.event.action != 'closed' && 'fork-pr-build' || null }}
+    permissions: {}
     steps:
       - name: Approval granted
         run: echo "Approval gate passed"
@@ -81,6 +85,11 @@ jobs:
       always() &&
       (needs.approval-gate.result == 'success' || needs.approval-gate.result == 'skipped') &&
       (github.event.action != 'closed' || github.event.pull_request.merged == true)
+    # reusable-docker.yml が必要とする権限を明示する
+    permissions:
+      contents: write
+      packages: write
+      deployments: write
     uses: book000/templates/.github/workflows/reusable-docker.yml@master
     with:
       targets: >-
