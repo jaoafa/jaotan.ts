@@ -31,10 +31,10 @@ jobs:
   post-approval-request:
     name: Post approval request
     runs-on: ubuntu-latest
-    # フォーク PR のときのみ承認リクエストを投稿する（同一リポジトリからの PR は不要）
-    # closed（マージ済み）の場合は承認不要のため除外する
-    if: github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository && github.event.pull_request.merged != true
+    # フォーク PR のときのみ承認リクエストを投稿する（同一リポジトリからの PR・closed イベントは不要）
+    if: github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository && github.event.action != 'closed'
     permissions:
+      issues: write
       pull-requests: write
     steps:
       - name: Find existing approval request comment
@@ -58,13 +58,29 @@ jobs:
 
             [Actions run を確認して承認してください](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}?pr=${{ github.event.pull_request.number }})
 
+  # 承認ゲート: フォーク PR の場合のみ Environment で手動承認を待つ中間ジョブ
+  # reusable workflow（uses:）のジョブには environment: を直接設定できないため分離する
+  approval-gate:
+    name: Approval gate
+    runs-on: ubuntu-latest
+    needs: post-approval-request
+    # post-approval-request が skipped（同一リポジトリ PR 等）または success（フォーク PR）のときのみ実行する
+    if: always() && (needs.post-approval-request.result == 'success' || needs.post-approval-request.result == 'skipped')
+    # フォーク PR かつ closed でない場合のみ Environment で手動承認が必要
+    environment: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository && github.event.action != 'closed' && 'fork-pr-build' || null }}
+    steps:
+      - name: Approval granted
+        run: echo "Approval gate passed"
+
   docker-ci:
     name: Docker CI
-    needs: post-approval-request
-    # post-approval-request が skipped（push・同一リポジトリ PR 等）または success（フォーク PR）のときのみ実行する
-    if: always() && (needs.post-approval-request.result == 'success' || needs.post-approval-request.result == 'skipped')
-    # フォーク PR の場合のみ Environment で手動承認が必要（同一リポジトリからの PR・マージ済み PR は不要）
-    environment: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository && github.event.pull_request.merged != true && 'fork-pr-build' || null }}
+    needs: approval-gate
+    # approval-gate が success（承認済み）または skipped（同一リポジトリ PR 等）のときのみ実行する
+    # closed かつ未マージの場合はビルド不要のためスキップする
+    if: >-
+      always() &&
+      (needs.approval-gate.result == 'success' || needs.approval-gate.result == 'skipped') &&
+      (github.event.action != 'closed' || github.event.pull_request.merged == true)
     uses: book000/templates/.github/workflows/reusable-docker.yml@master
     with:
       targets: >-
