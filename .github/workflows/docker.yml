@@ -80,7 +80,7 @@ jobs:
     # approval-gate が success（承認済みまたは承認不要）のときのみ実行する
     # closed かつ未マージの場合はビルド不要のためスキップする
     # approval-gate は if: always() により常に実行されるため skipped にならない
-    if: needs.approval-gate.result == 'success' && (github.event.action != 'closed' || github.event.pull_request.merged == true)
+    if: always() && needs.approval-gate.result == 'success' && (github.event.action != 'closed' || github.event.pull_request.merged == true)
     uses: book000/templates/.github/workflows/reusable-docker.yml@master
     with:
       targets: >-
