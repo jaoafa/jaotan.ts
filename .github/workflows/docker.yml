@@ -26,6 +26,9 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.merged == true && github.base_ref || github.event.pull_request.head.sha }}
 
+# ワークフロー全体のデフォルト権限を無効化（各ジョブで最小権限を明示する）
+permissions: {}
+
 jobs:
   # フォーク PR の場合、承認リクエストコメントを投稿する
   post-approval-request:
@@ -81,6 +84,11 @@ jobs:
     # closed かつ未マージの場合はビルド不要のためスキップする
     # approval-gate は if: always() により常に実行されるため skipped にならない
     if: always() && needs.approval-gate.result == 'success' && (github.event.action != 'closed' || github.event.pull_request.merged == true)
+    # reusable-docker.yml が必要とする権限を明示する（呼び出し側で権限を明示することで最小権限の原則を維持する）
+    permissions:
+      contents: write
+      packages: write
+      deployments: write
     uses: book000/templates/.github/workflows/reusable-docker.yml@master
     with:
       targets: >-
