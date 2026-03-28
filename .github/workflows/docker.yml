@@ -26,8 +26,16 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.merged == true && github.base_ref || github.event.pull_request.head.sha }}
 
-# ワークフロー全体のデフォルト権限を無効化（各ジョブで最小権限を明示する）
-permissions: {}
+# ワークフロー全体の最大権限を設定する（各ジョブでジョブレベルの permissions: により最小権限に制限する）
+# 注意: permissions: {} は reusable workflow（uses:）を呼び出すジョブに write 権限を設定すると
+#       GitHub Actions の起動時バリデーション（startup_failure）を引き起こすため使用不可。
+#       ワークフロー全体で必要な権限の合算を設定し、各ジョブで制限するアプローチを採用する。
+permissions:
+  issues: write          # post-approval-request: 承認リクエストコメントの投稿・検索に必要
+  pull-requests: write   # post-approval-request: PR コメントの投稿に必要
+  contents: write        # docker-ci (reusable-docker.yml): バージョンタグの作成に必要
+  packages: write        # docker-ci (reusable-docker.yml): GHCR への image push に必要
+  deployments: write     # docker-ci (reusable-docker.yml): デプロイメントステータスの更新に必要
 
 jobs:
   # フォーク PR の場合、承認リクエストコメントを投稿する
