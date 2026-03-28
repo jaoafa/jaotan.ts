@@ -81,11 +81,9 @@ jobs:
     # closed かつ未マージの場合はビルド不要のためスキップする
     # approval-gate は if: always() により常に実行されるため skipped にならない
     if: always() && needs.approval-gate.result == 'success' && (github.event.action != 'closed' || github.event.pull_request.merged == true)
-    # reusable-docker.yml が必要とする権限を明示する（呼び出し側で権限を明示することで最小権限の原則を維持する）
-    permissions:
-      contents: write
-      packages: write
-      deployments: write
+    # NOTE: reusable workflow 呼び出しジョブ（uses:）に permissions: を設定すると
+    # GitHub Actions の起動時バリデーションで startup_failure になるため設定しない。
+    # 権限は reusable-docker.yml 側で宣言される（contents: write / packages: write / deployments: write）。
     uses: book000/templates/.github/workflows/reusable-docker.yml@master
     with:
       targets: >-
