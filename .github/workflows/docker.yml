@@ -26,10 +26,6 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.merged == true && github.base_ref || github.event.pull_request.head.sha }}
 
-# ワークフローレベルの permissions を設定しない（外部 reusable workflow 呼び出し時に
-# ワークフローレベルの permissions を設定すると GitHub Actions の起動時バリデーションで
-# startup_failure になるため。各ジョブでジョブレベルの permissions を設定する）
-
 jobs:
   # フォーク PR の場合、承認リクエストコメントを投稿する
   post-approval-request:
@@ -72,7 +68,7 @@ jobs:
     # セキュリティゲートは environment: が担保するため、コメント投稿の失敗でスキップされてはならない
     if: always()
     # フォーク PR かつ closed でない場合のみ Environment で手動承認が必要
-    environment: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository && github.event.action != 'closed' && 'fork-pr-build' || null }}
+    environment: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository && github.event.action != 'closed' && 'fork-pr-build' || '' }}
     permissions: {}
     steps:
       - name: Approval granted
@@ -85,11 +81,6 @@ jobs:
     # closed かつ未マージの場合はビルド不要のためスキップする
     # approval-gate は if: always() により常に実行されるため skipped にならない
     if: needs.approval-gate.result == 'success' && (github.event.action != 'closed' || github.event.pull_request.merged == true)
-    # reusable-docker.yml が必要とする権限を明示する
-    permissions:
-      contents: write
-      packages: write
-      deployments: write
     uses: book000/templates/.github/workflows/reusable-docker.yml@master
     with:
       targets: >-
