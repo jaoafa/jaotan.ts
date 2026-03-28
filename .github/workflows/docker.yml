@@ -26,9 +26,71 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.merged == true && github.base_ref || github.event.pull_request.head.sha }}
 
+# ワークフロー全体のデフォルト権限を無効化（各ジョブで最小権限を明示する）
+permissions: {}
+
 jobs:
+  # フォーク PR の場合、承認リクエストコメントを投稿する
+  post-approval-request:
+    name: Post approval request
+    runs-on: ubuntu-latest
+    # フォーク PR のときのみ承認リクエストを投稿する（同一リポジトリからの PR・closed イベントは不要）
+    if: github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository && github.event.action != 'closed'
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Find existing approval request comment
+        id: find-comment
+        uses: peter-evans/find-comment@v3
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: github-actions[bot]
+          body-includes: Environment 承認待ち
+
+      - name: Post or update approval request comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          edit-mode: replace
+          body: |
+            ## Environment 承認待ち
+
+            この PR の Docker ビルドを実行するには、Environment `fork-pr-build` の承認が必要です。
+
+            [Actions run を確認して承認してください](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}?pr=${{ github.event.pull_request.number }})
+
+  # 承認ゲート: フォーク PR の場合のみ Environment で手動承認を待つ中間ジョブ
+  # reusable workflow（uses:）のジョブには environment: を直接設定できないため分離する
+  approval-gate:
+    name: Approval gate
+    runs-on: ubuntu-latest
+    needs: post-approval-request
+    # post-approval-request の結果に関わらず常に実行する
+    # セキュリティゲートは environment: が担保するため、コメント投稿の失敗でスキップされてはならない
+    if: always()
+    # フォーク PR かつ closed でない場合のみ Environment で手動承認が必要
+    environment: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository && github.event.action != 'closed' && 'fork-pr-build' || null }}
+    permissions: {}
+    steps:
+      - name: Approval granted
+        run: echo "Approval gate passed"
+
   docker-ci:
     name: Docker CI
+    needs: approval-gate
+    # approval-gate が success（承認済みまたは承認不要）のときのみ実行する
+    # closed かつ未マージの場合はビルド不要のためスキップする
+    if: >-
+      always() &&
+      needs.approval-gate.result == 'success' &&
+      (github.event.action != 'closed' || github.event.pull_request.merged == true)
+    # reusable-docker.yml が必要とする権限を明示する
+    permissions:
+      contents: write
+      packages: write
+      deployments: write
     uses: book000/templates/.github/workflows/reusable-docker.yml@master
     with:
       targets: >-
