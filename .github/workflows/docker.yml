@@ -90,10 +90,9 @@ jobs:
     needs: approval-gate
     # approval-gate が success（承認済みまたは承認不要）のときのみ実行する
     # closed かつ未マージの場合はビルド不要のためスキップする
-    if: >-
-      always() &&
-      needs.approval-gate.result == 'success' &&
-      (github.event.action != 'closed' || github.event.pull_request.merged == true)
+    # approval-gate は if: always() により常に実行されるため skipped にならない
+    # → docker-ci 側に always() は不要。approval-gate が cancelled の場合は docker-ci もスキップされるのが正しい動作
+    if: "needs.approval-gate.result == 'success' && (github.event.action != 'closed' || github.event.pull_request.merged == true)"
     # reusable-docker.yml が必要とする権限を明示する
     permissions:
       contents: write
