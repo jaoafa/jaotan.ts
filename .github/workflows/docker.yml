@@ -26,12 +26,6 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.merged == true && github.base_ref || github.event.pull_request.head.sha }}
 
-# テスト: permissions のみ追加（approval-gate なし）
-permissions:
-  contents: write
-  packages: write
-  deployments: write
-
 jobs:
   docker-ci:
     name: Docker CI
