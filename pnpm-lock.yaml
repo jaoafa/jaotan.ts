@@ -12,8 +12,8 @@ importers:
         specifier: 1.13.26
         version: 1.13.26(eslint@10.1.0)(typescript@5.9.3)
       '@book000/node-utils':
-        specifier: 1.24.112
-        version: 1.24.112
+        specifier: 1.24.113
+        version: 1.24.113
       '@napi-rs/canvas':
         specifier: 0.1.97
         version: 0.1.97
@@ -253,8 +253,8 @@ packages:
     peerDependencies:
       eslint: 10.1.0
 
-  '@book000/node-utils@1.24.112':
-    resolution: {integrity: sha512-e5UzSzAdNJUryMbwkfr+0QQyZXMGZHi4eE7AL7SbhgUWbbOsKk/jPv3yenkhgRJR8prIHzDk2szZnYo7gdefdg==}
+  '@book000/node-utils@1.24.113':
+    resolution: {integrity: sha512-Wnd2/HG4X3BNNLWCRp2XzB3VVLu3hsMyyMVBGp450FL8t3VaITti+7/mkTFf3YXEWY6KyfA2S4S9b1HYzF+PBA==}
 
   '@colors/colors@1.6.0':
     resolution: {integrity: sha512-Ir+AOibqzrIsL6ajt3Rz3LskB7OiMVHqltZmspbW/TJuTVuyOMirVqAkjfY6JISiLHgyNqicAC8AyHHGzNd/dA==}
@@ -3402,7 +3402,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@book000/node-utils@1.24.112':
+  '@book000/node-utils@1.24.113':
     dependencies:
       axios: 1.13.6
       cycle: 1.0.3
