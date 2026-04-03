@@ -8,6 +8,7 @@ import {
   CanvasRenderingContext2D,
   Image,
 } from '@napi-rs/canvas'
+import { Logger } from '@book000/node-utils'
 
 interface ParsedEmoji {
   image: Image | null
@@ -173,13 +174,18 @@ export class SetbannerExtraCommand implements BaseCommand {
   }
 
   async parseEmojiText(emojiText: string): Promise<ParsedEmoji> {
+    const logger = Logger.configure('SetbannerExtraCommand.parseEmojiText')
+
     // URLの場合は、loadImageで読み込む
     if (emojiText.startsWith('http')) {
       try {
         const image = await loadImage(emojiText)
         return { image, text: null }
       } catch (err) {
-        console.error(`Failed to load image from URL: ${emojiText}`, err)
+        logger.error(
+          `Failed to load image from URL: ${emojiText}`,
+          err as Error
+        )
         return { image: null, text: emojiText }
       }
     }
@@ -195,7 +201,7 @@ export class SetbannerExtraCommand implements BaseCommand {
           )
           return { image, text: null }
         } catch (err) {
-          console.error(`Failed to load emoji image: ${emojiText}`, err)
+          logger.error(`Failed to load emoji image: ${emojiText}`, err as Error)
           return { image: null, text: emojiText }
         }
       }
