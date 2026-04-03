@@ -178,8 +178,8 @@ export class SetbannerExtraCommand implements BaseCommand {
       try {
         const image = await loadImage(emojiText)
         return { image, text: null }
-      } catch (error) {
-        console.error(`Failed to load image from URL: ${emojiText}`, error)
+      } catch (err) {
+        console.error(`Failed to load image from URL: ${emojiText}`, err)
         return { image: null, text: emojiText }
       }
     }
@@ -194,8 +194,8 @@ export class SetbannerExtraCommand implements BaseCommand {
             `https://cdn.discordapp.com/emojis/${groups.id}.png`
           )
           return { image, text: null }
-        } catch (error) {
-          console.error(`Failed to load emoji image: ${emojiText}`, error)
+        } catch (err) {
+          console.error(`Failed to load emoji image: ${emojiText}`, err)
           return { image: null, text: emojiText }
         }
       }

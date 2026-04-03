@@ -96,8 +96,8 @@ export class MeetingReactionVoteEvent extends BaseDiscordEvent<'messageReactionA
       .then(async () => {
         await reply.delete()
       })
-      .catch((error: unknown) => {
-        logger.error('Failed to delete message', error as Error)
+      .catch((err: unknown) => {
+        logger.error('Failed to delete message', err as Error)
       })
   }
 
@@ -129,8 +129,8 @@ export class MeetingReactionVoteEvent extends BaseDiscordEvent<'messageReactionA
       .then(async () => {
         await reply.delete()
       })
-      .catch((error: unknown) => {
-        logger.error('Failed to delete message', error as Error)
+      .catch((err: unknown) => {
+        logger.error('Failed to delete message', err as Error)
       })
   }
 }

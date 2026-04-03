@@ -82,10 +82,10 @@ export class GreetingTimeoutTask extends BaseDiscordTask {
               `✅ Kicked ${member.user.tag} (${member.id}) for greeting timeout`
             )
             kickedCount++
-          } catch (error) {
+          } catch (err) {
             logger.error(
               `❌ Failed to kick ${member.user.tag} (${member.id})`,
-              error as Error
+              err as Error
             )
           }
         }
@@ -94,8 +94,8 @@ export class GreetingTimeoutTask extends BaseDiscordTask {
       logger.info(
         `✅ Greeting timeout check completed: checked ${checkedCount} members, kicked ${kickedCount}`
       )
-    } catch (error) {
-      logger.error('❌ Error in greeting timeout task', error as Error)
+    } catch (err) {
+      logger.error('❌ Error in greeting timeout task', err as Error)
     }
   }
 }

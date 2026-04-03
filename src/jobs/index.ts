@@ -17,8 +17,8 @@ export abstract class BaseDiscordJob {
     cron.schedule(
       this.schedule,
       () => {
-        this.execute().catch((error: unknown) => {
-          logger.error('❌ job failed', error as Error)
+        this.execute().catch((err: unknown) => {
+          logger.error('❌ job failed', err as Error)
         })
       },
       {

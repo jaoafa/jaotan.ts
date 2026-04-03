@@ -223,11 +223,11 @@ export class Kinenbi {
         rank,
         totalDays: counts.length,
       }
-    } catch (error) {
+    } catch (err) {
       // エラーが発生した場合は null を返す
       logger.error(
         'Failed to get ranking',
-        error instanceof Error ? error : undefined
+        err instanceof Error ? err : undefined
       )
       return null
     }

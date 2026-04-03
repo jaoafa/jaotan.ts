@@ -23,8 +23,8 @@ function main() {
       .then(() => {
         logger.info('👋 Discord client closed.')
       })
-      .catch((error: unknown) => {
-        logger.error('❌ Discord client close failed.', error as Error)
+      .catch((err: unknown) => {
+        logger.error('❌ Discord client close failed.', err as Error)
       })
       .finally(() => {
         process.exit(0)

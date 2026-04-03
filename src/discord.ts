@@ -124,10 +124,10 @@ export class Discord {
       if (!message.inGuild()) {
         return
       }
-      this.onMessageCreate(message).catch((error: unknown) => {
+      this.onMessageCreate(message).catch((err: unknown) => {
         Logger.configure('Discord.onMessageCreate').error(
           '❌ Error',
-          error as Error
+          err as Error
         )
       })
     })
@@ -150,8 +150,8 @@ export class Discord {
       event.register()
     }
 
-    this.client.login(config.get('discord').token).catch((error: unknown) => {
-      Logger.configure('Discord.login').error('❌ login failed', error as Error)
+    this.client.login(config.get('discord').token).catch((err: unknown) => {
+      Logger.configure('Discord.login').error('❌ login failed', err as Error)
     })
 
     this.tasks = [
@@ -161,10 +161,10 @@ export class Discord {
       new GreetingTimeoutTask(this),
     ]
     for (const task of this.tasks) {
-      task.register().catch((error: unknown) => {
+      task.register().catch((err: unknown) => {
         Logger.configure('Discord.task').error(
           '❌ task register failed',
-          error as Error
+          err as Error
         )
       })
     }
@@ -194,8 +194,8 @@ export class Discord {
     logger.info(`👌 ready: ${this.client.user?.tag}`)
 
     for (const task of this.tasks) {
-      task.execute().catch((error: unknown) => {
-        logger.error('❌ task execute failed', error as Error)
+      task.execute().catch((err: unknown) => {
+        logger.error('❌ task execute failed', err as Error)
       })
     }
   }
@@ -261,10 +261,10 @@ export class Discord {
     const [, ...args] = message.content.split(' ')
     try {
       await command.execute(this, message, args)
-    } catch (error) {
+    } catch (err) {
       // エラー処理
-      logger.error('❌ Error', error as Error)
-      const stacktrace = (error as Error).stack?.toString() ?? ''
+      logger.error('❌ Error', err as Error)
+      const stacktrace = (err as Error).stack?.toString() ?? ''
       const files = this.getStackTraceTypeScriptFiles(stacktrace)
       await message.reply({
         embeds: [
@@ -276,7 +276,7 @@ export class Discord {
             .addFields([
               {
                 name: 'エラーメッセージ',
-                value: `\`\`\`\n${(error as Error).message}\n\`\`\``,
+                value: `\`\`\`\n${(err as Error).message}\n\`\`\``,
                 inline: false,
               },
               {
