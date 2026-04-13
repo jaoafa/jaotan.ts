@@ -1,4 +1,3 @@
-
 interface MeboOptions {
   utterance: string
   uid: string

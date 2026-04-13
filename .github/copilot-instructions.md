@@ -37,7 +37,7 @@ src/
 ### 基底クラス
 
 - **コマンド**: `BaseCommand` クラスを継承
-- **イベント**: `BaseDiscordEvent` クラスを継承  
+- **イベント**: `BaseDiscordEvent` クラスを継承
 - **タスク**: `BaseDiscordTask` クラスを継承
 
 ### 命名規則
@@ -100,7 +100,7 @@ async optimize(): Promise<void> {
 ### Conventional Commits
 
 - `feat:` 新機能
-- `fix:` バグ修正  
+- `fix:` バグ修正
 - `docs:` ドキュメント
 - `style:` コードスタイル
 - `refactor:` リファクタリング
@@ -161,7 +161,7 @@ export class ExampleCommand extends BaseCommand {
 
   async execute(interaction: ChatInputCommandInteraction): Promise<void> {
     const logger = Logger.configure('ExampleCommand.execute')
-    
+
     try {
       await interaction.reply('Example response')
       logger.info('✅ Command executed successfully')
@@ -183,7 +183,7 @@ export class ExampleEvent extends BaseDiscordEvent {
 
   async execute(member: GuildMember): Promise<void> {
     const logger = Logger.configure('ExampleEvent.execute')
-    
+
     try {
       // イベント処理
       logger.info(`✅ Member ${member.user.tag} joined`)

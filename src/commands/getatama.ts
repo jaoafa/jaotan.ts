@@ -2,7 +2,6 @@ import { Discord } from '@/discord'
 import { Message } from 'discord.js'
 import { BaseCommand } from '.'
 
-
 interface PhrasePlusResponse {
   results: {
     full: string

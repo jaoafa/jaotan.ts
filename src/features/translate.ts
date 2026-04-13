@@ -170,7 +170,11 @@ export class Translate {
     const res = await fetch(this.translateGasUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ before: beforeLanguage, after: afterLanguage, text }),
+      body: JSON.stringify({
+        before: beforeLanguage,
+        after: afterLanguage,
+        text,
+      }),
     })
     if (res.status !== 200) {
       throw new Error('Failed to translate')
