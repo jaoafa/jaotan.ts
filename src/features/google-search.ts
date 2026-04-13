@@ -76,11 +76,12 @@ export class GoogleSearch {
     }
 
     const res = await fetch(url)
-    let data: GoogleCustomSearchResponse
+    let data: any
+    const responseText = await res.text()
     try {
-      data = (await res.json()) as GoogleCustomSearchResponse
+      data = JSON.parse(responseText) as GoogleCustomSearchResponse
     } catch {
-      data = {}
+      data = responseText
     }
     this.incrementRequestCount()
     this.saveResponse(res.status, data)
@@ -89,11 +90,12 @@ export class GoogleSearch {
     }
 
     // searchInformation, itemsがあることを確認
-    if (!data.searchInformation || !data.items) {
+    const parsedData = data as GoogleCustomSearchResponse
+    if (!parsedData.searchInformation || !parsedData.items) {
       throw new Error('Invalid response')
     }
 
-    const items = data.items.map((item) => {
+    const items = parsedData.items.map((item) => {
       return {
         title: item.title,
         htmlTitle: item.htmlTitle,
@@ -107,8 +109,8 @@ export class GoogleSearch {
     })
 
     return {
-      searchTime: data.searchInformation.formattedSearchTime,
-      totalResult: data.searchInformation.formattedTotalResults,
+      searchTime: parsedData.searchInformation.formattedSearchTime,
+      totalResult: parsedData.searchInformation.formattedTotalResults,
       items,
     }
   }
