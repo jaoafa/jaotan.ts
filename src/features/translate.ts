@@ -1,5 +1,4 @@
 import { Configuration } from '@/config'
-import axios from 'axios'
 import DetectLanguage from 'detectlanguage'
 import {
   BaseMessageOptions,
@@ -168,25 +167,16 @@ export class Translate {
       throw new Error('Invalid after language')
     }
 
-    const response = await axios.post<TranslateResponse>(
-      this.translateGasUrl,
-      {
-        before: beforeLanguage,
-        after: afterLanguage,
-        text,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        validateStatus: () => true,
-      }
-    )
-    if (response.status !== 200) {
+    const res = await fetch(this.translateGasUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ before: beforeLanguage, after: afterLanguage, text }),
+    })
+    if (res.status !== 200) {
       throw new Error('Failed to translate')
     }
 
-    const data = response.data
+    const data = (await res.json()) as TranslateResponse
     return {
       beforeLanguage,
       afterLanguage,

@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { load } from 'cheerio'
 import fs from 'node:fs'
 import fsp from 'node:fs/promises'
@@ -55,25 +54,21 @@ export class Kinenbi {
       return prevData.results
     }
 
-    const response = await axios.post<string>(
-      this.baseUrl,
-      {
-        MD: '1',
-        M: date.getMonth() + 1,
-        D: date.getDate(),
-      },
-      {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        validateStatus: () => true,
-      }
-    )
-    if (response.status !== 200) {
-      throw new Error('Failed to get today: ' + response.status.toString())
+    const body = new URLSearchParams({
+      MD: '1',
+      M: (date.getMonth() + 1).toString(),
+      D: date.getDate().toString(),
+    })
+    const res = await fetch(this.baseUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body.toString(),
+    })
+    if (res.status !== 200) {
+      throw new Error('Failed to get today: ' + res.status.toString())
     }
 
-    const html = response.data
+    const html = await res.text()
     const $ = load(html)
     const elements = $('div.today_kinenbilist a.winDetail')
 
@@ -130,12 +125,10 @@ export class Kinenbi {
     const urlObject = new URL(this.baseUrl + options.filename)
     urlObject.search = this.objectToSearchParams(options.query).toString()
 
-    const response = await axios.get<string>(urlObject.toString(), {
-      validateStatus: () => true,
-    })
+    const res = await fetch(urlObject.toString())
     // 正しくても404が返ってくることがある
 
-    const html = response.data
+    const html = await res.text()
     const $ = load(html)
 
     const title = $('td[nowarp] > font:nth-child(1)').text()

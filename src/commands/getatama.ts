@@ -1,7 +1,7 @@
 import { Discord } from '@/discord'
 import { Message } from 'discord.js'
 import { BaseCommand } from '.'
-import axios from 'axios'
+
 
 interface PhrasePlusResponse {
   results: {
@@ -44,18 +44,15 @@ export class GetAtamaCommand implements BaseCommand {
       return
     }
 
-    const response = await axios.get<PhrasePlusResponse>(apiUrl, {
-      params: {
-        count,
-      },
-      validateStatus: () => true,
-    })
-    if (response.status !== 200) {
+    const url = new URL(apiUrl)
+    url.searchParams.set('count', count.toString())
+    const res = await fetch(url.toString())
+    if (!res.ok) {
       await message.reply({
         embeds: [
           {
             title: 'エラー',
-            description: `APIリクエストに失敗しました: ${response.status} ${response.statusText}`,
+            description: `APIリクエストに失敗しました: ${res.status} ${res.statusText}`,
             color: 0xff_00_00,
           },
         ],
@@ -63,7 +60,7 @@ export class GetAtamaCommand implements BaseCommand {
       return
     }
 
-    const data = response.data
+    const data = (await res.json()) as PhrasePlusResponse
     if (!('results' in data)) {
       await message.reply({
         embeds: [

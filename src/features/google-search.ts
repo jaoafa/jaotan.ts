@@ -1,4 +1,3 @@
-import axios from 'axios'
 import fs from 'node:fs'
 
 interface GoogleCustomSearchResponse {
@@ -76,16 +75,18 @@ export class GoogleSearch {
       url += `&searchType=${searchType}`
     }
 
-    const response = await axios.get<GoogleCustomSearchResponse>(url, {
-      validateStatus: () => true,
-    })
-    this.incrementRequestCount()
-    this.saveResponse(response.status, response.data)
-    if (response.status !== 200) {
-      throw new Error(`Google Custom Search API failed: ${response.status}`)
+    const res = await fetch(url)
+    let data: GoogleCustomSearchResponse
+    try {
+      data = (await res.json()) as GoogleCustomSearchResponse
+    } catch {
+      data = {}
     }
-
-    const data = response.data
+    this.incrementRequestCount()
+    this.saveResponse(res.status, data)
+    if (res.status !== 200) {
+      throw new Error(`Google Custom Search API failed: ${res.status}`)
+    }
 
     // searchInformation, itemsがあることを確認
     if (!data.searchInformation || !data.items) {

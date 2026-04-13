@@ -1,4 +1,3 @@
-import axios from 'axios'
 
 interface MeboOptions {
   utterance: string
@@ -35,17 +34,23 @@ export class Mebo {
     const utterance = options.utterance
     const uid = options.uid
 
-    const response = await axios
-      .post<MeboResponse>(this.apiUrl, {
-        api_key: this.apiKey,
-        agent_id: this.agentId,
-        utterance,
-        uid: `jaotan-reply-${uid}`,
+    try {
+      const res = await fetch(this.apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          api_key: this.apiKey,
+          agent_id: this.agentId,
+          utterance,
+          uid: `jaotan-reply-${uid}`,
+        }),
       })
-      .catch(() => null)
-    if (!response) {
+      if (!res.ok) {
+        return null
+      }
+      return (await res.json()) as MeboResponse
+    } catch {
       return null
     }
-    return response.data
   }
 }
