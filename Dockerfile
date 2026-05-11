@@ -2,8 +2,6 @@ FROM node:24-alpine
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME/bin:$PATH"
-# pnpm v11 では TTY なし環境での node_modules 削除確認を回避するために CI=true が必要
-ENV CI=true
 
 # hadolint ignore=DL3018
 RUN apk update && \
@@ -17,14 +15,14 @@ RUN apk update && \
 
 WORKDIR /app
 
-COPY pnpm-lock.yaml ./
+COPY pnpm-lock.yaml package.json pnpm-workspace.yaml ./
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm fetch
 
-COPY package.json tsconfig.json ./
+COPY tsconfig.json ./
 COPY src src
 
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile --prefer-offline
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile --offline
 
 COPY assets /assets
 
