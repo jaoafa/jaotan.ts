@@ -2,6 +2,8 @@ FROM node:24-alpine
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME/bin:$PATH"
+# pnpm v11 では TTY なし環境での node_modules 削除確認を回避するために CI=true が必要
+ENV CI=true
 
 # hadolint ignore=DL3018
 RUN apk update && \
