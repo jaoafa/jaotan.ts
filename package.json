@@ -72,10 +72,5 @@
     "setupFilesAfterEnv": [
       "jest-expect-message"
     ]
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild"
-    ]
   }
 }
