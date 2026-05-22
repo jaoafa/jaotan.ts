@@ -27,7 +27,8 @@
     "newLine": "LF",
     "paths": {
       "@/*": ["src/*"]
-    }
+    },
+    "types": ["jest"]
   },
   "include": ["src/**/*", "src/**/*.test.ts"]
 }
