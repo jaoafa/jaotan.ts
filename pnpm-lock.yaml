@@ -12,8 +12,8 @@ importers:
         specifier: 1.14.40
         version: 1.14.40(eslint@10.4.0)(typescript@6.0.3)
       '@book000/node-utils':
-        specifier: 1.24.170
-        version: 1.24.170
+        specifier: 1.24.193
+        version: 1.24.193
       '@napi-rs/canvas':
         specifier: 1.0.0
         version: 1.0.0
@@ -250,8 +250,8 @@ packages:
     peerDependencies:
       eslint: 10.4.0
 
-  '@book000/node-utils@1.24.170':
-    resolution: {integrity: sha512-qdr+FEirHkoEsCWHIO6XOwOryiE1p//FHIO4/BIBknF5u840SmRkMzY7BzQlhS9LdtPMmX0P8sWQu/nHm5wATg==}
+  '@book000/node-utils@1.24.193':
+    resolution: {integrity: sha512-2+NnVx4lzr6G8FLH20trPJM4HRChRIVz306RrKki8IQwHM0gcpDtWfMXRq5jKzxQAe8yfVwKuJhNPPUyrgOUgQ==}
 
   '@colors/colors@1.6.0':
     resolution: {integrity: sha512-Ir+AOibqzrIsL6ajt3Rz3LskB7OiMVHqltZmspbW/TJuTVuyOMirVqAkjfY6JISiLHgyNqicAC8AyHHGzNd/dA==}
@@ -3409,7 +3409,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@book000/node-utils@1.24.170':
+  '@book000/node-utils@1.24.193':
     dependencies:
       cycle: 1.0.3
       jsonc-parser: 3.3.1
