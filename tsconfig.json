@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
-    "ignoreDeprecations": "6.0",
     "target": "es2020",
     "module": "commonjs",
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "lib": ["ESNext", "esnext.AsyncIterable"],
     "rootDir": "./src",
     "outDir": "./dist",
@@ -23,12 +22,11 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "experimentalDecorators": true,
-    "baseUrl": ".",
     "newLine": "LF",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     },
-    "types": ["jest"]
+    "types": ["jest", "node"]
   },
   "include": ["src/**/*", "src/**/*.test.ts"]
 }
