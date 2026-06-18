@@ -12,8 +12,8 @@ importers:
         specifier: 1.15.4
         version: 1.15.4(eslint@10.5.0)(typescript@6.0.3)
       '@book000/node-utils':
-        specifier: 1.24.236
-        version: 1.24.236
+        specifier: 1.24.237
+        version: 1.24.237
       '@napi-rs/canvas':
         specifier: 1.0.0
         version: 1.0.0
@@ -250,8 +250,8 @@ packages:
     peerDependencies:
       eslint: 10.5.0
 
-  '@book000/node-utils@1.24.236':
-    resolution: {integrity: sha512-Zrm33ymbnBDLNLmHegwvdnWJVl8ZVuKc7W7bTHUlBL7TrgJwjzMLry0vrZky1iEljQ/OPO8Ic37IKrMQf7ECzA==}
+  '@book000/node-utils@1.24.237':
+    resolution: {integrity: sha512-TSxAh8hZaDS7HyjPwmaFUEibnw9nfD7Ol9gIgG++vY/X3OeWpdQBfEgTz1XHfNCjwdK/+AEzYkyFe00nSPkDVQ==}
 
   '@colors/colors@1.6.0':
     resolution: {integrity: sha512-Ir+AOibqzrIsL6ajt3Rz3LskB7OiMVHqltZmspbW/TJuTVuyOMirVqAkjfY6JISiLHgyNqicAC8AyHHGzNd/dA==}
@@ -3402,7 +3402,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@book000/node-utils@1.24.236':
+  '@book000/node-utils@1.24.237':
     dependencies:
       cycle: 1.0.3
       jsonc-parser: 3.3.1
@@ -3725,7 +3725,7 @@ snapshots:
 
   '@jest/pattern@30.4.0':
     dependencies:
-      '@types/node': 24.12.4
+      '@types/node': 24.13.2
       jest-regex-util: 30.4.0
 
   '@jest/reporters@30.4.1':
@@ -3826,7 +3826,7 @@ snapshots:
       '@jest/schemas': 30.4.1
       '@types/istanbul-lib-coverage': 2.0.6
       '@types/istanbul-reports': 3.0.4
-      '@types/node': 24.12.4
+      '@types/node': 24.13.2
       '@types/yargs': 17.0.34
       chalk: 4.1.2
 
@@ -5693,7 +5693,7 @@ snapshots:
   jest-haste-map@30.4.1:
     dependencies:
       '@jest/types': 30.4.1
-      '@types/node': 24.12.4
+      '@types/node': 24.13.2
       anymatch: 3.1.3
       fb-watchman: 2.0.2
       graceful-fs: 4.2.11
@@ -5879,7 +5879,7 @@ snapshots:
   jest-util@30.4.1:
     dependencies:
       '@jest/types': 30.4.1
-      '@types/node': 24.12.4
+      '@types/node': 24.13.2
       chalk: 4.1.2
       ci-info: 4.4.0
       graceful-fs: 4.2.11
@@ -5907,7 +5907,7 @@ snapshots:
 
   jest-worker@30.4.1:
     dependencies:
-      '@types/node': 24.12.4
+      '@types/node': 24.13.2
       '@ungap/structured-clone': 1.3.0
       jest-util: 30.4.1
       merge-stream: 2.0.0
