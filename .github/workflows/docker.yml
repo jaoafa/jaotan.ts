@@ -90,6 +90,7 @@ jobs:
         [
           { imageName: "jaoafa/jaotan.ts", context: ".", file: "Dockerfile", packageName: "jaotan.ts" }
         ]
+      allow-unsafe-pr-checkout: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository }}
     secrets:
       DOCKER_USERNAME: ${{ github.actor }}
       DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
