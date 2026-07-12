@@ -32,22 +32,6 @@ export class SetbannerExtraCommand implements BaseCommand {
     const templateBaseImagePath = `${assetDirectory}/setbanner-template-base.png`
     const templateOverlayImagePath = `${assetDirectory}/setbanner-template-overlay.png`
 
-    // 左側テキストの描画位置
-    const leftX = 100
-    const leftY = 265
-
-    // 左側絵文字の描画位置
-    const leftEmojiX = 300
-    const leftEmojiY = 280
-
-    // 右側絵文字の描画位置
-    const rightEmojiX = 600
-    const rightEmojiY = 280
-
-    // 右側テキストの描画位置
-    const rightX = 845
-    const rightY = 265
-
     // 画像を生成
     const fonts = [
       { name: 'Noto Serif JP Black', fontFilename: 'NotoSerifJP-Black.otf' },
@@ -90,6 +74,22 @@ export class SetbannerExtraCommand implements BaseCommand {
       })
       return
     }
+
+    // 左側テキストの描画位置
+    const leftX = 100
+    const leftY = 265
+
+    // 左側絵文字の描画位置
+    const leftEmojiX = 300
+    const leftEmojiY = 280
+
+    // 右側絵文字の描画位置
+    const rightEmojiX = 600
+    const rightEmojiY = 280
+
+    // 右側テキストの描画位置
+    const rightX = 845
+    const rightY = 265
 
     // 左側テキストと絵文字
     const leftText = args[0].replaceAll('ー', '┃')

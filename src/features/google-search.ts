@@ -133,7 +133,7 @@ export class GoogleSearch {
       const code = match[1]
         ? Number.parseInt(match[1], 10)
         : Number.parseInt(match[2], 16)
-      result = result.replaceAll(match[0], String.fromCodePoint(code))
+      result = result.replaceAll(match[0], () => String.fromCodePoint(code))
     }
 
     const replaceMap = {
@@ -146,7 +146,7 @@ export class GoogleSearch {
       '&nbsp;': ' ',
     }
     for (const [key, value] of Object.entries(replaceMap)) {
-      result = result.replaceAll(key, value)
+      result = result.replaceAll(key, () => value)
     }
 
     // 太字
@@ -174,7 +174,7 @@ export class GoogleSearch {
       json = JSON.parse(data)
     }
 
-    if (!(date in json)) {
+    if (!Object.hasOwn(json, date)) {
       json[date] = 0
     }
     json[date]++
@@ -196,7 +196,7 @@ export class GoogleSearch {
     // リセットタイミングはPST0時
     // タイムゾーンを考慮して日付を取得
     const date = this.getPstDate()
-    if (!(date in json)) {
+    if (!Object.hasOwn(json, date)) {
       return 0
     }
 

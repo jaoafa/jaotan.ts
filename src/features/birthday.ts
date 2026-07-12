@@ -290,18 +290,20 @@ export class Birthday {
    */
   public static isValidDate(date: IBirthdayDateWithYear): boolean {
     const month = date.month
-    const day = date.day
-    const year = date.year
 
     // 月は1〜12であること
     if (month < 1 || month > 12) {
       return false
     }
 
+    const day = date.day
+
     // 日は1〜31であること
     if (day < 1 || day > 31) {
       return false
     }
+
+    const year = date.year
 
     // 年はnullまたは0以上であること
     if (year !== null && year < 0) {

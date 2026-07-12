@@ -23,12 +23,11 @@ export class MeetingNewVoteEvent extends BaseDiscordEvent<'messageCreate'> {
     // サーバのテキストチャンネル以外は無視
     if (message.channel.type !== ChannelType.GuildText) return
 
-    const channel = message.channel
-    const meetingVoteFeature = new MeetingVote(channel)
-
     // すでにピン留めされたメッセージは無視
     if (message.pinned) return
 
+    const channel = message.channel
+    const meetingVoteFeature = new MeetingVote(channel)
     await meetingVoteFeature.newVoteMessage(message)
   }
 }

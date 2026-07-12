@@ -40,9 +40,6 @@ export class MeetingReactionVoteEvent extends BaseDiscordEvent<'messageReactionA
     // サーバのテキストチャンネル以外は無視
     if (message.channel.type !== ChannelType.GuildText) return
 
-    const channel = message.channel
-    const meetingVoteFeature = new MeetingVote(channel)
-
     // ピン留めされていないメッセージは無視
     if (!message.pinned) return
 
@@ -50,6 +47,9 @@ export class MeetingReactionVoteEvent extends BaseDiscordEvent<'messageReactionA
     if (user.partial) {
       user = await user.fetch()
     }
+
+    const channel = message.channel
+    const meetingVoteFeature = new MeetingVote(channel)
 
     // 投票権利を有するか確認
     if (!meetingVoteFeature.hasVoteRight(user)) {
