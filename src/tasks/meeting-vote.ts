@@ -1,6 +1,6 @@
 import { ChannelType } from 'discord.js'
 import { BaseDiscordTask } from '.'
-import { Configuration } from '../config'
+import { Config } from '../config'
 import { MeetingVote } from '../features/meeting-vote'
 
 /**
@@ -13,7 +13,7 @@ export class MeetingVoteTask extends BaseDiscordTask {
   }
 
   async execute(): Promise<void> {
-    const config: Configuration = this.discord.getConfig()
+    const config: Config = this.discord.getConfig()
     const meetingVoteChannelId =
       config.get('discord').channel?.meetingVote ?? '1149598703846440960'
 

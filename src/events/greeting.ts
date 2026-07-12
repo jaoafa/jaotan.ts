@@ -1,6 +1,6 @@
 import { Message } from 'discord.js'
 import { BaseDiscordEvent } from '.'
-import { Configuration } from '@/config'
+import { Config } from '@/config'
 
 /**
  * #greeting チャンネルでの挨拶を処理するイベント
@@ -23,11 +23,9 @@ export class GreetingEvent extends BaseDiscordEvent<'messageCreate'> {
   readonly eventName = 'messageCreate'
 
   async execute(message: Message<true>): Promise<void> {
-    const config: Configuration = this.discord.getConfig()
+    const config: Config = this.discord.getConfig()
     const greetingChannelId =
       config.get('discord').channel?.greeting ?? '1149587870273773569'
-    const verifiedRoleId =
-      config.get('discord').role?.verified ?? '1149583365708709940'
 
     // #greeting チャンネル以外は無視
     if (message.channel.id !== greetingChannelId) return
@@ -42,6 +40,8 @@ export class GreetingEvent extends BaseDiscordEvent<'messageCreate'> {
       return
     }
 
+    const verifiedRoleId =
+      config.get('discord').role?.verified ?? '1149583365708709940'
     const member = message.member
     const isMailVerified = member.roles.cache.has(verifiedRoleId)
 
@@ -52,7 +52,7 @@ export class GreetingEvent extends BaseDiscordEvent<'messageCreate'> {
         this.jaoPostedUsers.add(message.author.id)
       }
 
-      const emoji = isMailVerified ? '\u274C' : '\u27A1'
+      const emoji = isMailVerified ? '\u{274C}' : '\u{27A1}'
       await message.react(emoji)
       return
     }
@@ -60,20 +60,20 @@ export class GreetingEvent extends BaseDiscordEvent<'messageCreate'> {
     // afa メッセージの場合
     if (isMailVerified) {
       // MailVerifiedがついている: \u274C をリアクション
-      await message.react('\u274C')
+      await message.react('\u{274C}')
       return
     }
 
     // MailVerifiedがついていない
     if (!this.jaoPostedUsers.has(message.author.id)) {
       // jaoPostedUsersに投稿者が含まれていない: \u274C をリアクション
-      await message.react('\u274C')
+      await message.react('\u{274C}')
       return
     }
 
     // jaoPostedUsersに投稿者が含まれている: \u2B55 をリアクション、jaoPostedUsersから削除
     this.jaoPostedUsers.delete(message.author.id)
-    await message.react('\u2B55')
+    await message.react('\u{2B55}')
 
     const roles = message.member.roles
     const hasMainRole =

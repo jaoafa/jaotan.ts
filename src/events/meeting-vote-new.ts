@@ -1,6 +1,6 @@
 import { ChannelType, Message } from 'discord.js'
 import { BaseDiscordEvent } from '.'
-import { Configuration } from '../config'
+import { Config } from '../config'
 import { MeetingVote } from '../features/meeting-vote'
 
 /**
@@ -10,7 +10,7 @@ export class MeetingNewVoteEvent extends BaseDiscordEvent<'messageCreate'> {
   readonly eventName = 'messageCreate'
 
   async execute(message: Message<true>): Promise<void> {
-    const config: Configuration = this.discord.getConfig()
+    const config: Config = this.discord.getConfig()
     const meetingVoteChannelId =
       config.get('discord').channel?.meetingVote ?? '1149598703846440960'
 
@@ -23,12 +23,11 @@ export class MeetingNewVoteEvent extends BaseDiscordEvent<'messageCreate'> {
     // サーバのテキストチャンネル以外は無視
     if (message.channel.type !== ChannelType.GuildText) return
 
-    const channel = message.channel
-    const meetingVoteFeature = new MeetingVote(channel)
-
     // すでにピン留めされたメッセージは無視
     if (message.pinned) return
 
+    const channel = message.channel
+    const meetingVoteFeature = new MeetingVote(channel)
     await meetingVoteFeature.newVoteMessage(message)
   }
 }

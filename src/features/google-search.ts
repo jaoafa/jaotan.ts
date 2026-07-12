@@ -75,18 +75,18 @@ export class GoogleSearch {
       url += `&searchType=${searchType}`
     }
 
-    const res = await fetch(url)
+    const response = await fetch(url)
     let data: any
-    const responseText = await res.text()
+    const responseText = await response.text()
     try {
       data = JSON.parse(responseText) as GoogleCustomSearchResponse
     } catch {
       data = responseText
     }
     this.incrementRequestCount()
-    this.saveResponse(res.status, data)
-    if (res.status !== 200) {
-      throw new Error(`Google Custom Search API failed: ${res.status}`)
+    this.saveResponse(response.status, data)
+    if (response.status !== 200) {
+      throw new Error(`Google Custom Search API failed: ${response.status}`)
     }
 
     // searchInformation, itemsがあることを確認
@@ -130,10 +130,9 @@ export class GoogleSearch {
     const matches = html.matchAll(pattern)
     let result = html
     for (const match of matches) {
-      const code = match[1]
-        ? Number.parseInt(match[1], 10)
-        : Number.parseInt(match[2], 16)
-      result = result.replaceAll(match[0], String.fromCodePoint(code))
+      const code = match[1] ? Number(match[1]) : Number.parseInt(match[2], 16)
+      const replacement = String.fromCodePoint(code)
+      result = result.replaceAll(match[0], () => replacement)
     }
 
     const replaceMap = {
@@ -146,7 +145,7 @@ export class GoogleSearch {
       '&nbsp;': ' ',
     }
     for (const [key, value] of Object.entries(replaceMap)) {
-      result = result.replaceAll(key, value)
+      result = result.replaceAll(key, () => value)
     }
 
     // 太字
@@ -174,7 +173,7 @@ export class GoogleSearch {
       json = JSON.parse(data)
     }
 
-    if (!(date in json)) {
+    if (!Object.hasOwn(json, date)) {
       json[date] = 0
     }
     json[date]++
@@ -196,7 +195,7 @@ export class GoogleSearch {
     // リセットタイミングはPST0時
     // タイムゾーンを考慮して日付を取得
     const date = this.getPstDate()
-    if (!(date in json)) {
+    if (!Object.hasOwn(json, date)) {
       return 0
     }
 

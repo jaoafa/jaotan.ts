@@ -10,10 +10,10 @@ export class SearchImageCommand implements BaseCommand {
   async execute(
     discord: Discord,
     message: Message<true>,
-    args: string[]
+    arguments_: string[]
   ): Promise<void> {
     // 引数がない場合はエラーを返す
-    if (args.length === 0) {
+    if (arguments_.length === 0) {
       await message.reply({
         embeds: [
           new EmbedBuilder()
@@ -25,7 +25,7 @@ export class SearchImageCommand implements BaseCommand {
       })
       return
     }
-    const text = args.join(' ')
+    const text = arguments_.join(' ')
 
     // APIキーの取得
     const googleSearchConfig = discord.getConfig().get('googleSearch')

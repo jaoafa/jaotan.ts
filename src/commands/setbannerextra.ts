@@ -23,7 +23,7 @@ export class SetbannerExtraCommand implements BaseCommand {
   async execute(
     _discord: Discord,
     message: Message<true>,
-    args: string[]
+    arguments_: string[]
   ): Promise<void> {
     const { author } = message
 
@@ -31,22 +31,6 @@ export class SetbannerExtraCommand implements BaseCommand {
     const assetDirectory = process.env.ASSETS_DIR ?? 'assets'
     const templateBaseImagePath = `${assetDirectory}/setbanner-template-base.png`
     const templateOverlayImagePath = `${assetDirectory}/setbanner-template-overlay.png`
-
-    // 左側テキストの描画位置
-    const leftX = 100
-    const leftY = 265
-
-    // 左側絵文字の描画位置
-    const leftEmojiX = 300
-    const leftEmojiY = 280
-
-    // 右側絵文字の描画位置
-    const rightEmojiX = 600
-    const rightEmojiY = 280
-
-    // 右側テキストの描画位置
-    const rightX = 845
-    const rightY = 265
 
     // 画像を生成
     const fonts = [
@@ -67,17 +51,17 @@ export class SetbannerExtraCommand implements BaseCommand {
     }
 
     const canvas = createCanvas(960, 540)
-    const ctx = canvas.getContext('2d')
+    const context = canvas.getContext('2d')
     const templateImage = await loadImage(templateBaseImagePath)
-    ctx.drawImage(templateImage, 0, 0, 960, 540)
+    context.drawImage(templateImage, 0, 0, 960, 540)
 
     // 引数を処理
     // 1: 左側テキスト
     // 2: 左側絵文字
     // 3: 右側絵文字
     // 4: 右側テキスト
-    args = args.map((arg) => arg.trim())
-    if (args.length < 4) {
+    arguments_ = arguments_.map((argument) => argument.trim())
+    if (arguments_.length < 4) {
       await message.channel.send({
         embeds: [
           new EmbedBuilder()
@@ -91,12 +75,28 @@ export class SetbannerExtraCommand implements BaseCommand {
       return
     }
 
+    // 左側テキストの描画位置
+    const leftX = 100
+    const leftY = 265
+
+    // 左側絵文字の描画位置
+    const leftEmojiX = 300
+    const leftEmojiY = 280
+
+    // 右側絵文字の描画位置
+    const rightEmojiX = 600
+    const rightEmojiY = 280
+
+    // 右側テキストの描画位置
+    const rightX = 845
+    const rightY = 265
+
     // 左側テキストと絵文字
-    const leftText = args[0].replaceAll('ー', '┃')
-    const leftEmoji = args[1]
+    const leftText = arguments_[0].replaceAll('ー', '┃')
+    const leftEmoji = arguments_[1]
     // 右側絵文字とテキスト
-    const rightEmoji = args[2]
-    const rightText = args[3].replaceAll('ー', '┃')
+    const rightEmoji = arguments_[2]
+    const rightText = arguments_[3].replaceAll('ー', '┃')
 
     // 絵文字文字列をパース
     const leftEmojiParsed = await this.parseEmojiText(leftEmoji)
@@ -104,7 +104,7 @@ export class SetbannerExtraCommand implements BaseCommand {
 
     // 絵文字を描画
     if (leftEmojiParsed.image) {
-      ctx.drawImage(
+      context.drawImage(
         leftEmojiParsed.image,
         leftEmojiX - 70,
         leftEmojiY - 70,
@@ -113,7 +113,7 @@ export class SetbannerExtraCommand implements BaseCommand {
       )
     } else {
       this.drawText(
-        ctx,
+        context,
         leftEmojiParsed.text ?? leftEmoji,
         leftEmojiX + 32,
         leftEmojiY + 32,
@@ -121,7 +121,7 @@ export class SetbannerExtraCommand implements BaseCommand {
       )
     }
     if (rightEmojiParsed.image) {
-      ctx.drawImage(
+      context.drawImage(
         rightEmojiParsed.image,
         rightEmojiX - 70,
         rightEmojiY - 70,
@@ -130,7 +130,7 @@ export class SetbannerExtraCommand implements BaseCommand {
       )
     } else {
       this.drawText(
-        ctx,
+        context,
         rightEmojiParsed.text ?? rightEmoji,
         rightEmojiX + 32,
         rightEmojiY + 32,
@@ -139,12 +139,12 @@ export class SetbannerExtraCommand implements BaseCommand {
     }
 
     // テキストを描画
-    this.drawText(ctx, leftText, leftX, leftY, fonts)
-    this.drawText(ctx, rightText, rightX, rightY, fonts)
+    this.drawText(context, leftText, leftX, leftY, fonts)
+    this.drawText(context, rightText, rightX, rightY, fonts)
 
     // オーバーレイ画像を描画
     const overlayImage = await loadImage(templateOverlayImagePath)
-    ctx.drawImage(overlayImage, 0, 0, 960, 540)
+    context.drawImage(overlayImage, 0, 0, 960, 540)
 
     // 画像をバナー画像として設定
     const buffer = canvas.toBuffer('image/png')
@@ -206,7 +206,7 @@ export class SetbannerExtraCommand implements BaseCommand {
   }
 
   drawText(
-    ctx: CanvasRenderingContext2D,
+    context: CanvasRenderingContext2D,
     text: string,
     x: number,
     y: number,
@@ -216,18 +216,18 @@ export class SetbannerExtraCommand implements BaseCommand {
     const textLength = text.length
     const fontSize = Math.min(144, 500 / (textLength * 1.3))
     const fontNames = fonts.map((font) => `'${font.name}'`).join(', ')
-    ctx.font = `${fontSize * 1.4}px ${fontNames}`
-    ctx.fillStyle = 'black'
-    ctx.textAlign = 'center'
-    ctx.textBaseline = 'middle'
+    context.font = `${fontSize * 1.4}px ${fontNames}`
+    context.fillStyle = 'black'
+    context.textAlign = 'center'
+    context.textBaseline = 'middle'
 
     // eslint-disable-next-line @typescript-eslint/no-misused-spread -- unicorn/prefer-spread と競合
     const characters = [...text]
     const lineHeight = fontSize * 1.4
-    for (let i = 0; i < characters.length; i++) {
-      const char = characters[i]
-      const yOffset = (i - (characters.length - 1) / 2) * lineHeight
-      ctx.fillText(char, x, y + yOffset)
+    for (let index = 0; index < characters.length; index++) {
+      const char = characters[index]
+      const yOffset = (index - (characters.length - 1) / 2) * lineHeight
+      context.fillText(char, x, y + yOffset)
     }
   }
 }

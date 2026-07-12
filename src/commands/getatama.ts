@@ -15,7 +15,7 @@ export class GetAtamaCommand implements BaseCommand {
   async execute(
     discord: Discord,
     message: Message<true>,
-    args: string[]
+    arguments_: string[]
   ): Promise<void> {
     const config = discord.getConfig()
     const apiUrl = config.get('phrasePlusApiUrl')
@@ -35,7 +35,7 @@ export class GetAtamaCommand implements BaseCommand {
     // 引数が指定されている場合、それをcountとして使う
     // そうでない場合、countは1
     // 引数が数値でない場合、エラー
-    const count = args[0] ? Number.parseInt(args[0]) : 1
+    const count = arguments_[0] ? Number.parseInt(arguments_[0]) : 1
     if (Number.isNaN(count) || count < 1 || count > 100) {
       await message.reply(
         ':x: 引数が間違っています。`/getatama <取得する数>` の形式で入力してください。取得する数は半角数字で1以上100未満です。'
@@ -45,13 +45,13 @@ export class GetAtamaCommand implements BaseCommand {
 
     const url = new URL(apiUrl)
     url.searchParams.set('count', count.toString())
-    const res = await fetch(url.toString())
-    if (!res.ok) {
+    const response = await fetch(url.href)
+    if (!response.ok) {
       await message.reply({
         embeds: [
           {
             title: 'エラー',
-            description: `APIリクエストに失敗しました: ${res.status} ${res.statusText}`,
+            description: `APIリクエストに失敗しました: ${response.status} ${response.statusText}`,
             color: 0xff_00_00,
           },
         ],
@@ -59,7 +59,7 @@ export class GetAtamaCommand implements BaseCommand {
       return
     }
 
-    const data = (await res.json()) as PhrasePlusResponse
+    const data = (await response.json()) as PhrasePlusResponse
     if (!('results' in data)) {
       await message.reply({
         embeds: [

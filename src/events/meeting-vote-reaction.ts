@@ -9,7 +9,7 @@ import {
   Colors,
 } from 'discord.js'
 import { BaseDiscordEvent } from '.'
-import { Configuration } from '../config'
+import { Config } from '../config'
 import { MeetingVote } from '../features/meeting-vote'
 import { setTimeout } from 'node:timers/promises'
 import { Logger } from '@book000/node-utils'
@@ -24,7 +24,7 @@ export class MeetingReactionVoteEvent extends BaseDiscordEvent<'messageReactionA
     reaction: MessageReaction | PartialMessageReaction,
     user: User | PartialUser
   ): Promise<void> {
-    const config: Configuration = this.discord.getConfig()
+    const config: Config = this.discord.getConfig()
     const meetingVoteChannelId =
       config.get('discord').channel?.meetingVote ?? '1149598703846440960'
 
@@ -40,11 +40,11 @@ export class MeetingReactionVoteEvent extends BaseDiscordEvent<'messageReactionA
     // サーバのテキストチャンネル以外は無視
     if (message.channel.type !== ChannelType.GuildText) return
 
-    const channel = message.channel
-    const meetingVoteFeature = new MeetingVote(channel)
-
     // ピン留めされていないメッセージは無視
     if (!message.pinned) return
+
+    const channel = message.channel
+    const meetingVoteFeature = new MeetingVote(channel)
 
     // PartialUserの場合はfetch
     if (user.partial) {
@@ -92,13 +92,14 @@ export class MeetingReactionVoteEvent extends BaseDiscordEvent<'messageReactionA
       },
     })
 
-    setTimeout(60_000)
-      .then(async () => {
+    ;(async () => {
+      try {
+        await setTimeout(60_000)
         await reply.delete()
-      })
-      .catch((error: unknown) => {
+      } catch (error: unknown) {
         logger.error('Failed to delete message', error as Error)
-      })
+      }
+    })()
   }
 
   async executeUserHasNoVoteRight(
@@ -125,12 +126,13 @@ export class MeetingReactionVoteEvent extends BaseDiscordEvent<'messageReactionA
       },
     })
 
-    setTimeout(60_000)
-      .then(async () => {
+    ;(async () => {
+      try {
+        await setTimeout(60_000)
         await reply.delete()
-      })
-      .catch((error: unknown) => {
+      } catch (error: unknown) {
         logger.error('Failed to delete message', error as Error)
-      })
+      }
+    })()
   }
 }

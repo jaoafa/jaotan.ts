@@ -190,9 +190,9 @@ export class Birthday {
    * @returns ファイルパス
    */
   private getPath() {
-    const dataDir = process.env.DATA_DIR ?? 'data/'
+    const dataDirectory = process.env.DATA_DIR ?? 'data/'
 
-    return `${dataDir}/birthday.json`
+    return `${dataDirectory}/birthday.json`
   }
 
   /**
@@ -290,8 +290,6 @@ export class Birthday {
    */
   public static isValidDate(date: IBirthdayDateWithYear): boolean {
     const month = date.month
-    const day = date.day
-    const year = date.year
 
     // 月は1〜12であること
     if (month < 1 || month > 12) {
@@ -299,11 +297,13 @@ export class Birthday {
     }
 
     // 日は1〜31であること
+    const day = date.day
     if (day < 1 || day > 31) {
       return false
     }
 
     // 年はnullまたは0以上であること
+    const year = date.year
     if (year !== null && year < 0) {
       return false
     }
@@ -343,10 +343,10 @@ export class Birthday {
   /**
    * 数値を2桁の0埋めした文字列に変換する
    *
-   * @param num 数値
+   * @param number_ 数値
    * @returns 2桁の0埋めした文字列
    */
-  private static getZeroPadding(num: number): string {
-    return num.toString().padStart(2, '0')
+  private static getZeroPadding(number_: number): string {
+    return number_.toString().padStart(2, '0')
   }
 }

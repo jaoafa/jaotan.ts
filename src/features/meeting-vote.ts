@@ -37,12 +37,12 @@ class VoteReaction {
    * 指定したメッセージでこのリアクションをつけたユーザーを取得します。
    *
    * @param message メッセージ
-   * @param excludeBot Botを除外するかどうか
+   * @param isExcludingBot Botを除外するかどうか
    * @returns ユーザーのコレクション
    */
   public async getUsers(
     message: Message<true>,
-    excludeBot = false
+    isExcludingBot = false
   ): Promise<Collection<string, User>> {
     message = await message.fetch()
 
@@ -51,7 +51,7 @@ class VoteReaction {
       return new Collection<string, User>()
     }
     const users = await reaction.users.fetch()
-    return excludeBot ? users.filter((user: User) => !user.bot) : users
+    return isExcludingBot ? users.filter((user: User) => !user.bot) : users
   }
 
   /**
@@ -77,19 +77,19 @@ export const VoteReactionType = {
   /**
    * 賛成
    */
-  Good: new VoteReaction('\uD83D\uDC4D'),
+  Good: new VoteReaction('\u{1F44D}'),
   /**
    * 反対
    */
-  Bad: new VoteReaction('\uD83D\uDC4E'),
+  Bad: new VoteReaction('\u{1F44E}'),
   /**
    * 白票
    */
-  White: new VoteReaction('\uD83C\uDFF3'),
+  White: new VoteReaction('\u{1F3F3}'),
   /**
    * リマインド済み
    */
-  Remind: new VoteReaction('\uD83D\uDCF3'),
+  Remind: new VoteReaction('\u{1F4F3}'),
 } as const
 
 /**
@@ -310,11 +310,11 @@ export class MeetingVote {
     // 投票開始から1週間が経過していて、リマインド済みでない場合、リマインドする
     // リマインドした場合、Bot自身がリアクションをつける
     const voteRemindDateTime = this.getVoteRemindDateTime(message)
-    const reminded = await VoteReactionType.Remind.isReacted(
+    const isReminded = await VoteReactionType.Remind.isReacted(
       message,
       message.client.user.id
     )
-    if (voteRemindDateTime < new Date() && !reminded) {
+    if (voteRemindDateTime < new Date() && !isReminded) {
       await this.remind(message, goodUsers, badUsers, whiteUsers)
     }
   }

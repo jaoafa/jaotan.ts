@@ -10,9 +10,9 @@ export class TozhCommand implements BaseCommand {
   async execute(
     discord: Discord,
     message: Message<true>,
-    args: string[]
+    arguments_: string[]
   ): Promise<void> {
-    const text = args.join(' ')
+    const text = arguments_.join(' ')
 
     const config = discord.getConfig()
     const translate = new Translate(config)

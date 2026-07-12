@@ -8,7 +8,7 @@ import {
 } from 'discord.js'
 import { Logger } from '@book000/node-utils'
 import { BaseDiscordEvent } from './events'
-import { Configuration } from './config'
+import { Config } from './config'
 import { BaseCommand } from './commands'
 import { PingCommand } from './commands/ping'
 import { TmttmtCommand } from './commands/tmttmt'
@@ -62,7 +62,7 @@ import { SetbannerExtraCommand } from './commands/setbannerextra'
 import { GreetingTimeoutTask } from './tasks/greeting-timeout'
 
 export class Discord {
-  private config: Configuration
+  private config: Config
   public readonly client: Client
 
   private readonly tasks: BaseDiscordTask[] = []
@@ -100,7 +100,7 @@ export class Discord {
     new UnmuteCommand(),
   ]
 
-  constructor(config: Configuration) {
+  constructor(config: Config) {
     this.client = new Client({
       intents: [
         GatewayIntentBits.Guilds,
@@ -124,12 +124,16 @@ export class Discord {
       if (!message.inGuild()) {
         return
       }
-      this.onMessageCreate(message).catch((error: unknown) => {
-        Logger.configure('Discord.onMessageCreate').error(
-          '❌ Error',
-          error as Error
-        )
-      })
+      ;(async () => {
+        try {
+          await this.onMessageCreate(message)
+        } catch (error: unknown) {
+          Logger.configure('Discord.onMessageCreate').error(
+            '❌ Error',
+            error as Error
+          )
+        }
+      })()
     })
 
     const events: BaseDiscordEvent<any>[] = [
@@ -150,9 +154,17 @@ export class Discord {
       event.register()
     }
 
-    this.client.login(config.get('discord').token).catch((error: unknown) => {
-      Logger.configure('Discord.login').error('❌ login failed', error as Error)
-    })
+    const client = this.client
+    ;(async () => {
+      try {
+        await client.login(config.get('discord').token)
+      } catch (error: unknown) {
+        Logger.configure('Discord.login').error(
+          '❌ login failed',
+          error as Error
+        )
+      }
+    })()
 
     this.tasks = [
       new MeetingVoteTask(this),
@@ -161,12 +173,16 @@ export class Discord {
       new GreetingTimeoutTask(this),
     ]
     for (const task of this.tasks) {
-      task.register().catch((error: unknown) => {
-        Logger.configure('Discord.task').error(
-          '❌ task register failed',
-          error as Error
-        )
-      })
+      ;(async () => {
+        try {
+          await task.register()
+        } catch (error: unknown) {
+          Logger.configure('Discord.task').error(
+            '❌ task register failed',
+            error as Error
+          )
+        }
+      })()
     }
 
     const crons: BaseDiscordJob[] = [new EveryDayJob(this)]
@@ -194,14 +210,17 @@ export class Discord {
     logger.info(`👌 ready: ${this.client.user?.tag}`)
 
     for (const task of this.tasks) {
-      task.execute().catch((error: unknown) => {
-        logger.error('❌ task execute failed', error as Error)
-      })
+      ;(async () => {
+        try {
+          await task.execute()
+        } catch (error: unknown) {
+          logger.error('❌ task execute failed', error as Error)
+        }
+      })()
     }
   }
 
   async onMessageCreate(message: Message<true>) {
-    const logger = Logger.configure('Discord.onMessageCreate')
     // Botのメッセージは無視
     if (message.author.bot) {
       return
@@ -222,6 +241,8 @@ export class Discord {
       // コマンドが見つからない場合は無視
       return
     }
+
+    const logger = Logger.configure('Discord.onMessageCreate')
 
     // コマンドの実行権限を確認
     if (command.permissions) {
@@ -258,9 +279,9 @@ export class Discord {
 
     logger.info(`👌 ${message.author.tag}: execute ${command.name}`)
 
-    const [, ...args] = message.content.split(' ')
+    const [, ...arguments_] = message.content.split(' ')
     try {
-      await command.execute(this, message, args)
+      await command.execute(this, message, arguments_)
     } catch (error) {
       // エラー処理
       logger.error('❌ Error', error as Error)

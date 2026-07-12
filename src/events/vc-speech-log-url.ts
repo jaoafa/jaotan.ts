@@ -1,6 +1,6 @@
 import { ChannelType, Colors, EmbedBuilder, Message } from 'discord.js'
 import { BaseDiscordEvent } from '.'
-import { Configuration } from '../config'
+import { Config } from '../config'
 
 /**
  * #vc-speech-log へのメッセージリンクが投稿された際、リンク先メッセージの内容を引用する
@@ -12,10 +12,6 @@ export class VCSpeechLogMessageUrlEvent extends BaseDiscordEvent<'messageCreate'
   readonly eventName = 'messageCreate'
 
   async execute(message: Message<true>): Promise<void> {
-    const config: Configuration = this.discord.getConfig()
-    const vcSpeechLogChannelId =
-      config.get('discord').channel?.vcSpeechLog ?? '1149606247314767993'
-
     // メンバーが取得できない場合は無視
     if (!message.member) return
     // Botは無視
@@ -25,8 +21,10 @@ export class VCSpeechLogMessageUrlEvent extends BaseDiscordEvent<'messageCreate'
     const messageUrlMatch = message.content.match(this.messageUrlRegex)
     if (!messageUrlMatch) return
 
+    const config: Config = this.discord.getConfig()
+    const vcSpeechLogChannelId =
+      config.get('discord').channel?.vcSpeechLog ?? '1149606247314767993'
     const urlChannelId = messageUrlMatch[2]
-    const urlMessageId = messageUrlMatch[3]
 
     // #vc-speech-log チャンネル以外は無視
     if (urlChannelId !== vcSpeechLogChannelId) return
@@ -35,6 +33,7 @@ export class VCSpeechLogMessageUrlEvent extends BaseDiscordEvent<'messageCreate'
     const vcSpeechLogChannel = await message.guild.channels.fetch(urlChannelId)
     if (vcSpeechLogChannel?.type !== ChannelType.GuildText) return
 
+    const urlMessageId = messageUrlMatch[3]
     const vcSpeechLogMessage =
       await vcSpeechLogChannel.messages.fetch(urlMessageId)
 

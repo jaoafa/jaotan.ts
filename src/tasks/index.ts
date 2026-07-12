@@ -12,8 +12,9 @@ export abstract class BaseDiscordTask {
   abstract get interval(): number
 
   async register(): Promise<void> {
+    const interval = setInterval(this.interval * 1000)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    for await (const _ of setInterval(this.interval * 1000)) {
+    for await (const _ of interval) {
       await this.execute()
     }
   }

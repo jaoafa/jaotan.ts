@@ -16,10 +16,12 @@ export abstract class BaseDiscordJob {
     const logger = Logger.configure(`${this.constructor.name}.register`)
     cron.schedule(
       this.schedule,
-      () => {
-        this.execute().catch((error: unknown) => {
+      async () => {
+        try {
+          await this.execute()
+        } catch (error: unknown) {
           logger.error('❌ job failed', error as Error)
-        })
+        }
       },
       {
         timezone: 'Asia/Tokyo',

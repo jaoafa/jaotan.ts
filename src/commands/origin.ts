@@ -10,16 +10,16 @@ export class OriginCommand implements BaseCommand {
   async execute(
     _discord: Discord,
     message: Message<true>,
-    args: string[]
+    arguments_: string[]
   ): Promise<void> {
-    if (args.length === 0) {
+    if (arguments_.length === 0) {
       await message.reply(
         ':x: 引数が足りません。`/origin <記念日ナンバー>` の形式で入力してください。'
       )
       return
     }
 
-    const index = Number.parseInt(args[0])
+    const index = Number.parseInt(arguments_[0])
     if (Number.isNaN(index)) {
       await message.reply(
         ':x: 引数が間違っています。`/origin <記念日ナンバー>` の形式で入力してください。記念日ナンバーは半角数字です。'

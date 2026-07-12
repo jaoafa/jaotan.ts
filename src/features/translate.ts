@@ -1,4 +1,4 @@
-import { Configuration } from '@/config'
+import { Config } from '@/config'
 import DetectLanguage from 'detectlanguage'
 import {
   BaseMessageOptions,
@@ -144,15 +144,14 @@ export class Translate {
     zu: 'ズールー語',
   }
 
-  constructor(config: Configuration) {
+  constructor(config: Config) {
     const translateGasUrl = config.get('translateGasUrl')
-    const detectLanguageApiToken = config.get('detectLanguageApiToken')
     if (!translateGasUrl) {
       throw new Error('translateGasUrl is required')
     }
 
     this.translateGasUrl = translateGasUrl
-    this.detectLanguageApiToken = detectLanguageApiToken ?? null
+    this.detectLanguageApiToken = config.get('detectLanguageApiToken') ?? null
   }
 
   async translate(
@@ -167,7 +166,7 @@ export class Translate {
       throw new Error('Invalid after language')
     }
 
-    const res = await fetch(this.translateGasUrl, {
+    const response = await fetch(this.translateGasUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -176,11 +175,11 @@ export class Translate {
         text,
       }),
     })
-    if (res.status !== 200) {
+    if (response.status !== 200) {
       throw new Error('Failed to translate')
     }
 
-    const data = (await res.json()) as TranslateResponse
+    const data = (await response.json()) as TranslateResponse
     return {
       beforeLanguage,
       afterLanguage,
@@ -259,8 +258,8 @@ export class Translate {
     // 翻訳処理
     // afterLanguagesの順番で翻訳。翻訳後の言語が複数ある場合は、翻訳後の言語の数だけ繰り返す
     const fields: EmbedField[] = []
-    for (let i = 0; i < afterLanguages.length; i++) {
-      const language = afterLanguages[i]
+    for (let index = 0; index < afterLanguages.length; index++) {
+      const language = afterLanguages[index]
 
       if (beforeLanguage === language) {
         await reply.edit(
@@ -286,11 +285,11 @@ export class Translate {
       })
 
       // 翻訳結果を送信
-      const type = i === afterLanguages.length - 1 ? 'SUCCESS' : 'PENDING'
+      const type = index === afterLanguages.length - 1 ? 'SUCCESS' : 'PENDING'
       const title =
-        i === afterLanguages.length - 1
+        index === afterLanguages.length - 1
           ? '翻訳完了'
-          : `翻訳中 (${i + 1}/${afterLanguages.length})`
+          : `翻訳中 (${index + 1}/${afterLanguages.length})`
 
       await reply.edit(this.getEmbedMessage(type, title, null, fields))
 

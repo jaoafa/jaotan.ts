@@ -34,7 +34,7 @@ export class Mebo {
     const uid = options.uid
 
     try {
-      const res = await fetch(this.apiUrl, {
+      const response = await fetch(this.apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -44,10 +44,10 @@ export class Mebo {
           uid: `jaotan-reply-${uid}`,
         }),
       })
-      if (!res.ok) {
+      if (!response.ok) {
         return null
       }
-      return (await res.json()) as MeboResponse
+      return (await response.json()) as MeboResponse
     } catch {
       return null
     }

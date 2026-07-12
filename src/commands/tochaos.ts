@@ -10,9 +10,9 @@ export class TochaosCommand implements BaseCommand {
   async execute(
     discord: Discord,
     message: Message<true>,
-    args: string[]
+    arguments_: string[]
   ): Promise<void> {
-    const text = args.join(' ')
+    const text = arguments_.join(' ')
 
     const config = discord.getConfig()
     const translate = new Translate(config)
@@ -22,7 +22,7 @@ export class TochaosCommand implements BaseCommand {
     const afterLanguages: string[] = []
     // 3 から 5 の間のランダムな数値を生成
     const translateCount = Math.floor(Math.random() * 3) + 3
-    for (let i = 0; i < translateCount; i++) {
+    for (let index = 0; index < translateCount; index++) {
       const excludes = [beforeLanguage, ...afterLanguages, 'ja']
       afterLanguages.push(translate.randomLanguage(excludes))
     }

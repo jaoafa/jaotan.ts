@@ -1,6 +1,6 @@
 import { ChannelType, GuildMember } from 'discord.js'
 import { BaseDiscordEvent } from '.'
-import { Configuration } from '@/config'
+import { Config } from '@/config'
 
 /**
  * ユーザーがサーバから退出した際、以下の処理を行う
@@ -10,7 +10,7 @@ export class LeavedNotififerEvent extends BaseDiscordEvent<'guildMemberRemove'> 
   readonly eventName = 'guildMemberRemove'
 
   async execute(member: GuildMember): Promise<void> {
-    const config: Configuration = this.discord.getConfig()
+    const config: Config = this.discord.getConfig()
     const generalChannelId =
       config.get('discord').channel?.general ?? '1138605147287728150'
 

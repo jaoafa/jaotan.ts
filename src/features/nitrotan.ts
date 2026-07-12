@@ -1,6 +1,6 @@
 import { Discord } from '@/discord'
 import { Logger } from '@book000/node-utils'
-import { Guild, Role, TextChannel } from 'discord.js'
+import { Channel, Guild, Role, TextChannel } from 'discord.js'
 import fs from 'node:fs'
 
 export const NitrotanReason = {
@@ -71,9 +71,15 @@ export class Nitrotan {
 
     const channelId =
       config.get('discord').channel?.other ?? '1149857948089192448'
-    const channel =
-      discord.client.channels.cache.get(channelId) ??
-      (await discord.client.channels.fetch(channelId).catch(() => null))
+    let channel: Channel | null | undefined =
+      discord.client.channels.cache.get(channelId)
+    if (!channel) {
+      try {
+        channel = await discord.client.channels.fetch(channelId)
+      } catch {
+        channel = null
+      }
+    }
     if (!channel) {
       throw new Error('Channel not found')
     }
@@ -93,9 +99,14 @@ export class Nitrotan {
     }
 
     const roleId = config.get('discord').role?.nitrotan ?? '1149583556138508328'
-    const role =
-      guild.roles.cache.get(roleId) ??
-      (await guild.roles.fetch(roleId).catch(() => null))
+    let role: Role | null | undefined = guild.roles.cache.get(roleId)
+    if (!role) {
+      try {
+        role = await guild.roles.fetch(roleId)
+      } catch {
+        role = null
+      }
+    }
 
     if (!role) {
       throw new Error('Role not found')
@@ -108,10 +119,10 @@ export class Nitrotan {
    * ファイルからNitroユーザーデータを読み込む。
    * 最終読み込み日時から30分以上経過している場合は読み込む。
    *
-   * @param force 最終読み込み日時を無視して強制的に読み込むか
+   * @param isForced 最終読み込み日時を無視して強制的に読み込むか
    */
-  public load(force = false) {
-    if (!force && Nitrotan.lastLoadAt) {
+  public load(isForced = false) {
+    if (!isForced && Nitrotan.lastLoadAt) {
       const now = new Date()
       const diff = now.getTime() - Nitrotan.lastLoadAt.getTime()
       if (diff < 30 * 60 * 1000) {
@@ -162,11 +173,11 @@ export class Nitrotan {
    * ユーザーをNitroとして認識する
    */
   public async add(discordId: string, reason: NitrotanReasonType) {
-    const logger = Logger.configure('Nitrotan.add')
     if (this.isNitrotan(discordId)) {
       return
     }
 
+    const logger = Logger.configure('Nitrotan.add')
     Nitrotan.nitrotans.push({
       discordId,
       since: new Date(),
@@ -317,7 +328,11 @@ export class Nitrotan {
       return cacheMember
     }
 
-    return await this.guild.members.fetch(discordId).catch(() => null)
+    try {
+      return await this.guild.members.fetch(discordId)
+    } catch {
+      return null
+    }
   }
 
   /**
@@ -330,8 +345,8 @@ export class Nitrotan {
    * @returns ファイルパス
    */
   private getPath() {
-    const dataDir = process.env.DATA_DIR ?? 'data/'
+    const dataDirectory = process.env.DATA_DIR ?? 'data/'
 
-    return `${dataDir}/nitrotan.json`
+    return `${dataDirectory}/nitrotan.json`
   }
 }

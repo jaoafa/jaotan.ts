@@ -10,10 +10,10 @@ export class TranslateCommand implements BaseCommand {
   async execute(
     discord: Discord,
     message: Message<true>,
-    args: string[]
+    arguments_: string[]
   ): Promise<void> {
     // 引数は最低3つ必要
-    if (args.length < 3) {
+    if (arguments_.length < 3) {
       await message.reply(
         ':x: 引数が足りません。`/translate <before> <after> <text>` の形式で入力してください。'
       )
@@ -21,9 +21,9 @@ export class TranslateCommand implements BaseCommand {
     }
 
     // 翻訳前の言語、翻訳後の言語、翻訳するテキストを取得
-    const beforeLanguage = args[0]
-    const afterLanguage = args[1]
-    const text = args.slice(2).join(' ')
+    const beforeLanguage = arguments_[0]
+    const afterLanguage = arguments_[1]
+    const text = arguments_.slice(2).join(' ')
 
     const config = discord.getConfig()
     const translate = new Translate(config)

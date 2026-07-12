@@ -38,20 +38,20 @@ export class Kinenbi {
    * 指定した日付の記念日一覧を取得します。
    *
    * @param date 日付
-   * @param force キャッシュを無視して強制的に取得するかどうか
+   * @param isForced キャッシュを無視して強制的に取得するかどうか
    * @returns 記念日一覧
    */
   public async get(
     date: Date,
-    force = false
+    isForced = false
   ): Promise<KinenbiResultWithCustom[]> {
     const cachePath = this.getCachePath(date)
-    const prevData: KinenbiCache | null = fs.existsSync(cachePath)
+    const previousData: KinenbiCache | null = fs.existsSync(cachePath)
       ? JSON.parse(fs.readFileSync(cachePath, 'utf8'))
       : null
 
-    if (!force && prevData) {
-      return prevData.results
+    if (!isForced && previousData) {
+      return previousData.results
     }
 
     const body = new URLSearchParams({
@@ -59,16 +59,16 @@ export class Kinenbi {
       M: (date.getMonth() + 1).toString(),
       D: date.getDate().toString(),
     })
-    const res = await fetch(this.baseUrl, {
+    const response = await fetch(this.baseUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: body.toString(),
     })
-    if (res.status !== 200) {
-      throw new Error('Failed to get today: ' + res.status.toString())
+    if (response.status !== 200) {
+      throw new Error('Failed to get today: ' + response.status.toString())
     }
 
-    const html = await res.text()
+    const html = await response.text()
     const $ = load(html)
     const elements = $('div.today_kinenbilist a.winDetail')
 
@@ -86,24 +86,24 @@ export class Kinenbi {
         continue
       }
 
-      const searchParamsObject = this.searchParamsToObject(
+      const searchParametersObject = this.searchParamsToObject(
         kinenbiUrlObject.searchParams
       )
-      const lastFoundDate = prevData?.results.find(
+      const lastFoundDate = previousData?.results.find(
         (result) =>
           result.detail.filename === filename &&
-          result.detail.query.TYPE === searchParamsObject.TYPE &&
-          result.detail.query.MD === searchParamsObject.MD &&
-          result.detail.query.NM === searchParamsObject.NM
+          result.detail.query.TYPE === searchParametersObject.TYPE &&
+          result.detail.query.MD === searchParametersObject.MD &&
+          result.detail.query.NM === searchParametersObject.NM
       )?.foundDate
       const foundDate = lastFoundDate ?? date // キャッシュがある場合は前回の日付を使う
-      const isNew = prevData !== null && lastFoundDate === undefined // キャッシュがある場合は新規かどうかを判定
+      const isNew = previousData !== null && lastFoundDate === undefined // キャッシュがある場合は新規かどうかを判定
 
       results.push({
         title,
         detail: {
           filename,
-          query: searchParamsObject,
+          query: searchParametersObject,
         },
         foundDate,
         isNew,
@@ -125,10 +125,10 @@ export class Kinenbi {
     const urlObject = new URL(this.baseUrl + options.filename)
     urlObject.search = this.objectToSearchParams(options.query).toString()
 
-    const res = await fetch(urlObject.toString())
+    const response = await fetch(urlObject.href)
     // 正しくても404が返ってくることがある
 
-    const html = await res.text()
+    const html = await response.text()
     const $ = load(html)
 
     const title = $('td[nowarp] > font:nth-child(1)').text()
@@ -157,11 +157,11 @@ export class Kinenbi {
     const logger = Logger.configure('Kinenbi.getRanking')
 
     try {
-      const dataDir = process.env.DATA_DIR ?? 'data/'
-      const cacheDir = `${dataDir}/kinenbi-cache/`
+      const dataDirectory = process.env.DATA_DIR ?? 'data/'
+      const cacheDirectory = `${dataDirectory}/kinenbi-cache/`
 
       // キャッシュディレクトリの存在確認
-      if (!fs.existsSync(cacheDir)) {
+      if (!fs.existsSync(cacheDirectory)) {
         return null
       }
 
@@ -182,14 +182,14 @@ export class Kinenbi {
 
       // すべてのキャッシュファイルを読み込んで記念日個数をカウント
       // 今日のファイルも counts に含めて集計する
-      const files = await fsp.readdir(cacheDir)
+      const files = await fsp.readdir(cacheDirectory)
       const jsonFiles = files.filter((file) => file.endsWith('.json'))
 
       const counts: number[] = []
 
       for (const file of jsonFiles) {
         try {
-          const filePath = `${cacheDir}${file}`
+          const filePath = `${cacheDirectory}${file}`
           const fileData: unknown = JSON.parse(
             await fsp.readFile(filePath, 'utf8')
           )
@@ -242,32 +242,31 @@ export class Kinenbi {
   }
 
   private getCachePath(date: Date): string {
-    const dataDir = process.env.DATA_DIR ?? 'data/'
-    const cacheDir = `${dataDir}/kinenbi-cache/`
+    const dataDirectory = process.env.DATA_DIR ?? 'data/'
+    const cacheDirectory = `${dataDirectory}/kinenbi-cache/`
     const cacheFile = `${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}.json`
 
-    if (!fs.existsSync(cacheDir)) {
-      fs.mkdirSync(cacheDir, { recursive: true })
+    if (!fs.existsSync(cacheDirectory)) {
+      fs.mkdirSync(cacheDirectory, { recursive: true })
     }
 
-    return `${cacheDir}${cacheFile}`
+    return `${cacheDirectory}${cacheFile}`
   }
 
   private searchParamsToObject(
-    searchParams: URLSearchParams
+    searchParameters: URLSearchParams
   ): Record<string, string> {
-    const result: Record<string, string> = {}
-    for (const [key, value] of searchParams) {
-      result[key] = value
-    }
+    const result: Record<string, string> = Object.fromEntries(searchParameters)
     return result
   }
 
-  private objectToSearchParams(obj: Record<string, string>): URLSearchParams {
-    const searchParams = new URLSearchParams()
-    for (const key in obj) {
-      searchParams.append(key, obj[key])
+  private objectToSearchParams(
+    object: Record<string, string>
+  ): URLSearchParams {
+    const searchParameters = new URLSearchParams()
+    for (const key in object) {
+      searchParameters.append(key, object[key])
     }
-    return searchParams
+    return searchParameters
   }
 }

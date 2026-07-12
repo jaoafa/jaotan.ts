@@ -1,6 +1,6 @@
 import { Birthday } from '@/features/birthday'
 import { BaseDiscordJob } from '.'
-import { Configuration } from '@/config'
+import { Config } from '@/config'
 import { ChannelType } from 'discord.js'
 import { Kinenbi } from '@/features/kinenbi'
 
@@ -11,7 +11,7 @@ export class EveryDayJob extends BaseDiscordJob {
   readonly schedule = '0 0 * * *'
 
   async execute(): Promise<void> {
-    const config: Configuration = this.discord.getConfig()
+    const config: Config = this.discord.getConfig()
     const generalChannelId =
       config.get('discord').channel?.general ?? '1138605147287728150'
 
@@ -104,31 +104,31 @@ export class EveryDayJob extends BaseDiscordJob {
     const todayKinenbi = await kinenbi.get(date, true)
     const contents = []
 
-    let isAlreadyAddedDetail = false
-
     if (todayKinenbi.length === 0) {
       contents.push('本日の記念日が存在しないか、取得できませんでした。')
       return contents
     }
 
-    let num = 0
+    let isAlreadyAddedDetail = false
+
+    let number_ = 0
     for (const result of todayKinenbi) {
-      num++
+      number_++
       const newSuffix = result.isNew ? ':new:' : ''
 
       if (isAlreadyAddedDetail) {
-        contents.push(`${num}. ${result.title} ${newSuffix}`)
+        contents.push(`${number_}. ${result.title} ${newSuffix}`)
         continue
       }
 
       const detail = await kinenbi.getDetail(result.detail)
       if (detail.description.includes('毎月')) {
-        contents.push(`${num}. ${result.title} ${newSuffix}`)
+        contents.push(`${number_}. ${result.title} ${newSuffix}`)
         continue
       }
 
       contents.push(
-        `${num}. ${result.title} ${newSuffix}\`\`\`${detail.description}\`\`\``
+        `${number_}. ${result.title} ${newSuffix}\`\`\`${detail.description}\`\`\``
       )
       isAlreadyAddedDetail = true
     }

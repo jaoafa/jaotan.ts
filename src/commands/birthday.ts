@@ -11,7 +11,7 @@ export class BirthdayCommand implements BaseCommand {
   async execute(
     discord: Discord,
     message: Message<true>,
-    args: string[]
+    arguments_: string[]
   ): Promise<void> {
     // birthday: 設定されている誕生日を表示
     // birthday set 2000-01-01: 誕生日を設定
@@ -19,19 +19,19 @@ export class BirthdayCommand implements BaseCommand {
     // birthday delete: 誕生日を削除
     // それ以外: ヘルプを表示
 
-    if (args.length === 0) {
+    if (arguments_.length === 0) {
       await this.executeGet(discord, message)
       return
     }
 
-    const subCommand = args[0]
+    const subCommand = arguments_[0]
     switch (subCommand) {
       case 'set': {
-        await this.executeSet(discord, message, args.slice(1))
+        await this.executeSet(discord, message, arguments_.slice(1))
         break
       }
       case 'force': {
-        await this.executeForce(discord, message, args.slice(1))
+        await this.executeForce(discord, message, arguments_.slice(1))
         break
       }
       case 'delete': {
@@ -87,10 +87,10 @@ export class BirthdayCommand implements BaseCommand {
   async executeSet(
     _discord: Discord,
     message: Message<true>,
-    args: string[]
+    arguments_: string[]
   ): Promise<void> {
     // birthday set 2000-01-01
-    const inputDate = Birthday.parseInputDate(args.join(' '))
+    const inputDate = Birthday.parseInputDate(arguments_.join(' '))
 
     if (!inputDate) {
       const embed = this.createEmbed(
@@ -142,11 +142,11 @@ export class BirthdayCommand implements BaseCommand {
   async executeForce(
     _discord: Discord,
     message: Message<true>,
-    args: string[]
+    arguments_: string[]
   ): Promise<void> {
     // birthday force 20
 
-    const age = Number.parseInt(args[0])
+    const age = Number.parseInt(arguments_[0])
     if (!age) {
       const embed = this.createEmbed(
         'error',

@@ -10,13 +10,13 @@ export class AkakeseCommand implements BaseCommand {
   async execute(
     _discord: Discord,
     message: Message<true>,
-    args: string[]
+    arguments_: string[]
   ): Promise<void> {
     // GIFファイルのパス
     const assetDirectory = process.env.ASSETS_DIR ?? 'assets'
     const gifPath = `${assetDirectory}/akakese.gif`
 
-    const mentionTo = this.getMentionTo(message.author, args)
+    const mentionTo = this.getMentionTo(message.author, arguments_)
 
     const buffer = fs.readFileSync(gifPath)
     await message.channel.send({
@@ -32,18 +32,18 @@ export class AkakeseCommand implements BaseCommand {
     })
   }
 
-  private getMentionTo(author: User, args: string[]): string {
-    if (args.length === 0) {
+  private getMentionTo(author: User, arguments_: string[]): string {
+    if (arguments_.length === 0) {
       return `<@${author.id}>`
     }
 
     // 数値なら、IDとみなす
-    if (/^\d+$/.test(args[0])) {
-      return `<@${args[0]}>`
+    if (/^\d+$/.test(arguments_[0])) {
+      return `<@${arguments_[0]}>`
     }
 
     // メンションを解釈する
-    const mentionTo = args[0]
+    const mentionTo = arguments_[0]
       .replace(/<@!?(\d+)>/, (_, id) => `<@${id}>`)
       .replace(/<@&(\d+)>/, (_, id) => `<@&${id}>`)
       .replace(/<@#(\d+)>/, (_, id) => `<@#${id}>`)

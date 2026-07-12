@@ -1,6 +1,6 @@
 import { ChannelType, GuildMember } from 'discord.js'
 import { BaseDiscordEvent } from '.'
-import { Configuration } from '@/config'
+import { Config } from '@/config'
 
 /**
  * ユーザーがサーバに参加した際、以下の処理を行う
@@ -11,7 +11,7 @@ export class JoinedNotifierEvent extends BaseDiscordEvent<'guildMemberAdd'> {
   readonly eventName = 'guildMemberAdd'
 
   async execute(member: GuildMember): Promise<void> {
-    const config: Configuration = this.discord.getConfig()
+    const config: Config = this.discord.getConfig()
     const generalChannelId =
       config.get('discord').channel?.general ?? '1138605147287728150'
     const greetingChannelId =

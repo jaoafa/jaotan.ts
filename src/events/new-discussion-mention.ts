@@ -9,7 +9,7 @@ export class NewDiscussionMention extends BaseDiscordEvent<'threadCreate'> {
 
   async execute(
     thread: AnyThreadChannel,
-    newlyCreated: boolean
+    isNewlyCreated: boolean
   ): Promise<void> {
     const config = this.discord.getConfig()
     const discussionChannelId =
@@ -22,7 +22,7 @@ export class NewDiscussionMention extends BaseDiscordEvent<'threadCreate'> {
       return
     }
     // 新規作成でない場合は無視
-    if (!newlyCreated) return
+    if (!isNewlyCreated) return
 
     const adminRoleId =
       config.get('discord').role?.admin ?? '1138605444600963163'

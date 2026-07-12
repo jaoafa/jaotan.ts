@@ -10,7 +10,7 @@ export class SetbannerCommand implements BaseCommand {
   async execute(
     _discord: Discord,
     message: Message<true>,
-    args: string[]
+    arguments_: string[]
   ): Promise<void> {
     const { author } = message
 
@@ -41,29 +41,29 @@ export class SetbannerCommand implements BaseCommand {
     }
 
     const canvas = createCanvas(960, 540)
-    const ctx = canvas.getContext('2d')
+    const context = canvas.getContext('2d')
     const templateImage = await loadImage(templateImagePath)
-    ctx.drawImage(templateImage, 0, 0, 960, 540)
+    context.drawImage(templateImage, 0, 0, 960, 540)
 
     // テキストを描画
-    const text = args.join(' ').replaceAll('ー', '┃')
+    const text = arguments_.join(' ').replaceAll('ー', '┃')
 
     // 自動でフォントサイズを調整。フォントサイズ144pxを最大として、縦幅500pxに収まるようにする
     const textLength = text.length
     const fontSize = Math.min(144, 500 / (textLength * 1.3))
     const fontNames = fonts.map((font) => `'${font.name}'`).join(', ')
-    ctx.font = `${fontSize * 1.4}px ${fontNames}`
-    ctx.fillStyle = 'black'
-    ctx.textAlign = 'center'
-    ctx.textBaseline = 'middle'
+    context.font = `${fontSize * 1.4}px ${fontNames}`
+    context.fillStyle = 'black'
+    context.textAlign = 'center'
+    context.textBaseline = 'middle'
 
     // eslint-disable-next-line @typescript-eslint/no-misused-spread -- unicorn/prefer-spread と競合
     const characters = [...text]
     const lineHeight = fontSize * 1.4
-    for (let i = 0; i < characters.length; i++) {
-      const char = characters[i]
-      const yOffset = (i - (characters.length - 1) / 2) * lineHeight
-      ctx.fillText(char, x, y + yOffset)
+    for (let index = 0; index < characters.length; index++) {
+      const char = characters[index]
+      const yOffset = (index - (characters.length - 1) / 2) * lineHeight
+      context.fillText(char, x, y + yOffset)
     }
 
     // 画像をバナー画像として設定

@@ -3,12 +3,12 @@ import { Birthday, IBirthdayDateWithYear } from './birthday'
 import 'jest-expect-message'
 
 describe('Birthday', () => {
-  let beforeDataDir: string | undefined
+  let beforeDataDirectory: string | undefined
   let birthday: Birthday
 
   beforeEach(() => {
     // テストデータはテンポラリディレクトリに保存する
-    beforeDataDir = process.env.DATA_DIR
+    beforeDataDirectory = process.env.DATA_DIR
     process.env.DATA_DIR = tmpdir()
 
     birthday = new Birthday()
@@ -18,7 +18,7 @@ describe('Birthday', () => {
     // テストデータをクリアする
     birthday.delete('testUser')
 
-    process.env.DATA_DIR = beforeDataDir
+    process.env.DATA_DIR = beforeDataDirectory
   })
 
   it('ファイルから誕生日データを追加して読み込む', () => {
@@ -86,12 +86,7 @@ describe('Birthday', () => {
     birthday.set('testUser', { month: 1, day: 1, year: 2000 })
 
     // 異常な値の誕生日を設定
-    const ages = [
-      Number.POSITIVE_INFINITY,
-      Number.NEGATIVE_INFINITY,
-      Number.NaN,
-      -1,
-    ]
+    const ages = [Infinity, -Infinity, Number.NaN, -1]
 
     for (const age of ages) {
       // テストユーザーの強制年齢を異常な値で設定

@@ -38,11 +38,11 @@ export abstract class BaseCommand {
    *
    * @param {Discord} discord Discordインスタンス
    * @param {Message} message Discordメッセージ
-   * @param {string[]} args コマンド引数
+   * @param {string[]} arguments_ コマンド引数
    */
   abstract execute(
     discord: Discord,
     message: Message<true>,
-    args: string[]
+    arguments_: string[]
   ): Promise<void>
 }

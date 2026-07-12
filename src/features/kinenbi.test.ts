@@ -5,38 +5,38 @@ import { Kinenbi } from './kinenbi'
 import 'jest-expect-message'
 
 describe('Kinenbi', () => {
-  let beforeDataDir: string | undefined
-  let testDataDir: string
+  let beforeDataDirectory: string | undefined
+  let testDataDirectory: string
   let kinenbi: Kinenbi
 
   beforeEach(() => {
     // テストデータはテンポラリディレクトリに保存する
-    beforeDataDir = process.env.DATA_DIR
-    testDataDir = path.join(tmpdir(), `kinenbi-test-${Date.now()}`)
-    process.env.DATA_DIR = testDataDir
+    beforeDataDirectory = process.env.DATA_DIR
+    testDataDirectory = path.join(tmpdir(), `kinenbi-test-${Date.now()}`)
+    process.env.DATA_DIR = testDataDirectory
 
     kinenbi = new Kinenbi()
   })
 
   afterEach(() => {
     // テストデータをクリアする
-    if (existsSync(testDataDir)) {
-      rmSync(testDataDir, { recursive: true, force: true })
+    if (existsSync(testDataDirectory)) {
+      rmSync(testDataDirectory, { recursive: true, force: true })
     }
 
-    process.env.DATA_DIR = beforeDataDir
+    process.env.DATA_DIR = beforeDataDirectory
   })
 
   describe('getRanking', () => {
     it('同点を含む順位計算が正しく動作する', async () => {
       // テストキャッシュディレクトリを作成
-      const cacheDir = path.join(testDataDir, 'kinenbi-cache')
-      mkdirSync(cacheDir, { recursive: true })
+      const cacheDirectory = path.join(testDataDirectory, 'kinenbi-cache')
+      mkdirSync(cacheDirectory, { recursive: true })
 
       // テストデータを作成（異なる記念日個数のファイル）
       // 01-01: 5個（1位）
       writeFileSync(
-        path.join(cacheDir, '01-01.json'),
+        path.join(cacheDirectory, '01-01.json'),
         JSON.stringify({
           cachedDate: '2026-01-01T00:00:00.000Z',
           results: [
@@ -51,7 +51,7 @@ describe('Kinenbi', () => {
 
       // 02-09: 3個（2位）- 今日として扱う
       writeFileSync(
-        path.join(cacheDir, '02-09.json'),
+        path.join(cacheDirectory, '02-09.json'),
         JSON.stringify({
           cachedDate: '2026-02-09T00:00:00.000Z',
           results: [
@@ -64,7 +64,7 @@ describe('Kinenbi', () => {
 
       // 03-15: 3個（2位、同点）
       writeFileSync(
-        path.join(cacheDir, '03-15.json'),
+        path.join(cacheDirectory, '03-15.json'),
         JSON.stringify({
           cachedDate: '2026-03-15T00:00:00.000Z',
           results: [
@@ -77,7 +77,7 @@ describe('Kinenbi', () => {
 
       // 12-31: 1個（4位）
       writeFileSync(
-        path.join(cacheDir, '12-31.json'),
+        path.join(cacheDirectory, '12-31.json'),
         JSON.stringify({
           cachedDate: '2025-12-31T00:00:00.000Z',
           results: [{ title: '大晦日' }],
@@ -102,12 +102,12 @@ describe('Kinenbi', () => {
 
     it('今日のキャッシュファイルが存在しない場合に null を返す', async () => {
       // テストキャッシュディレクトリを作成
-      const cacheDir = path.join(testDataDir, 'kinenbi-cache')
-      mkdirSync(cacheDir, { recursive: true })
+      const cacheDirectory = path.join(testDataDirectory, 'kinenbi-cache')
+      mkdirSync(cacheDirectory, { recursive: true })
 
       // 他の日のキャッシュファイルのみ作成
       writeFileSync(
-        path.join(cacheDir, '01-01.json'),
+        path.join(cacheDirectory, '01-01.json'),
         JSON.stringify({
           cachedDate: '2026-01-01T00:00:00.000Z',
           results: [{ title: '元日' }],
@@ -122,12 +122,12 @@ describe('Kinenbi', () => {
 
     it('壊れた JSON ファイルをスキップして処理を続行する', async () => {
       // テストキャッシュディレクトリを作成
-      const cacheDir = path.join(testDataDir, 'kinenbi-cache')
-      mkdirSync(cacheDir, { recursive: true })
+      const cacheDirectory = path.join(testDataDirectory, 'kinenbi-cache')
+      mkdirSync(cacheDirectory, { recursive: true })
 
       // 正常な今日のキャッシュファイル
       writeFileSync(
-        path.join(cacheDir, '02-09.json'),
+        path.join(cacheDirectory, '02-09.json'),
         JSON.stringify({
           cachedDate: '2026-02-09T00:00:00.000Z',
           results: [{ title: '記念日1' }, { title: '記念日2' }],
@@ -135,11 +135,11 @@ describe('Kinenbi', () => {
       )
 
       // 壊れた JSON ファイル
-      writeFileSync(path.join(cacheDir, '01-01.json'), 'invalid json {')
+      writeFileSync(path.join(cacheDirectory, '01-01.json'), 'invalid json {')
 
       // 正常なファイル
       writeFileSync(
-        path.join(cacheDir, '12-31.json'),
+        path.join(cacheDirectory, '12-31.json'),
         JSON.stringify({
           cachedDate: '2025-12-31T00:00:00.000Z',
           results: [{ title: '大晦日' }],
@@ -156,12 +156,12 @@ describe('Kinenbi', () => {
 
     it('results が配列でない場合に null を返す', async () => {
       // テストキャッシュディレクトリを作成
-      const cacheDir = path.join(testDataDir, 'kinenbi-cache')
-      mkdirSync(cacheDir, { recursive: true })
+      const cacheDirectory = path.join(testDataDirectory, 'kinenbi-cache')
+      mkdirSync(cacheDirectory, { recursive: true })
 
       // results が配列でないファイル
       writeFileSync(
-        path.join(cacheDir, '02-09.json'),
+        path.join(cacheDirectory, '02-09.json'),
         JSON.stringify({
           cachedDate: '2026-02-09T00:00:00.000Z',
           results: 'not an array',
@@ -175,12 +175,12 @@ describe('Kinenbi', () => {
 
     it('すべてのファイルが壊れている場合に null を返す', async () => {
       // テストキャッシュディレクトリを作成
-      const cacheDir = path.join(testDataDir, 'kinenbi-cache')
-      mkdirSync(cacheDir, { recursive: true })
+      const cacheDirectory = path.join(testDataDirectory, 'kinenbi-cache')
+      mkdirSync(cacheDirectory, { recursive: true })
 
       // 今日のキャッシュファイル（正常）
       writeFileSync(
-        path.join(cacheDir, '02-09.json'),
+        path.join(cacheDirectory, '02-09.json'),
         JSON.stringify({
           cachedDate: '2026-02-09T00:00:00.000Z',
           results: [{ title: '記念日1' }],
@@ -188,8 +188,8 @@ describe('Kinenbi', () => {
       )
 
       // 他のファイルはすべて壊れている
-      writeFileSync(path.join(cacheDir, '01-01.json'), 'invalid json')
-      writeFileSync(path.join(cacheDir, '12-31.json'), '{invalid}')
+      writeFileSync(path.join(cacheDirectory, '01-01.json'), 'invalid json')
+      writeFileSync(path.join(cacheDirectory, '12-31.json'), '{invalid}')
 
       const ranking = await kinenbi.getRanking(new Date('2026-02-09'))
 
@@ -202,12 +202,12 @@ describe('Kinenbi', () => {
 
     it('記念日が0個の日でも正しく順位を計算する', async () => {
       // テストキャッシュディレクトリを作成
-      const cacheDir = path.join(testDataDir, 'kinenbi-cache')
-      mkdirSync(cacheDir, { recursive: true })
+      const cacheDirectory = path.join(testDataDirectory, 'kinenbi-cache')
+      mkdirSync(cacheDirectory, { recursive: true })
 
       // 今日のキャッシュファイル（0個）
       writeFileSync(
-        path.join(cacheDir, '02-09.json'),
+        path.join(cacheDirectory, '02-09.json'),
         JSON.stringify({
           cachedDate: '2026-02-09T00:00:00.000Z',
           results: [],
@@ -216,7 +216,7 @@ describe('Kinenbi', () => {
 
       // 他の日のキャッシュファイル
       writeFileSync(
-        path.join(cacheDir, '01-01.json'),
+        path.join(cacheDirectory, '01-01.json'),
         JSON.stringify({
           cachedDate: '2026-01-01T00:00:00.000Z',
           results: [{ title: '元日' }],
