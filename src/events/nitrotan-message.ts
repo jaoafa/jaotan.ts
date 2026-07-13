@@ -61,7 +61,7 @@ export class NitrotanMessageEvent extends BaseDiscordEvent<'messageCreate'> {
   private isAnimationEmojiMessage(message: Message<true>): boolean {
     const matches = message.content.matchAll(this.emojiRegex)
 
-    return [...matches].some((match) => match.groups?.animated === 'a')
+    return matches.some((match) => match.groups?.animated === 'a')
   }
 
   /**
@@ -75,7 +75,7 @@ export class NitrotanMessageEvent extends BaseDiscordEvent<'messageCreate'> {
 
     const guildEmojis = message.guild.emojis.cache
 
-    return [...matches].some((match) => {
+    return matches.some((match) => {
       const emojiId = match.groups?.id
       if (!emojiId) return false
       return !guildEmojis.has(emojiId)

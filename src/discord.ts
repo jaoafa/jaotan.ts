@@ -201,7 +201,6 @@ export class Discord {
   }
 
   async onMessageCreate(message: Message<true>) {
-    const logger = Logger.configure('Discord.onMessageCreate')
     // Botのメッセージは無視
     if (message.author.bot) {
       return
@@ -212,6 +211,8 @@ export class Discord {
     if (onlyGuildId && message.guild.id !== onlyGuildId) {
       return
     }
+
+    const logger = Logger.configure('Discord.onMessageCreate')
 
     // 対応するコマンドを探す
     // コマンドは長い順にソートしておく

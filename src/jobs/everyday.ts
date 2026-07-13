@@ -104,12 +104,12 @@ export class EveryDayJob extends BaseDiscordJob {
     const todayKinenbi = await kinenbi.get(date, true)
     const contents = []
 
-    let isAlreadyAddedDetail = false
-
     if (todayKinenbi.length === 0) {
       contents.push('本日の記念日が存在しないか、取得できませんでした。')
       return contents
     }
+
+    let isAlreadyAddedDetail = false
 
     let num = 0
     for (const result of todayKinenbi) {

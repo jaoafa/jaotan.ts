@@ -146,11 +146,11 @@ export class Translate {
 
   constructor(config: Configuration) {
     const translateGasUrl = config.get('translateGasUrl')
-    const detectLanguageApiToken = config.get('detectLanguageApiToken')
     if (!translateGasUrl) {
       throw new Error('translateGasUrl is required')
     }
 
+    const detectLanguageApiToken = config.get('detectLanguageApiToken')
     this.translateGasUrl = translateGasUrl
     this.detectLanguageApiToken = detectLanguageApiToken ?? null
   }

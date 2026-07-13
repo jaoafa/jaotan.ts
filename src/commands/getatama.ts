@@ -45,7 +45,8 @@ export class GetAtamaCommand implements BaseCommand {
 
     const url = new URL(apiUrl)
     url.searchParams.set('count', count.toString())
-    const res = await fetch(url.toString())
+
+    const res = await fetch(url.href)
     if (!res.ok) {
       await message.reply({
         embeds: [

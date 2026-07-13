@@ -125,7 +125,7 @@ export class Kinenbi {
     const urlObject = new URL(this.baseUrl + options.filename)
     urlObject.search = this.objectToSearchParams(options.query).toString()
 
-    const res = await fetch(urlObject.toString())
+    const res = await fetch(urlObject.href)
     // 正しくても404が返ってくることがある
 
     const html = await res.text()
@@ -256,10 +256,7 @@ export class Kinenbi {
   private searchParamsToObject(
     searchParams: URLSearchParams
   ): Record<string, string> {
-    const result: Record<string, string> = {}
-    for (const [key, value] of searchParams) {
-      result[key] = value
-    }
+    const result: Record<string, string> = Object.fromEntries(searchParams)
     return result
   }
 

@@ -162,10 +162,11 @@ export class Nitrotan {
    * ユーザーをNitroとして認識する
    */
   public async add(discordId: string, reason: NitrotanReasonType) {
-    const logger = Logger.configure('Nitrotan.add')
     if (this.isNitrotan(discordId)) {
       return
     }
+
+    const logger = Logger.configure('Nitrotan.add')
 
     Nitrotan.nitrotans.push({
       discordId,

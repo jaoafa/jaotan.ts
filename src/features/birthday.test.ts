@@ -86,12 +86,7 @@ describe('Birthday', () => {
     birthday.set('testUser', { month: 1, day: 1, year: 2000 })
 
     // 異常な値の誕生日を設定
-    const ages = [
-      Number.POSITIVE_INFINITY,
-      Number.NEGATIVE_INFINITY,
-      Number.NaN,
-      -1,
-    ]
+    const ages = [Infinity, -Infinity, NaN, -1]
 
     for (const age of ages) {
       // テストユーザーの強制年齢を異常な値で設定
