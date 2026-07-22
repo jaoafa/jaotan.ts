@@ -314,7 +314,7 @@ export class MeetingVote {
       message,
       message.client.user.id
     )
-    if (voteRemindDateTime < new Date() && !reminded) {
+    if (!reminded && voteRemindDateTime < new Date()) {
       await this.remind(message, goodUsers, badUsers, whiteUsers)
     }
   }
