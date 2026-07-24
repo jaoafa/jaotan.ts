@@ -4,6 +4,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import {
   EmojiRanking,
+  extractMessageEmojis,
   getMonthKey,
   getPreviousMonthKey,
 } from './emoji-ranking'
@@ -159,5 +160,55 @@ describe('EmojiRanking', () => {
     expect(reloaded.getRanking('1999-01', 'reactions', 10)).toEqual([
       { kind: 'unicode', key: '😄', display: '😄', count: 1 },
     ])
+  })
+})
+
+describe('extractMessageEmojis', () => {
+  it('Unicode絵文字を抽出する', () => {
+    const result = extractMessageEmojis('おはよう😄よろしく')
+    expect(result).toEqual([{ kind: 'unicode', key: '😄', display: '😄' }])
+  })
+
+  it('カスタム絵文字を抽出する', () => {
+    const result = extractMessageEmojis('こんにちは<:wave:123456789012345678>')
+    expect(result).toEqual([
+      {
+        kind: 'custom',
+        key: 'wave:123456789012345678',
+        display: '<:wave:123456789012345678>',
+      },
+    ])
+  })
+
+  it('アニメーションカスタム絵文字を抽出する', () => {
+    const result = extractMessageEmojis('<a:dance:987654321098765432>')
+    expect(result).toEqual([
+      {
+        kind: 'custom',
+        key: 'dance:987654321098765432',
+        display: '<a:dance:987654321098765432>',
+      },
+    ])
+  })
+
+  it('カスタム絵文字とUnicode絵文字が混在していても両方抽出する', () => {
+    const result = extractMessageEmojis('やった🎉<:wave:123>おめでとう')
+    expect(result).toEqual(
+      expect.arrayContaining([
+        { kind: 'unicode', key: '🎉', display: '🎉' },
+        { kind: 'custom', key: 'wave:123', display: '<:wave:123>' },
+      ])
+    )
+    expect(result).toHaveLength(2)
+  })
+
+  it('同じ絵文字が複数回出現しても1件に重複排除される', () => {
+    const result = extractMessageEmojis('😄😄😄')
+    expect(result).toEqual([{ kind: 'unicode', key: '😄', display: '😄' }])
+  })
+
+  it('絵文字が含まれない場合は空配列を返す', () => {
+    const result = extractMessageEmojis('こんにちは、世界')
+    expect(result).toEqual([])
   })
 })

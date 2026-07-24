@@ -35,6 +35,9 @@ importers:
       discord.js:
         specifier: 14.27.0
         version: 14.27.0
+      emoji-regex:
+        specifier: ^10.6.0
+        version: 10.6.0
       eslint:
         specifier: 10.7.0
         version: 10.7.0(supports-color@8.1.1)

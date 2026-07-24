@@ -1,4 +1,5 @@
 import fs from 'node:fs'
+import emojiRegex from 'emoji-regex'
 
 /**
  * 日付から Asia/Tokyo 基準の年月キー (YYYY-MM) を取得する
@@ -74,6 +75,37 @@ export interface EmojiUsageData {
 
 /** 集計カテゴリ */
 export type EmojiUsageCategory = 'reactions' | 'messages'
+
+const CUSTOM_EMOJI_PATTERN = /<a?:(\w+):(\d+)>/g
+
+/**
+ * メッセージ本文からカスタム絵文字・Unicode 絵文字を抽出する
+ *
+ * 同じメッセージ内で同じ絵文字が複数回出現しても、キー単位で重複排除し 1 件にまとめる。
+ *
+ * @param content メッセージ本文
+ * @returns 重複排除済みの絵文字一覧
+ */
+export function extractMessageEmojis(content: string): EmojiInput[] {
+  const emojis = new Map<string, EmojiInput>()
+
+  for (const match of content.matchAll(CUSTOM_EMOJI_PATTERN)) {
+    const [full, name, id] = match
+    const key = `${name}:${id}`
+    emojis.set(key, { kind: 'custom', key, display: full })
+  }
+
+  const unicodeMatches = content.match(emojiRegex()) ?? []
+  for (const character of unicodeMatches) {
+    emojis.set(character, {
+      kind: 'unicode',
+      key: character,
+      display: character,
+    })
+  }
+
+  return [...emojis.values()]
+}
 
 /**
  * 絵文字の利用状況(リアクション・メッセージ投稿)を月別に集計・永続化するクラス
