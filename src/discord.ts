@@ -55,6 +55,10 @@ import { ToenCommand } from './commands/toen'
 import { UnmuteCommand } from './commands/unmute'
 import { NitrotanReactionEvent } from './events/nitrotan-reaction'
 import { NitrotanMessageEvent } from './events/nitrotan-message'
+import {
+  EmojiReactionAddEvent,
+  EmojiReactionRemoveEvent,
+} from './events/emoji-reaction'
 import { NitrotanOptimizeTask } from './tasks/nitrotan-optimize'
 import { NitrotanProfileTask } from './tasks/nitrotan-profile'
 import { ReplyEvent } from './events/reply'
@@ -133,6 +137,8 @@ export class Discord {
     })
 
     const events: BaseDiscordEvent<any>[] = [
+      new EmojiReactionAddEvent(this),
+      new EmojiReactionRemoveEvent(this),
       new GreetingEvent(this),
       new JoinedNotifierEvent(this),
       new LeavedNotififerEvent(this),
