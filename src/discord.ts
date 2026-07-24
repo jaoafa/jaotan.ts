@@ -59,6 +59,7 @@ import {
   EmojiReactionAddEvent,
   EmojiReactionRemoveEvent,
 } from './events/emoji-reaction'
+import { EmojiMessageEvent } from './events/emoji-message'
 import { NitrotanOptimizeTask } from './tasks/nitrotan-optimize'
 import { NitrotanProfileTask } from './tasks/nitrotan-profile'
 import { ReplyEvent } from './events/reply'
@@ -137,6 +138,7 @@ export class Discord {
     })
 
     const events: BaseDiscordEvent<any>[] = [
+      new EmojiMessageEvent(this),
       new EmojiReactionAddEvent(this),
       new EmojiReactionRemoveEvent(this),
       new GreetingEvent(this),
