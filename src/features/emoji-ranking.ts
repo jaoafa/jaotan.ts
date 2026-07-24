@@ -31,7 +31,7 @@ export function getMonthKey(date: Date): string {
  * @returns 前月の年月キー (例: "2025-12")
  */
 export function getPreviousMonthKey(monthKey: string): string {
-  const [yearString, monthString] = monthKey.split('-')
+  const [yearString, monthString] = monthKey.split('-', 2)
   const year = Number(yearString)
   const month = Number(monthString)
   if (month === 1) {
@@ -70,7 +70,7 @@ export interface EmojiMonthlyUsage {
 /** 絵文字利用状況の永続化データ */
 export interface EmojiUsageData {
   /** 年月 (YYYY-MM形式、Asia/Tokyo基準) をキーとした月別集計データ */
-  months: Record<string, EmojiMonthlyUsage>
+  months: Partial<Record<string, EmojiMonthlyUsage>>
 }
 
 /** 集計カテゴリ */
@@ -104,7 +104,7 @@ export function extractMessageEmojis(content: string): EmojiInput[] {
     })
   }
 
-  return [...emojis.values()]
+  return emojis.values().toArray()
 }
 
 /**
