@@ -45,6 +45,7 @@ import { NewDiscussionMention } from './events/new-discussion-mention'
 import { BaseDiscordJob } from './jobs'
 import nodeCron from 'node-cron'
 import { EveryDayJob } from './jobs/everyday'
+import { MonthlyEmojiRankingJob } from './jobs/emoji-ranking'
 import { BirthdayCommand } from './commands/birthday'
 import { GetAtamaCommand } from './commands/getatama'
 import { SetbannerCommand } from './commands/setbanner'
@@ -177,7 +178,10 @@ export class Discord {
       })
     }
 
-    const crons: BaseDiscordJob[] = [new EveryDayJob(this)]
+    const crons: BaseDiscordJob[] = [
+      new EveryDayJob(this),
+      new MonthlyEmojiRankingJob(this),
+    ]
     for (const job of crons) {
       job.register(nodeCron)
     }
