@@ -45,6 +45,7 @@ import { NewDiscussionMention } from './events/new-discussion-mention'
 import { BaseDiscordJob } from './jobs'
 import nodeCron from 'node-cron'
 import { EveryDayJob } from './jobs/everyday'
+import { MonthlyEmojiRankingJob } from './jobs/emoji-ranking'
 import { BirthdayCommand } from './commands/birthday'
 import { GetAtamaCommand } from './commands/getatama'
 import { SetbannerCommand } from './commands/setbanner'
@@ -55,6 +56,11 @@ import { ToenCommand } from './commands/toen'
 import { UnmuteCommand } from './commands/unmute'
 import { NitrotanReactionEvent } from './events/nitrotan-reaction'
 import { NitrotanMessageEvent } from './events/nitrotan-message'
+import {
+  EmojiReactionAddEvent,
+  EmojiReactionRemoveEvent,
+} from './events/emoji-reaction'
+import { EmojiMessageEvent } from './events/emoji-message'
 import { NitrotanOptimizeTask } from './tasks/nitrotan-optimize'
 import { NitrotanProfileTask } from './tasks/nitrotan-profile'
 import { ReplyEvent } from './events/reply'
@@ -133,6 +139,9 @@ export class Discord {
     })
 
     const events: BaseDiscordEvent<any>[] = [
+      new EmojiMessageEvent(this),
+      new EmojiReactionAddEvent(this),
+      new EmojiReactionRemoveEvent(this),
       new GreetingEvent(this),
       new JoinedNotifierEvent(this),
       new LeavedNotififerEvent(this),
@@ -169,7 +178,10 @@ export class Discord {
       })
     }
 
-    const crons: BaseDiscordJob[] = [new EveryDayJob(this)]
+    const crons: BaseDiscordJob[] = [
+      new EveryDayJob(this),
+      new MonthlyEmojiRankingJob(this),
+    ]
     for (const job of crons) {
       job.register(nodeCron)
     }
