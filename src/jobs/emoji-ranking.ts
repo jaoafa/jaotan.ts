@@ -9,10 +9,10 @@ import {
 } from '@/features/emoji-ranking'
 
 /**
- * 毎月1日0:00に、前月使われた絵文字のランキングを#generalへ投稿する
+ * 毎月1日0:30に、前月使われた絵文字のランキングを#generalへ投稿する
  */
 export class MonthlyEmojiRankingJob extends BaseDiscordJob {
-  readonly schedule = '0 0 1 * *'
+  readonly schedule = '30 0 1 * *'
 
   async execute(): Promise<void> {
     const config: Configuration = this.discord.getConfig()
