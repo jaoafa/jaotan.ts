@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       '@book000/eslint-config':
-        specifier: 1.16.24
-        version: 1.16.24(eslint@10.8.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
+        specifier: 1.16.25
+        version: 1.16.25(eslint@10.8.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       '@book000/node-utils':
         specifier: 1.25.20
         version: 1.25.20(@opentelemetry/core@2.9.0(@opentelemetry/api@1.9.1))(supports-color@8.1.1)
@@ -259,8 +259,8 @@ packages:
   '@bcoe/v8-coverage@0.2.3':
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
 
-  '@book000/eslint-config@1.16.24':
-    resolution: {integrity: sha512-IHe6qj8pYzdf5Cuedoo3rIi5qs3ZAr+oa+u7m2Uh2MgZ6bcR6fUOtGaQBT+E0XgNycsz1jQijczqTQ4cujISsw==}
+  '@book000/eslint-config@1.16.25':
+    resolution: {integrity: sha512-KwlRzoDEV1VSX1OgDYy0dieAdS/XY6SWuVyS8d/vy6+S9HMqe1Pi1ETbLqrAsNGE1yzr1URKyHqP47Mai+yPNw==}
     peerDependencies:
       eslint: 10.8.0
 
@@ -3611,7 +3611,7 @@ snapshots:
 
   '@bcoe/v8-coverage@0.2.3': {}
 
-  '@book000/eslint-config@1.16.24(eslint@10.8.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)':
+  '@book000/eslint-config@1.16.25(eslint@10.8.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)':
     dependencies:
       '@typescript-eslint/parser': 8.65.0(eslint@10.8.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       eslint: 10.8.0(supports-color@8.1.1)
