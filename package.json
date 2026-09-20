@@ -28,6 +28,7 @@
     "generate-schema": "typescript-json-schema --required src/config.ts ConfigInterface -o schema/Configuration.json"
   },
   "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "7.29.7",
     "@book000/eslint-config": "1.16.66",
     "@book000/node-utils": "1.25.110",
     "@napi-rs/canvas": "1.0.9",
@@ -37,7 +38,7 @@
     "cheerio": "1.2.0",
     "detectlanguage": "3.0.0",
     "discord.js": "14.27.0",
-    "emoji-regex": "10.6.0",
+    "emoji-regex": "11.0.0",
     "eslint": "10.10.0",
     "eslint-config-standard": "17.1.0",
     "eslint-plugin-import": "2.32.0",
@@ -68,8 +69,12 @@
         {
           "tsconfig": "tsconfig.json"
         }
-      ]
+      ],
+      "^.+\\.mjs$": "babel-jest"
     },
+    "transformIgnorePatterns": [
+      "node_modules/(?!(.*/)?emoji-regex/)"
+    ],
     "setupFilesAfterEnv": [
       "jest-expect-message"
     ]
