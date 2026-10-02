@@ -1,0 +1,122 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "properties": {
+        "azure": {
+            "properties": {
+                "translator": {
+                    "properties": {
+                        "apikey": {
+                            "type": "string"
+                        },
+                        "endpoint": {
+                            "type": "string"
+                        },
+                        "region": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "apikey",
+                        "endpoint"
+                    ],
+                    "type": "object"
+                }
+            },
+            "required": [
+                "translator"
+            ],
+            "type": "object"
+        },
+        "discord": {
+            "properties": {
+                "channel": {
+                    "properties": {
+                        "discussion": {
+                            "type": "string"
+                        },
+                        "general": {
+                            "type": "string"
+                        },
+                        "greeting": {
+                            "type": "string"
+                        },
+                        "meetingVote": {
+                            "type": "string"
+                        },
+                        "other": {
+                            "type": "string"
+                        },
+                        "vcSpeechLog": {
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "guildId": {
+                    "type": "string"
+                },
+                "role": {
+                    "properties": {
+                        "admin": {
+                            "type": "string"
+                        },
+                        "nitrotan": {
+                            "type": "string"
+                        },
+                        "verified": {
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "token": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "token"
+            ],
+            "type": "object"
+        },
+        "googleSearch": {
+            "properties": {
+                "cx": {
+                    "type": "string"
+                },
+                "gcpKey": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "cx",
+                "gcpKey"
+            ],
+            "type": "object"
+        },
+        "mebo": {
+            "properties": {
+                "agentId": {
+                    "type": "string"
+                },
+                "apiKey": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "agentId",
+                "apiKey"
+            ],
+            "type": "object"
+        },
+        "phrasePlusApiUrl": {
+            "type": "string"
+        }
+    },
+    "required": [
+        "azure",
+        "discord",
+        "googleSearch",
+        "mebo"
+    ],
+    "type": "object"
+}

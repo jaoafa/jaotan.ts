@@ -1,5 +1,9 @@
 import { Configuration } from '@/config'
-import DetectLanguage from 'detectlanguage'
+import { AzureTranslator } from './azure-translator'
+import {
+  TranslationLimitError,
+  TranslationUsageStore,
+} from './translation-usage-store'
 import {
   BaseMessageOptions,
   Colors,
@@ -14,22 +18,10 @@ export interface TranslateResult {
   result: string
 }
 
-interface TranslateResponse {
-  request: {
-    before: string
-    after: string
-    text: string
-  }
-  response: {
-    status: boolean
-    result: string
-    text: string
-  }
-}
-
 export class Translate {
-  private readonly translateGasUrl: string
-  private readonly detectLanguageApiToken: string | null
+  private readonly azureTranslator: AzureTranslator
+  private readonly usageStore: TranslationUsageStore
+  private commandStarted = false
 
   private readonly languages: Record<string, string> = {
     af: 'アフリカーンス語',
@@ -145,14 +137,11 @@ export class Translate {
   }
 
   constructor(config: Configuration) {
-    const translateGasUrl = config.get('translateGasUrl')
-    if (!translateGasUrl) {
-      throw new Error('translateGasUrl is required')
-    }
-
-    const detectLanguageApiToken = config.get('detectLanguageApiToken')
-    this.translateGasUrl = translateGasUrl
-    this.detectLanguageApiToken = detectLanguageApiToken ?? null
+    this.usageStore = new TranslationUsageStore()
+    this.azureTranslator = new AzureTranslator(
+      config.get('azure').translator,
+      this.usageStore
+    )
   }
 
   async translate(
@@ -160,45 +149,59 @@ export class Translate {
     afterLanguage: string,
     text: string
   ): Promise<TranslateResult> {
-    if (!this.isValidateLanguage(beforeLanguage)) {
-      throw new Error('Invalid before language')
-    }
-    if (!this.isValidateLanguage(afterLanguage)) {
-      throw new Error('Invalid after language')
-    }
-
-    const res = await fetch(this.translateGasUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        before: beforeLanguage,
-        after: afterLanguage,
-        text,
-      }),
-    })
-    if (res.status !== 200) {
-      throw new Error('Failed to translate')
-    }
-
-    const data = (await res.json()) as TranslateResponse
     return {
       beforeLanguage,
       afterLanguage,
-      result: data.response.result,
+      result: await this.azureTranslator.translate(
+        beforeLanguage,
+        afterLanguage,
+        text
+      ),
     }
   }
 
   async detectLanguage(text: string): Promise<string> {
-    if (!this.detectLanguageApiToken) {
-      throw new Error('detectLanguageApiToken is required')
+    if (!text || text.length > 10_000) {
+      throw new Error('Invalid text length for language detection')
     }
-    const detectLanguage = new DetectLanguage(this.detectLanguageApiToken)
-    const result = await detectLanguage.detect(text)
-    if (result.length === 0) {
-      throw new Error('Failed to detect language')
+    return this.azureTranslator.detectLanguage(text)
+  }
+
+  /** Validates a command and applies the shared cooldown before API calls. */
+  public async beginCommand(
+    message: Message<true>,
+    text: string
+  ): Promise<boolean> {
+    if (this.commandStarted) return true
+    if (!text || text.length > 10_000) {
+      await message.reply(
+        this.getEmbedMessage(
+          'ERROR',
+          '翻訳失敗',
+          text
+            ? '翻訳するテキストが長すぎます。10,000 文字以内で指定してください。'
+            : '翻訳するテキストがありません。'
+        )
+      )
+      return false
     }
 
-    return result[0].language
+    try {
+      await this.usageStore.startCommand(message.author.id)
+      this.commandStarted = true
+      return true
+    } catch (error) {
+      await message.reply(
+        this.getEmbedMessage(
+          'ERROR',
+          '翻訳失敗',
+          error instanceof TranslationLimitError
+            ? this.getErrorMessage(error)
+            : '翻訳利用状況を確認できないため、翻訳を開始できませんでした。'
+        )
+      )
+      return false
+    }
   }
 
   public async execute(
@@ -207,13 +210,15 @@ export class Translate {
     afterLanguages: string[],
     text: string
   ) {
+    if (!(await this.beginCommand(message, text))) return
+
     // 翻訳前の言語、翻訳後の言語、翻訳するテキストが正しいか確認
-    if (!this.isValidateLanguage(beforeLanguage)) {
+    if (!(await this.azureTranslator.toAzureLanguage(beforeLanguage))) {
       await message.reply(
         this.getEmbedMessage(
           'ERROR',
           '翻訳失敗',
-          `\`${beforeLanguage}\` はサポートされていないか、無効な言語です。`
+          `\`${beforeLanguage}\` は Azure Translator でサポートされていません。`
         )
       )
       return
@@ -228,18 +233,6 @@ export class Translate {
       )
       return
     }
-    for (const language of afterLanguages) {
-      if (!this.isValidateLanguage(language)) {
-        await message.reply(
-          this.getEmbedMessage(
-            'ERROR',
-            '翻訳失敗',
-            `\`${language}\` はサポートされていないか、無効な言語です。`
-          )
-        )
-        return
-      }
-    }
     if (!text) {
       await message.reply(
         this.getEmbedMessage(
@@ -249,6 +242,38 @@ export class Translate {
         )
       )
       return
+    }
+    if (text.length > 10_000) {
+      await message.reply(
+        this.getEmbedMessage(
+          'ERROR',
+          '翻訳失敗',
+          '翻訳するテキストが長すぎます。10,000 文字以内で指定してください。'
+        )
+      )
+      return
+    }
+    if (afterLanguages.length > 6) {
+      await message.reply(
+        this.getEmbedMessage(
+          'ERROR',
+          '翻訳失敗',
+          '一度に指定できる翻訳段階は 6 段階までです。'
+        )
+      )
+      return
+    }
+    for (const language of afterLanguages) {
+      if (!(await this.azureTranslator.toAzureLanguage(language))) {
+        await message.reply(
+          this.getEmbedMessage(
+            'ERROR',
+            '翻訳失敗',
+            `\`${language}\` は Azure Translator でサポートされていません。`
+          )
+        )
+        return
+      }
     }
 
     // 翻訳処理前にメッセージを送信
@@ -262,7 +287,10 @@ export class Translate {
     for (let i = 0; i < afterLanguages.length; i++) {
       const language = afterLanguages[i]
 
-      if (beforeLanguage === language) {
+      if (
+        (await this.azureTranslator.toAzureLanguage(beforeLanguage)) ===
+        (await this.azureTranslator.toAzureLanguage(language))
+      ) {
         await reply.edit(
           this.getEmbedMessage(
             'ERROR',
@@ -273,7 +301,15 @@ export class Translate {
         return
       }
 
-      const result = await this.translate(beforeLanguage, language, text)
+      let result: TranslateResult
+      try {
+        result = await this.translate(beforeLanguage, language, text)
+      } catch (error) {
+        await reply.edit(
+          this.getEmbedMessage('ERROR', '翻訳失敗', this.getErrorMessage(error))
+        )
+        return
+      }
       // 言語の日本語名を取得
       const beforeLanguageName = this.getLanguageName(beforeLanguage)
       const afterLanguageName = this.getLanguageName(language)
@@ -292,7 +328,18 @@ export class Translate {
           ? '翻訳完了'
           : `翻訳中 (${i + 1}/${afterLanguages.length})`
 
-      await reply.edit(this.getEmbedMessage(type, title, null, fields))
+      try {
+        await reply.edit(this.getEmbedMessage(type, title, null, fields))
+      } catch {
+        await reply.edit(
+          this.getEmbedMessage(
+            'ERROR',
+            '翻訳失敗',
+            '翻訳結果を Discord に表示できませんでした。時間をおいて再度お試しください。'
+          )
+        )
+        return
+      }
 
       // 翻訳後の言語を翻訳前の言語に、翻訳結果を翻訳前のテキストに設定
       beforeLanguage = language
@@ -339,18 +386,51 @@ export class Translate {
     }
   }
 
-  public isValidateLanguage(language: string): boolean {
-    return Object.keys(this.languages).includes(language)
-  }
-
-  public randomLanguage(excluded: string[] = []): string {
-    const languages = Object.keys(this.languages).filter(
-      (language) => !excluded.includes(language)
+  public async randomLanguage(excluded: string[] = []): Promise<string> {
+    const excludedLanguages = await Promise.all(
+      excluded.map((language) => this.azureTranslator.toAzureLanguage(language))
     )
+    const excludedCanonical = new Set(
+      excludedLanguages.filter((language): language is string =>
+        Boolean(language)
+      )
+    )
+    const seenCanonical = new Set<string>()
+    const languages: string[] = []
+    for (const language of Object.keys(this.languages)) {
+      const canonical = await this.azureTranslator.toAzureLanguage(language)
+      if (
+        canonical &&
+        !excludedCanonical.has(canonical) &&
+        !seenCanonical.has(canonical)
+      ) {
+        seenCanonical.add(canonical)
+        languages.push(language)
+      }
+    }
+    if (languages.length === 0) {
+      throw new Error('No available Azure Translator languages')
+    }
     return languages[Math.floor(Math.random() * languages.length)]
   }
 
   public getLanguageName(language: string): string {
-    return this.languages[language]
+    return this.languages[language] ?? language
+  }
+
+  private getErrorMessage(error: unknown): string {
+    if (!(error instanceof TranslationLimitError)) {
+      return 'Azure Translator で翻訳できませんでした。時間をおいて再度お試しください。'
+    }
+    if (error.message.includes('cooldown')) {
+      return '翻訳を連続して実行できません。5 秒以上待ってから再度お試しください。'
+    }
+    if (error.message.includes('Monthly')) {
+      return '今月の翻訳利用上限に達しました。'
+    }
+    if (error.message.includes('Hourly')) {
+      return '1 時間あたりの翻訳利用上限に達しました。'
+    }
+    return '翻訳要求が混み合っています。時間をおいて再度お試しください。'
   }
 }

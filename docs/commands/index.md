@@ -15,18 +15,18 @@
 - [setbannerextra](setbannerextra.md): 画像テンプレートに引数で指定された文字列を複数合成し、サーバのバナー画像として設定します。
 - [super](super.md): ｽｩ( ᐛ👐) パァwﾍｸｻｺﾞｫﾝwwﾋﾞｷﾞｨﾝwﾃﾚﾚﾚﾚﾚﾚﾚﾃﾚﾚﾚﾚﾚﾚﾚﾃﾚﾚﾚﾚﾚﾚﾚwwﾃﾚｯﾃﾚｯﾃﾚｯwwʅ(´-౪-)ʃﾃﾞ─ﾝwwｹﾞｪｪﾑｵｰｳﾞｧｰwwwʅ(◜◡‾)ʃ?
 - [tmttmt](tmttmt.md): とまとぉwとまとぉw
-- [toar](toar.md): Google Translate サービスを利用して、アラビア文字に翻訳します。
-- [toarja](toarja.md): Google Translate サービスを利用して、アラビア文字に翻訳したうえで、日本語に翻訳します。
-- [tochaos](tochaos.md): Google Translate サービスを利用して、複数回翻訳を行った上で、日本語に翻訳します。
-- [toen](toen.md): Google Translate サービスを利用して、英語に翻訳します。
-- [tohe](tohe.md): Google Translate サービスを利用して、ヘブライ語に翻訳します。
-- [toheja](toheja.md): Google Translate サービスを利用して、ヘブライ語に翻訳したうえで、日本語に翻訳します。
-- [toja](toja.md): Google Translate サービスを利用して、日本語に翻訳します。
-- [tojaen](tojaen.md): Google Translate サービスを利用して、日本語に翻訳したうえで、英語に翻訳します。
-- [tokoja](tokoja.md): Google Translate サービスを利用して、韓国語に翻訳したうえで、日本語に翻訳します。
-- [torandja](torandja.md): Google Translate サービスを利用して、一度ランダムな言語に翻訳したうえで、日本語に翻訳します。
-- [toswja](toswja.md): Google Translate サービスを利用して、スワヒリ語に翻訳したうえで、日本語に翻訳します。
-- [tozh](tozh.md): Google Translate サービスを利用して、中国語（簡体）に翻訳します。
-- [tozhja](tozhja.md): Google Translate サービスを利用して、中国語（簡体）に翻訳したうえで、日本語に翻訳します。
-- [translate](translate.md): Google Translate サービスを利用して、翻訳をします。
+- [toar](toar.md): Azure AI Translator を利用して、アラビア文字に翻訳します。
+- [toarja](toarja.md): Azure AI Translator を利用して、アラビア文字に翻訳したうえで、日本語に翻訳します。
+- [tochaos](tochaos.md): Azure AI Translator を利用して、複数回翻訳を行った上で、日本語に翻訳します。
+- [toen](toen.md): Azure AI Translator を利用して、英語に翻訳します。
+- [tohe](tohe.md): Azure AI Translator を利用して、ヘブライ語に翻訳します。
+- [toheja](toheja.md): Azure AI Translator を利用して、ヘブライ語に翻訳したうえで、日本語に翻訳します。
+- [toja](toja.md): Azure AI Translator を利用して、日本語に翻訳します。
+- [tojaen](tojaen.md): Azure AI Translator を利用して、日本語に翻訳したうえで、英語に翻訳します。
+- [tokoja](tokoja.md): Azure AI Translator を利用して、韓国語に翻訳したうえで、日本語に翻訳します。
+- [torandja](torandja.md): Azure AI Translator を利用して、一度ランダムな言語に翻訳したうえで、日本語に翻訳します。
+- [toswja](toswja.md): Azure AI Translator を利用して、スワヒリ語に翻訳したうえで、日本語に翻訳します。
+- [tozh](tozh.md): Azure AI Translator を利用して、中国語（簡体）に翻訳します。
+- [tozhja](tozhja.md): Azure AI Translator を利用して、中国語（簡体）に翻訳したうえで、日本語に翻訳します。
+- [translate](translate.md): Azure AI Translator を利用して、翻訳をします。
 - [unmute](unmute.md): サーバミュートを解除します。

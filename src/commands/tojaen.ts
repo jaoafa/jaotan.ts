@@ -17,6 +17,8 @@ export class TojaenCommand implements BaseCommand {
     const config = discord.getConfig()
     const translate = new Translate(config)
 
+    if (!(await translate.beginCommand(message, text))) return
+
     const beforeLanguage = await translate.detectLanguage(text)
     await translate.execute(message, beforeLanguage, ['ja', 'en'], text)
   }
