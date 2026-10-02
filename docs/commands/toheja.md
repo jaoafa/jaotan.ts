@@ -3,7 +3,7 @@ title: toheja
 template: command.html
 ---
 
-Google Translate サービスを利用して、ヘブライ語に翻訳したうえで、日本語に翻訳します。
+Azure AI Translator を利用して、ヘブライ語に翻訳したうえで、日本語に翻訳します。
 
 ## 使い方
 
@@ -16,5 +16,5 @@ Google Translate サービスを利用して、ヘブライ語に翻訳したう
 
 ## 関連情報
 
-- 元言語の判定には、[Detect Language API](https://detectlanguage.com/) を使用しています。
+- 元言語の判定には、Azure AI Translator を使用しています。
 - [ソースコード](https://github.com/jaoafa/jaotan.ts/blob/master/src/commands/toheja.ts)

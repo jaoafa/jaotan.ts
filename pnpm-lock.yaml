@@ -190,9 +190,6 @@ importers:
       cheerio:
         specifier: 1.2.0
         version: 1.2.0
-      detectlanguage:
-        specifier: 3.0.0
-        version: 3.0.0
       discord.js:
         specifier: 14.27.0
         version: 14.27.0
@@ -1938,9 +1935,6 @@ packages:
   detect-newline@3.1.0:
     resolution: {integrity: sha512-TLz+x/vEXm/Y7P7wn1EJFNLxYpUD4TgMosxY6fAVJUnJMbupHBOncxyWUG9OpTaH9EBD7uFI5LfEgmMOc54DsA==}
     engines: {node: '>=8'}
-
-  detectlanguage@3.0.0:
-    resolution: {integrity: sha512-Lh0c3XYs6+l0XjdOmhIz0MWiUYmau1Q98Ygs9YtBCakOUvdpTTtuoOG0qFQ6EvT7pmiNswT+QUXSn/KzT4xYxw==}
 
   diff@4.0.4:
     resolution: {integrity: sha512-X07nttJQkwkfKfvTPG/KSnE2OMdcUCao6+eXF3wmnIQRn2aPAHH3VxDbDOdegkd6JbPsXqShpvEOHfAT+nCNwQ==}
@@ -5676,8 +5670,6 @@ snapshots:
   detect-libc@2.1.2: {}
 
   detect-newline@3.1.0: {}
-
-  detectlanguage@3.0.0: {}
 
   diff@4.0.4: {}
 

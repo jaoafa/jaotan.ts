@@ -17,12 +17,15 @@ export class TorandCommand implements BaseCommand {
     const config = discord.getConfig()
     const translate = new Translate(config)
 
-    const beforeLanguage = await translate.detectLanguage(text)
+    if (!(await translate.beginCommand(message, text))) return
 
-    const afterLanguages = [
-      translate.randomLanguage([beforeLanguage, 'ja']),
+    const beforeLanguage = await translate.detectLanguage(text)
+    const randomLanguage = await translate.randomLanguage([
+      beforeLanguage,
       'ja',
-    ]
+    ])
+
+    const afterLanguages = [randomLanguage, 'ja']
 
     await translate.execute(message, beforeLanguage, afterLanguages, text)
   }

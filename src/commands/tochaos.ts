@@ -17,6 +17,8 @@ export class TochaosCommand implements BaseCommand {
     const config = discord.getConfig()
     const translate = new Translate(config)
 
+    if (!(await translate.beginCommand(message, text))) return
+
     const beforeLanguage = await translate.detectLanguage(text)
 
     const afterLanguages: string[] = []
@@ -24,7 +26,7 @@ export class TochaosCommand implements BaseCommand {
     const translateCount = Math.floor(Math.random() * 3) + 3
     for (let i = 0; i < translateCount; i++) {
       const excludes = [beforeLanguage, ...afterLanguages, 'ja']
-      afterLanguages.push(translate.randomLanguage(excludes))
+      afterLanguages.push(await translate.randomLanguage(excludes))
     }
 
     afterLanguages.push('ja')
