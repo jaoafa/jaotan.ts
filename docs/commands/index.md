@@ -28,5 +28,5 @@
 - [toswja](toswja.md): Azure AI Translator を利用して、スワヒリ語に翻訳したうえで、日本語に翻訳します。
 - [tozh](tozh.md): Azure AI Translator を利用して、中国語（簡体）に翻訳します。
 - [tozhja](tozhja.md): Azure AI Translator を利用して、中国語（簡体）に翻訳したうえで、日本語に翻訳します。
-- [translate](translate.md): Azure AI Translator を利用して、翻訳をします。
+- [translate](translate.md): 入力したテキストを、指定した言語から別の言語へ翻訳します。
 - [unmute](unmute.md): サーバミュートを解除します。
