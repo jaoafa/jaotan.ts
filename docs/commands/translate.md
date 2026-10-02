@@ -11,7 +11,7 @@ template: command.html
 
 ```text
 /translate ja en こんにちは、今日は晴れです。
-/translate en ru Hello, how are you?
+/translate en ja Hello, how are you?
 ```
 
 最初の言語コードが翻訳元、次のコードが翻訳先です。テキストには空白を含められます。翻訳元の言語も指定してください。自動判定は行いません。
