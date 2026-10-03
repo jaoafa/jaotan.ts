@@ -6,7 +6,7 @@ import { DatabaseSync } from 'node:sqlite'
 import {
   TranslationLimitError,
   TranslationUsageStore,
-} from './translation-usage-store'
+} from '@/features/translation-usage-store'
 
 describe('TranslationUsageStore', () => {
   let dataDirectory: string
@@ -55,7 +55,7 @@ describe('TranslationUsageStore', () => {
 
   it('serializes reservations across Node processes', async () => {
     const tsxPath = path.join(process.cwd(), 'node_modules/tsx/dist/cli.mjs')
-    const script = `import { TranslationUsageStore } from './src/features/translation-usage-store.ts'; new TranslationUsageStore().reserveAndAcquireRequest(1_100_000).then(() => process.exit(0), () => process.exit(2))`
+    const script = `import { TranslationUsageStore } from '@/features/translation-usage-store.ts'; new TranslationUsageStore().reserveAndAcquireRequest(1_100_000).then(() => process.exit(0), () => process.exit(2))`
     const children = [1, 2].map(() =>
       spawn(process.execPath, [tsxPath, '--eval', script], {
         cwd: process.cwd(),

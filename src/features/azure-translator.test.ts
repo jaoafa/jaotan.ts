@@ -2,8 +2,8 @@ import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 import { DatabaseSync } from 'node:sqlite'
-import { AzureTranslator } from './azure-translator'
-import { TranslationUsageStore } from './translation-usage-store'
+import { AzureTranslator } from '@/features/azure-translator'
+import { TranslationUsageStore } from '@/features/translation-usage-store'
 
 function response(body: unknown, status = 200): Response {
   return Response.json(body, { status })

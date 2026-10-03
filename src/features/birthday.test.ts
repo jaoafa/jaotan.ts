@@ -1,5 +1,5 @@
 import { tmpdir } from 'node:os'
-import { Birthday, IBirthdayDateWithYear } from './birthday'
+import { Birthday, IBirthdayDateWithYear } from '@/features/birthday'
 import 'jest-expect-message'
 
 describe('Birthday', () => {

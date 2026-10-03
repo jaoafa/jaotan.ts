@@ -7,7 +7,7 @@ import {
   extractMessageEmojis,
   getMonthKey,
   getPreviousMonthKey,
-} from './emoji-ranking'
+} from '@/features/emoji-ranking'
 
 describe('getMonthKey', () => {
   it('Asia/Tokyo基準の年月キーを返す', () => {

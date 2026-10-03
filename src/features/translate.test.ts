@@ -2,7 +2,7 @@ import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 import { Configuration } from '@/config'
-import { Translate } from './translate'
+import { Translate } from '@/features/translate'
 
 function response(body: unknown, status = 200): Response {
   return Response.json(body, { status })
