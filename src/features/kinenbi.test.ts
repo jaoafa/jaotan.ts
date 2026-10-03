@@ -1,7 +1,7 @@
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { mkdirSync, writeFileSync, rmSync, existsSync } from 'node:fs'
-import { Kinenbi } from './kinenbi'
+import { Kinenbi } from '@/features/kinenbi'
 import 'jest-expect-message'
 
 describe('Kinenbi', () => {
