@@ -1,11 +1,31 @@
 /* eslint-disable @typescript-eslint/unbound-method */
+import fs from 'node:fs'
+import { tmpdir } from 'node:os'
+import path from 'node:path'
 import { ChannelType } from 'discord.js'
 import { Discord } from '@/discord'
 import { EmojiRanking } from '@/features/emoji-ranking'
 import { MonthlyEmojiRankingJob } from '@/jobs/emoji-ranking'
 
 describe('MonthlyEmojiRankingJob', () => {
-  afterEach(() => jest.restoreAllMocks())
+  let beforeDataDir: string | undefined
+  let dataDir: string
+
+  beforeEach(() => {
+    beforeDataDir = process.env.DATA_DIR
+    dataDir = fs.mkdtempSync(path.join(tmpdir(), 'emoji-ranking-job-test-'))
+    process.env.DATA_DIR = dataDir
+  })
+
+  afterEach(() => {
+    jest.restoreAllMocks()
+    fs.rmSync(dataDir, { recursive: true, force: true })
+    if (beforeDataDir === undefined) {
+      delete process.env.DATA_DIR
+    } else {
+      process.env.DATA_DIR = beforeDataDir
+    }
+  })
 
   it('posts both previous month rankings to the configured general channel', async () => {
     jest
