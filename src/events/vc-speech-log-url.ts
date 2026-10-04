@@ -25,9 +25,12 @@ export class VCSpeechLogMessageUrlEvent extends BaseDiscordEvent<'messageCreate'
 
     // #vc-speech-log チャンネル以外は無視
     const config: Configuration = this.discord.getConfig()
-    const vcSpeechLogChannelId =
-      config.get('discord').channel?.vcSpeechLog ?? '1149606247314767993'
-    if (urlChannelId !== vcSpeechLogChannelId) return
+    const vcSpeechLogChannelIds = new Set([
+      config.get('discord').channel?.vcSpeechLog ?? '1149606247314767993',
+      '1555541589164560415',
+      '1555864863052398632',
+    ])
+    if (!vcSpeechLogChannelIds.has(urlChannelId)) return
 
     // メッセージを取得
     const vcSpeechLogChannel = await message.guild.channels.fetch(urlChannelId)
