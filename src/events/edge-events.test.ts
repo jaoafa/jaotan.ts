@@ -122,4 +122,59 @@ describe('VCSpeechLogMessageUrlEvent', () => {
       })
     )
   })
+
+  it.each([
+    '1149606247314767993',
+    '1555541589164560415',
+    '1555864863052398632',
+  ])(
+    'quotes the content of a linked message in supported channel %s',
+    async (channelId) => {
+      const source = {
+        type: ChannelType.GuildText,
+        name: 'vc-speech-log',
+        messages: {
+          fetch: jest.fn().mockResolvedValue({
+            content: 'recognized words',
+            createdAt: new Date('2026-01-01T00:00:00Z'),
+          }),
+        },
+      }
+      const discord = {
+        getConfig: () => ({ get: () => ({ channel: {} }) }),
+      } as unknown as Discord
+      const input = {
+        member: {},
+        author: { bot: false },
+        content: `https://discord.com/channels/456/${channelId}/789`,
+        guild: { channels: { fetch: jest.fn().mockResolvedValue(source) } },
+        channel: { send: jest.fn() },
+      } as unknown as Message<true>
+
+      await new VCSpeechLogMessageUrlEvent(discord).execute(input)
+
+      expect(input.guild.channels.fetch).toHaveBeenCalledWith(channelId)
+      expect(source.messages.fetch).toHaveBeenCalledWith('789')
+      expect(input.channel.send).toHaveBeenCalled()
+    }
+  )
+
+  it('ignores links to unsupported channels', async () => {
+    const fetchChannel = jest.fn()
+    const discord = {
+      getConfig: () => ({ get: () => ({ channel: {} }) }),
+    } as unknown as Discord
+    const input = {
+      member: {},
+      author: { bot: false },
+      content: 'https://discord.com/channels/456/123/789',
+      guild: { channels: { fetch: fetchChannel } },
+      channel: { send: jest.fn() },
+    } as unknown as Message<true>
+
+    await new VCSpeechLogMessageUrlEvent(discord).execute(input)
+
+    expect(fetchChannel).not.toHaveBeenCalled()
+    expect(input.channel.send).not.toHaveBeenCalled()
+  })
 })
