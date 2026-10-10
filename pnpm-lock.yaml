@@ -173,8 +173,8 @@ importers:
         specifier: 1.16.66
         version: 1.16.66(eslint@10.12.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       '@book000/node-utils':
-        specifier: 1.25.144
-        version: 1.25.144(@babel/core@8.0.6)
+        specifier: 1.25.145
+        version: 1.25.145(@babel/core@8.0.6)
       '@napi-rs/canvas':
         specifier: 1.0.10
         version: 1.0.10
@@ -490,8 +490,8 @@ packages:
     peerDependencies:
       eslint: 10.10.0
 
-  '@book000/node-utils@1.25.144':
-    resolution: {integrity: sha512-k5l/FtzlyEbWFTMSqI0T/WPmJBtfd6a+/sQesru9HnJc6C2WU8zOFRuVehmaSxSMA6YgXC1IfzJis8zHFKiaxw==}
+  '@book000/node-utils@1.25.145':
+    resolution: {integrity: sha512-Y7XYtSE3CTSo2ALOW52FCwhyvQ28KWI1wtHvWyaBYXfFQTRr5vTgOQRvMYZpRoGSlSE+p0g24yg7cn55sTdPig==}
 
   '@cacheable/memory@2.2.0':
     resolution: {integrity: sha512-CTLKqLItRCEixEAewD3/j9DB3/o96gpTPD4eJ1v+DGOlxZRZncRQkGYqqnAGCscYd6RNeXfGeiuCphsPtqyIfQ==}
@@ -4180,7 +4180,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@book000/node-utils@1.25.144(@babel/core@8.0.6)':
+  '@book000/node-utils@1.25.145(@babel/core@8.0.6)':
     dependencies:
       '@sentry/node': 11.4.0(@babel/core@8.0.6)
       cycle: 1.0.3
