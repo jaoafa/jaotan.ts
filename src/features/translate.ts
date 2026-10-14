@@ -400,13 +400,15 @@ export class Translate {
     for (const language of Object.keys(this.languages)) {
       const canonical = await this.azureTranslator.toAzureLanguage(language)
       if (
-        canonical &&
-        !excludedCanonical.has(canonical) &&
-        !seenCanonical.has(canonical)
+        !canonical ||
+        excludedCanonical.has(canonical) ||
+        seenCanonical.has(canonical)
       ) {
-        seenCanonical.add(canonical)
-        languages.push(language)
+        continue
       }
+
+      seenCanonical.add(canonical)
+      languages.push(language)
     }
     if (languages.length === 0) {
       throw new Error('No available Azure Translator languages')
@@ -428,9 +430,8 @@ export class Translate {
     if (error.message.includes('Monthly')) {
       return '今月の翻訳利用上限に達しました。'
     }
-    if (error.message.includes('Hourly')) {
-      return '1 時間あたりの翻訳利用上限に達しました。'
-    }
-    return '翻訳要求が混み合っています。時間をおいて再度お試しください。'
+    return error.message.includes('Hourly')
+      ? '1 時間あたりの翻訳利用上限に達しました。'
+      : '翻訳要求が混み合っています。時間をおいて再度お試しください。'
   }
 }

@@ -196,11 +196,7 @@ export class GoogleSearch {
     // リセットタイミングはPST0時
     // タイムゾーンを考慮して日付を取得
     const date = this.getPstDate()
-    if (!Object.hasOwn(json, date)) {
-      return 0
-    }
-
-    return json[date]
+    return Object.hasOwn(json, date) ? json[date] : 0
   }
 
   public getRequestLimit() {

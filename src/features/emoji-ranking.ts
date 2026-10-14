@@ -34,10 +34,9 @@ export function getPreviousMonthKey(monthKey: string): string {
   const [yearString, monthString] = monthKey.split('-', 2)
   const year = Number(yearString)
   const month = Number(monthString)
-  if (month === 1) {
-    return `${year - 1}-12`
-  }
-  return `${year}-${String(month - 1).padStart(2, '0')}`
+  return month === 1
+    ? `${year - 1}-12`
+    : `${year}-${String(month - 1).padStart(2, '0')}`
 }
 
 /** 絵文字の種類 */
@@ -208,12 +207,9 @@ export class EmojiRanking {
   ): EmojiUsageRecord[] {
     this.load()
     const monthly = this.data.months[month]
-    if (!monthly) {
-      return []
-    }
-    return monthly[category]
-      .toSorted((a, b) => b.count - a.count)
-      .slice(0, topN)
+    return monthly
+      ? monthly[category].toSorted((a, b) => b.count - a.count).slice(0, topN)
+      : []
   }
 
   private getOrCreateMonth(month: string): EmojiMonthlyUsage {

@@ -45,11 +45,9 @@ export class NitrotanMessageEvent extends BaseDiscordEvent<'messageCreate'> {
     if (this.isOverBoostFileMessage(message)) {
       return NitrotanReason.SEND_LARGE_FILE
     }
-    if (this.isOver2000CharactersMessage(message)) {
-      return NitrotanReason.SEND_LARGE_MESSAGE
-    }
-
-    return null
+    return this.isOver2000CharactersMessage(message)
+      ? NitrotanReason.SEND_LARGE_MESSAGE
+      : null
   }
 
   /**
@@ -77,8 +75,7 @@ export class NitrotanMessageEvent extends BaseDiscordEvent<'messageCreate'> {
 
     return matches.some((match) => {
       const emojiId = match.groups?.id
-      if (!emojiId) return false
-      return !guildEmojis.has(emojiId)
+      return emojiId ? !guildEmojis.has(emojiId) : false
     })
   }
 
@@ -94,8 +91,7 @@ export class NitrotanMessageEvent extends BaseDiscordEvent<'messageCreate'> {
     const guildStickers = message.guild.stickers.cache
     return stickers.some((sticker) => {
       const stickerId = sticker.id
-      if (!stickerId) return false
-      return !guildStickers.has(stickerId)
+      return stickerId ? !guildStickers.has(stickerId) : false
     })
   }
 
