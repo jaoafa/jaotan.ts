@@ -56,12 +56,8 @@ export class MonthlyEmojiRankingJob extends BaseDiscordJob {
    * @returns 表示用の文字列配列。データが1件もない場合は代替文言を1行返す
    */
   private formatRanking(records: EmojiUsageRecord[]): string[] {
-    if (records.length === 0) {
-      return ['先月は利用がありませんでした']
-    }
-
-    return records.map(
+    return records.length === 0 ? ['先月は利用がありませんでした'] : records.map(
       (record, index) => `${index + 1}. ${record.display} (${record.count}回)`
-    )
+    );
   }
 }

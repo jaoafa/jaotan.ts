@@ -314,11 +314,7 @@ export class Nitrotan {
 
   private async getMember(discordId: string) {
     const cacheMember = this.guild.members.cache.get(discordId)
-    if (cacheMember) {
-      return cacheMember
-    }
-
-    return await this.guild.members.fetch(discordId).catch(() => null)
+    return cacheMember ?? (await this.guild.members.fetch(discordId).catch(() => null));
   }
 
   /**

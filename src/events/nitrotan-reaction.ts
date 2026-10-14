@@ -55,11 +55,7 @@ export class NitrotanReactionEvent extends BaseDiscordEvent<'messageReactionAdd'
     if (this.isAnimationEmojiReaction(reaction)) {
       return NitrotanReason.USE_ANIMATION_EMOJI_REACTION
     }
-    if (this.isOtherServerEmojiReaction(reaction)) {
-      return NitrotanReason.USE_OTHER_SERVER_EMOJI_REACTION
-    }
-
-    return null
+    return this.isOtherServerEmojiReaction(reaction) ? NitrotanReason.USE_OTHER_SERVER_EMOJI_REACTION : null;
   }
 
   /**
@@ -69,9 +65,7 @@ export class NitrotanReactionEvent extends BaseDiscordEvent<'messageReactionAdd'
    * @returns アニメーション絵文字を最初にリアクションしたか
    */
   private isAnimationEmojiReaction(reaction: MessageReaction): boolean {
-    if (reaction.count !== 1) return false
-
-    return reaction.emoji.animated ?? false
+    return reaction.count === 1 ? reaction.emoji.animated ?? false : false;
   }
 
   /**
@@ -81,11 +75,10 @@ export class NitrotanReactionEvent extends BaseDiscordEvent<'messageReactionAdd'
    * @returns 他サーバーの絵文字を最初にリアクションしたか
    */
   private isOtherServerEmojiReaction(reaction: MessageReaction): boolean {
-    if (reaction.count !== 1) return false
-
     return (
+      reaction.count === 1 &&
       'guild' in reaction.emoji &&
       reaction.emoji.guild.id === reaction.message.guild?.id
-    )
+    );
   }
 }

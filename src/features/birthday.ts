@@ -170,14 +170,9 @@ export class Birthday {
     const today = new Date()
     const age = today.getFullYear() - birthday.birthday.year
     const todayMonth = today.getMonth() + 1
-    if (
-      todayMonth < birthday.birthday.month ||
+    return todayMonth < birthday.birthday.month ||
       (todayMonth === birthday.birthday.month &&
-        today.getDate() < birthday.birthday.day)
-    ) {
-      return age - 1
-    }
-    return age
+        today.getDate() < birthday.birthday.day) ? age - 1 : age;
   }
 
   /**
@@ -240,25 +235,23 @@ export class Birthday {
 
     for (const pattern of patternsWithYear) {
       const match = input.match(pattern)
-      if (match) {
-        const month = Number.parseInt(match.groups?.month ?? '')
-        const day = Number.parseInt(match.groups?.day ?? '')
+      if (!match) continue
+      const month = Number.parseInt(match.groups?.month ?? '')
+      const day = Number.parseInt(match.groups?.day ?? '')
 
-        if (month && day) {
-          const year = Number.parseInt(match.groups?.year ?? '')
-          return { month, day, year }
-        }
+      if (month && day) {
+        const year = Number.parseInt(match.groups?.year ?? '')
+        return { month, day, year }
       }
     }
 
     for (const pattern of patternsWithoutYear) {
       const match = input.match(pattern)
-      if (match) {
-        const month = Number.parseInt(match.groups?.month ?? '')
-        const day = Number.parseInt(match.groups?.day ?? '')
-        if (month && day) {
-          return { month, day, year: null }
-        }
+      if (!match) continue
+      const month = Number.parseInt(match.groups?.month ?? '')
+      const day = Number.parseInt(match.groups?.day ?? '')
+      if (month && day) {
+        return { month, day, year: null }
       }
     }
 
@@ -276,10 +269,7 @@ export class Birthday {
   public static format(birthday: IBirthdayDateWithYear): string {
     const month = this.getZeroPadding(birthday.month)
     const day = this.getZeroPadding(birthday.day)
-    if (birthday.year) {
-      return `${birthday.year}/${month}/${day}`
-    }
-    return `${month}/${day}`
+    return birthday.year ? `${birthday.year}/${month}/${day}` : `${month}/${day}`;
   }
 
   /**

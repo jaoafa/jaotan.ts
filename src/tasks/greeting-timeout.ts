@@ -64,30 +64,32 @@ export class GreetingTimeoutTask extends BaseDiscordTask {
         const joinedAtMs = member.joinedAt.getTime()
         const elapsedMs = now - joinedAtMs
 
-        if (elapsedMs >= GreetingTimeoutTask.GREETING_TIMEOUT_MS) {
-          // キック可能か確認
-          if (!member.kickable) {
-            logger.warn(
-              `⚠️ Cannot kick ${member.user.tag} (${member.id}): not kickable`
-            )
-            continue
-          }
+        if (!(elapsedMs >= GreetingTimeoutTask.GREETING_TIMEOUT_MS)) {
+          continue;
+        }
 
-          // キック実行
-          try {
-            await member.kick(
-              '挨拶タイムアウト: 参加から10分以内に #greeting で jao→afa が完了しませんでした'
-            )
-            logger.info(
-              `✅ Kicked ${member.user.tag} (${member.id}) for greeting timeout`
-            )
-            kickedCount++
-          } catch (error) {
-            logger.error(
-              `❌ Failed to kick ${member.user.tag} (${member.id})`,
-              error as Error
-            )
-          }
+        // キック可能か確認
+        if (!member.kickable) {
+          logger.warn(
+            `⚠️ Cannot kick ${member.user.tag} (${member.id}): not kickable`
+          )
+          continue
+        }
+
+        // キック実行
+        try {
+          await member.kick(
+            '挨拶タイムアウト: 参加から10分以内に #greeting で jao→afa が完了しませんでした'
+          )
+          logger.info(
+            `✅ Kicked ${member.user.tag} (${member.id}) for greeting timeout`
+          )
+          kickedCount++
+        } catch (error) {
+          logger.error(
+            `❌ Failed to kick ${member.user.tag} (${member.id})`,
+            error as Error
+          )
         }
       }
 
