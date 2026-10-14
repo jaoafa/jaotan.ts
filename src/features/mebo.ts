@@ -44,7 +44,7 @@ export class Mebo {
           uid: `jaotan-reply-${uid}`,
         }),
       })
-      return res.ok ? ((await res.json()) as MeboResponse) : null;
+      return res.ok ? ((await res.json()) as MeboResponse) : null
     } catch {
       return null
     }

@@ -49,7 +49,7 @@ export class NitrotanProfileTask extends BaseDiscordTask {
       return NitrotanReason.BANNER
     }
 
-    return this.hasProfileTheme(member) ? NitrotanReason.PROFILE_THEME : null;
+    return this.hasProfileTheme(member) ? NitrotanReason.PROFILE_THEME : null
   }
 
   /**

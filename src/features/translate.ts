@@ -399,8 +399,12 @@ export class Translate {
     const languages: string[] = []
     for (const language of Object.keys(this.languages)) {
       const canonical = await this.azureTranslator.toAzureLanguage(language)
-      if (!canonical || excludedCanonical.has(canonical) || seenCanonical.has(canonical)) {
-        continue;
+      if (
+        !canonical ||
+        excludedCanonical.has(canonical) ||
+        seenCanonical.has(canonical)
+      ) {
+        continue
       }
 
       seenCanonical.add(canonical)
@@ -426,6 +430,8 @@ export class Translate {
     if (error.message.includes('Monthly')) {
       return '今月の翻訳利用上限に達しました。'
     }
-    return error.message.includes('Hourly') ? '1 時間あたりの翻訳利用上限に達しました。' : '翻訳要求が混み合っています。時間をおいて再度お試しください。';
+    return error.message.includes('Hourly')
+      ? '1 時間あたりの翻訳利用上限に達しました。'
+      : '翻訳要求が混み合っています。時間をおいて再度お試しください。'
   }
 }

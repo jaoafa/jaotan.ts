@@ -65,7 +65,7 @@ export class GreetingTimeoutTask extends BaseDiscordTask {
         const elapsedMs = now - joinedAtMs
 
         if (!(elapsedMs >= GreetingTimeoutTask.GREETING_TIMEOUT_MS)) {
-          continue;
+          continue
         }
 
         // キック可能か確認

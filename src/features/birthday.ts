@@ -172,7 +172,9 @@ export class Birthday {
     const todayMonth = today.getMonth() + 1
     return todayMonth < birthday.birthday.month ||
       (todayMonth === birthday.birthday.month &&
-        today.getDate() < birthday.birthday.day) ? age - 1 : age;
+        today.getDate() < birthday.birthday.day)
+      ? age - 1
+      : age
   }
 
   /**
@@ -269,7 +271,9 @@ export class Birthday {
   public static format(birthday: IBirthdayDateWithYear): string {
     const month = this.getZeroPadding(birthday.month)
     const day = this.getZeroPadding(birthday.day)
-    return birthday.year ? `${birthday.year}/${month}/${day}` : `${month}/${day}`;
+    return birthday.year
+      ? `${birthday.year}/${month}/${day}`
+      : `${month}/${day}`
   }
 
   /**

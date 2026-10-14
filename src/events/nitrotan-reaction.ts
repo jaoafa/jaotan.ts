@@ -55,7 +55,9 @@ export class NitrotanReactionEvent extends BaseDiscordEvent<'messageReactionAdd'
     if (this.isAnimationEmojiReaction(reaction)) {
       return NitrotanReason.USE_ANIMATION_EMOJI_REACTION
     }
-    return this.isOtherServerEmojiReaction(reaction) ? NitrotanReason.USE_OTHER_SERVER_EMOJI_REACTION : null;
+    return this.isOtherServerEmojiReaction(reaction)
+      ? NitrotanReason.USE_OTHER_SERVER_EMOJI_REACTION
+      : null
   }
 
   /**
@@ -65,7 +67,7 @@ export class NitrotanReactionEvent extends BaseDiscordEvent<'messageReactionAdd'
    * @returns アニメーション絵文字を最初にリアクションしたか
    */
   private isAnimationEmojiReaction(reaction: MessageReaction): boolean {
-    return reaction.count === 1 ? reaction.emoji.animated ?? false : false;
+    return reaction.count === 1 ? (reaction.emoji.animated ?? false) : false
   }
 
   /**
@@ -79,6 +81,6 @@ export class NitrotanReactionEvent extends BaseDiscordEvent<'messageReactionAdd'
       reaction.count === 1 &&
       'guild' in reaction.emoji &&
       reaction.emoji.guild.id === reaction.message.guild?.id
-    );
+    )
   }
 }
