@@ -15,6 +15,9 @@ export class GreetingTimeoutTask extends BaseDiscordTask {
   // タスク実行間隔（秒）
   private static readonly INTERVAL_SECONDS = 60 // 1分
 
+  // メンバーキャッシュを全メンバー取得で充填済みかどうか
+  private cacheWarmed = false
+
   get interval(): number {
     return GreetingTimeoutTask.INTERVAL_SECONDS
   }
@@ -28,15 +31,17 @@ export class GreetingTimeoutTask extends BaseDiscordTask {
       // ギルドを取得
       const guild = await this.discord.client.guilds.fetch(guildId)
 
-      // メンバー一覧を取得
-      // Note: guild.members.fetch() は全メンバーを取得するため、大規模サーバでは負荷が高くなる可能性がある
-      const members = await guild.members.fetch()
+      // 全メンバー取得 (Gateway opcode 8) はレート制限があり NitrotanProfileTask と衝突するため、初回のみ行いキャッシュを使う
+      if (!this.cacheWarmed) {
+        await guild.members.fetch()
+        this.cacheWarmed = true
+      }
       const now = Date.now()
 
       let checkedCount = 0
       let kickedCount = 0
 
-      for (const member of members.values()) {
+      for (const member of guild.members.cache.values()) {
         // Botは除外
         if (member.user.bot) {
           continue
@@ -76,8 +81,16 @@ export class GreetingTimeoutTask extends BaseDiscordTask {
           continue
         }
 
-        // キック実行
+        // キャッシュはイベントでのみ更新され、Gateway 再接続中のロール付与を取りこぼし得るため、キック直前に対象 1 人だけ最新化する
         try {
+          const latest = await guild.members.fetch({
+            user: member.id,
+            force: true,
+          })
+          if (latest.roles.cache.some((role) => role.id !== guild.id)) {
+            continue
+          }
+
           await member.kick(
             '挨拶タイムアウト: 参加から10分以内に #greeting で jao→afa が完了しませんでした'
           )
@@ -87,7 +100,7 @@ export class GreetingTimeoutTask extends BaseDiscordTask {
           kickedCount++
         } catch (error) {
           logger.error(
-            `❌ Failed to kick ${member.user.tag} (${member.id})`,
+            `❌ Failed to refresh or kick ${member.user.tag} (${member.id})`,
             error as Error
           )
         }
