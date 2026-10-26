@@ -146,8 +146,7 @@ export class BirthdayCommand implements BaseCommand {
   ): Promise<void> {
     // birthday force 20
 
-    const age = Number.parseInt(args[0])
-    if (!age) {
+    if (args.length === 0) {
       const embed = this.createEmbed(
         'error',
         '強制する年齢の設定に失敗',
@@ -158,7 +157,9 @@ export class BirthdayCommand implements BaseCommand {
       await message.channel.send({ embeds: [embed] })
       return
     }
-    if (Number.isNaN(age) || Number.isFinite(age) || age < 0) {
+    // 入力全体が正の整数であること（`20abc` や `1.5` を黙って受理しない）
+    const age = /^\d+$/.test(args[0]) ? Number(args[0]) : NaN
+    if (!Number.isSafeInteger(age) || age <= 0) {
       const embed = this.createEmbed(
         'error',
         '強制する年齢の設定に失敗',
