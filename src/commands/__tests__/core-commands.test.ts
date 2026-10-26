@@ -8,6 +8,7 @@ import { UnmuteCommand } from '@/commands/unmute'
 import { SetbannerExtraCommand } from '@/commands/setbannerextra'
 import { AkakeseCommand } from '@/commands/akakese'
 import { BirthdayCommand } from '@/commands/birthday'
+import { Birthday } from '@/features/birthday'
 import { OriginCommand } from '@/commands/origin'
 import { SetbannerCommand } from '@/commands/setbanner'
 
@@ -174,6 +175,51 @@ describe('SetbannerExtraCommand', () => {
 })
 
 describe('BirthdayCommand', () => {
+  describe('force', () => {
+    const mockForce = jest.fn()
+
+    beforeEach(() => {
+      mockForce.mockReset()
+      jest
+        .spyOn(Birthday.prototype, 'getByUser')
+        .mockReturnValue({ month: 1, day: 1 } as never)
+      jest.spyOn(Birthday.prototype, 'force').mockImplementation(mockForce)
+    })
+
+    afterEach(() => {
+      jest.restoreAllMocks()
+    })
+
+    it.each(['1', '20', '100'])('sets the valid age %s', async (arg) => {
+      const input = message()
+
+      await new BirthdayCommand().execute({} as Discord, input, ['force', arg])
+
+      expect(mockForce).toHaveBeenCalledWith('user-1', Number(arg))
+    })
+
+    it.each([
+      [[]],
+      [['']],
+      [['0']],
+      [['-1']],
+      [['1.5']],
+      [['20abc']],
+      [['abc']],
+      [['99999999999999999999']],
+    ])('rejects invalid input %j without saving', async (args) => {
+      const input = message()
+
+      await new BirthdayCommand().execute({} as Discord, input, [
+        'force',
+        ...args,
+      ])
+
+      expect(mockForce).not.toHaveBeenCalled()
+      expect(input.channel.send).toHaveBeenCalledTimes(1)
+    })
+  })
+
   it('shows help for an unknown subcommand', async () => {
     const input = message()
 
