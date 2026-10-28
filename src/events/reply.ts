@@ -80,6 +80,8 @@ export class ReplyEvent extends BaseDiscordEvent<'messageCreate'> {
 
   isReplyToMe(message: Message<true>): boolean {
     const clientUserId = this.discord.client.user?.id
-    return clientUserId ? message.mentions.users.has(clientUserId) : false
+    return (
+      clientUserId !== undefined && message.mentions.users.has(clientUserId)
+    )
   }
 }
