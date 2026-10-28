@@ -163,7 +163,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  '@sapphire/shapeshift': ^5
+  '@sapphire/shapeshift': 5.0.0
 
 importers:
 
