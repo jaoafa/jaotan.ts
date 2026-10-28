@@ -4,3 +4,5 @@ allowBuilds:
   unrs-resolver: true
 minimumReleaseAgeExclude:
   - '@book000/*'
+overrides:
+  '@sapphire/shapeshift': ^5
