@@ -5,6 +5,7 @@
 - [birthday](birthday.md): [毎日 `#general` に投稿されるメッセージ](../features/everyday.md) で掲載される、誕生日関連の設定・確認を行えます。
 - [controrandja](controrandja.md): [tochaos コマンド](tochaos.md) のエイリアスコマンドです。
 - [getatama](getatama.md): アタマな文章を生成します。
+- [jaotants](jaotants.md): jaotan の設定を Discord 上から管理します。現在は [vc-speech-log-url](../features/vc-speech-log-url.md) の引用対象チャンネルの設定に対応しています。
 - [origin](origin.md): [一般社団法人 日本記念日協会](https://www.kinenbi.gr.jp) が認定する記念日のうち、今日の特定の記念日について詳細を返信します。
 - [ping](ping.md): ピンポンを返します。
 - [potato](potato.md): (╮╯╭)
