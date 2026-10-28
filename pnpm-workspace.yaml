@@ -5,4 +5,4 @@ allowBuilds:
 minimumReleaseAgeExclude:
   - '@book000/*'
 overrides:
-  '@sapphire/shapeshift': ^5
+  '@sapphire/shapeshift': 5.0.0
