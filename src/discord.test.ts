@@ -1,6 +1,7 @@
 import nodeCron from 'node-cron'
-import { Client } from 'discord.js'
+import { Client, MessageFlags } from 'discord.js'
 import { Discord } from '@/discord'
+import * as jaotants from '@/interactions/jaotants'
 import { BaseDiscordTask } from '@/tasks'
 
 describe('Discord command registry', () => {
@@ -42,5 +43,105 @@ describe('Discord command registry', () => {
     expect(schedule).toHaveBeenCalledTimes(2)
 
     jest.restoreAllMocks()
+  })
+})
+
+describe('Discord interaction routing', () => {
+  const createDiscord = () => {
+    jest.spyOn(Client.prototype, 'login').mockResolvedValue('token')
+    jest.spyOn(BaseDiscordTask.prototype, 'register').mockResolvedValue()
+    jest.spyOn(nodeCron, 'schedule').mockReturnValue({} as never)
+    const config = {
+      get: (key: string) => (key === 'discord' ? { token: 'token' } : {}),
+    }
+    return new Discord(config as never)
+  }
+
+  const createInteraction = (commandName: string, chatInput = true) => ({
+    isChatInputCommand: () => chatInput,
+    commandName,
+    deferred: false,
+    replied: false,
+    reply: jest.fn(),
+    followUp: jest.fn(),
+  })
+
+  afterEach(() => {
+    jest.restoreAllMocks()
+  })
+
+  it('routes /jaotants to the handler', async () => {
+    const handler = jest
+      .spyOn(jaotants, 'handleJaotantsInteraction')
+      .mockResolvedValue()
+    const discord = createDiscord()
+    const interaction = createInteraction('jaotants')
+
+    await discord.onInteractionCreate(interaction as never)
+
+    expect(handler).toHaveBeenCalledWith(discord, interaction)
+  })
+
+  it.each([
+    ['another chat input command', createInteraction('ping')],
+    ['a non chat input interaction', createInteraction('jaotants', false)],
+  ])('does not route %s to the handler', async (_name, interaction) => {
+    const handler = jest
+      .spyOn(jaotants, 'handleJaotantsInteraction')
+      .mockResolvedValue()
+
+    await createDiscord().onInteractionCreate(interaction as never)
+
+    expect(handler).not.toHaveBeenCalled()
+    expect(interaction.reply).not.toHaveBeenCalled()
+  })
+
+  it('replies with an ephemeral error when the handler throws', async () => {
+    jest
+      .spyOn(jaotants, 'handleJaotantsInteraction')
+      .mockRejectedValue(new Error('boom'))
+    const interaction = createInteraction('jaotants')
+
+    await createDiscord().onInteractionCreate(interaction as never)
+
+    expect(interaction.reply).toHaveBeenCalledWith({
+      content: jaotants.jaotantsMessages.error,
+      flags: MessageFlags.Ephemeral,
+    })
+    expect(interaction.followUp).not.toHaveBeenCalled()
+  })
+
+  it('follows up when the interaction was already deferred', async () => {
+    jest
+      .spyOn(jaotants, 'handleJaotantsInteraction')
+      .mockRejectedValue(new Error('boom'))
+    const interaction = { ...createInteraction('jaotants'), deferred: true }
+
+    await createDiscord().onInteractionCreate(interaction as never)
+
+    expect(interaction.followUp).toHaveBeenCalledWith({
+      content: jaotants.jaotantsMessages.error,
+      flags: MessageFlags.Ephemeral,
+    })
+    expect(interaction.reply).not.toHaveBeenCalled()
+  })
+
+  it('initializes the channel config before registering the command', async () => {
+    const order: string[] = []
+    const discord = createDiscord()
+    jest
+      .spyOn(discord.getChannelConfigStore(), 'init')
+      .mockImplementation(() => {
+        order.push('init')
+        return Promise.resolve()
+      })
+    jest.spyOn(jaotants, 'registerJaotantsCommand').mockImplementation(() => {
+      order.push('register')
+      return Promise.resolve()
+    })
+
+    await discord.onReady()
+
+    expect(order).toEqual(['init', 'register'])
   })
 })

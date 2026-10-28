@@ -3,7 +3,9 @@ import {
   Colors,
   EmbedBuilder,
   GatewayIntentBits,
+  Interaction,
   Message,
+  MessageFlags,
   Partials,
 } from 'discord.js'
 import { Logger } from '@book000/node-utils'
@@ -66,10 +68,18 @@ import { NitrotanProfileTask } from './tasks/nitrotan-profile'
 import { ReplyEvent } from './events/reply'
 import { SetbannerExtraCommand } from './commands/setbannerextra'
 import { GreetingTimeoutTask } from './tasks/greeting-timeout'
+import { ChannelConfigStore } from './features/channel-config-store'
+import {
+  handleJaotantsInteraction,
+  jaotantsCommandData,
+  jaotantsMessages,
+  registerJaotantsCommand,
+} from './interactions/jaotants'
 
 export class Discord {
   private config: Configuration
   public readonly client: Client
+  private readonly channelConfigStore: ChannelConfigStore
 
   private readonly tasks: BaseDiscordTask[] = []
 
@@ -125,7 +135,19 @@ export class Discord {
         Partials.ThreadMember,
       ],
     })
-    this.client.on('ready', this.onReady.bind(this))
+    this.client.on('ready', () => {
+      this.onReady().catch((error: unknown) => {
+        Logger.configure('Discord.onReady').error('❌ Error', error as Error)
+      })
+    })
+    this.client.on('interactionCreate', (interaction) => {
+      this.onInteractionCreate(interaction).catch((error: unknown) => {
+        Logger.configure('Discord.onInteractionCreate').error(
+          '❌ Error',
+          error as Error
+        )
+      })
+    })
     this.client.on('messageCreate', (message) => {
       if (!message.inGuild()) {
         return
@@ -136,6 +158,14 @@ export class Discord {
           error as Error
         )
       })
+    })
+
+    this.channelConfigStore = new ChannelConfigStore({
+      legacyChannelIds: () => [
+        config.get('discord').channel?.vcSpeechLog ?? '1149606247314767993',
+        '1555541589164560415',
+        '1555864863052398632',
+      ],
     })
 
     const events: BaseDiscordEvent<any>[] = [
@@ -197,11 +227,15 @@ export class Discord {
     return this.config
   }
 
+  public getChannelConfigStore() {
+    return this.channelConfigStore
+  }
+
   public async close() {
     await this.client.destroy()
   }
 
-  onReady() {
+  async onReady() {
     const logger = Logger.configure('Discord.onReady')
     logger.info(`👌 ready: ${this.client.user?.tag}`)
 
@@ -209,6 +243,34 @@ export class Discord {
       task.execute().catch((error: unknown) => {
         logger.error('❌ task execute failed', error as Error)
       })
+    }
+
+    await this.channelConfigStore.init()
+    await registerJaotantsCommand(this)
+  }
+
+  async onInteractionCreate(interaction: Interaction) {
+    if (
+      !interaction.isChatInputCommand() ||
+      interaction.commandName !== jaotantsCommandData.name
+    ) {
+      return
+    }
+
+    try {
+      await handleJaotantsInteraction(this, interaction)
+    } catch (error) {
+      Logger.configure('Discord.onInteractionCreate').error(
+        '❌ Error',
+        error as Error
+      )
+      const reply = {
+        content: jaotantsMessages.error,
+        flags: MessageFlags.Ephemeral,
+      } as const
+      await (interaction.deferred || interaction.replied
+        ? interaction.followUp(reply)
+        : interaction.reply(reply))
     }
   }
 
