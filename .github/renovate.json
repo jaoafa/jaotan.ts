@@ -1,5 +1,12 @@
 {
   "extends": [
     "github>book000/templates//renovate/base"
+  ],
+  "packageRules": [
+    {
+      "description": "ランタイム (.node-version) が Node 24 のため、@types/node は 25 未満に固定する。@types/node 26 では util.InspectOptionsStylized が削除され、@sapphire/shapeshift@4 の d.cts が tsc で TS2305 になる。@sapphire/shapeshift@5 は node>=26 を要求する。ランタイムを Node 26 に上げるときにこのルールを削除する。",
+      "matchPackageNames": ["@types/node"],
+      "allowedVersions": "<25"
+    }
   ]
 }
