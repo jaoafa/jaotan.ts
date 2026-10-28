@@ -5,6 +5,7 @@ import {
   InteractionContextType,
   MessageFlags,
   PermissionFlagsBits,
+  RESTPostAPIApplicationGuildCommandsJSONBody,
   RESTPostAPIChatInputApplicationCommandsJSONBody,
   SlashCommandBuilder,
 } from 'discord.js'
@@ -42,50 +43,54 @@ export const jaotantsMessages = {
   list: (lines: string) => `登録中のチャンネル:\n${lines}`,
 } as const
 
+const baseCommand = new SlashCommandBuilder()
+  .setName('jaotants')
+  .setDescription('jaotan の設定を管理します (Admin 専用)')
+  .addSubcommandGroup((group) =>
+    group
+      .setName('vc-speech-log')
+      .setDescription('#vc-speech-log のメッセージリンク引用対象を管理します')
+      .addSubcommand((subcommand) =>
+        subcommand
+          .setName('add')
+          .setDescription('引用対象のチャンネルを追加します')
+          .addChannelOption((option) =>
+            option
+              .setName('channel')
+              .setDescription('追加するテキストチャンネル')
+              .addChannelTypes(ChannelType.GuildText)
+              .setRequired(true)
+          )
+      )
+      .addSubcommand((subcommand) =>
+        subcommand
+          .setName('remove')
+          .setDescription('引用対象のチャンネルを登録解除します')
+          .addChannelOption((option) =>
+            option
+              .setName('channel')
+              .setDescription('登録解除するテキストチャンネル')
+              .addChannelTypes(ChannelType.GuildText)
+          )
+          .addStringOption((option) =>
+            option
+              .setName('channel-id')
+              .setDescription('削除済みなど選択できないチャンネルの ID')
+          )
+      )
+      .addSubcommand((subcommand) =>
+        subcommand
+          .setName('list')
+          .setDescription('登録中のチャンネルを表示します')
+      )
+  )
+
+// contexts はグローバルコマンド専用で、ギルドコマンドの登録 API には送れない
+export const jaotantsGuildCommandData: RESTPostAPIApplicationGuildCommandsJSONBody =
+  baseCommand.toJSON()
+
 export const jaotantsCommandData: RESTPostAPIChatInputApplicationCommandsJSONBody =
-  new SlashCommandBuilder()
-    .setName('jaotants')
-    .setDescription('jaotan の設定を管理します (Admin 専用)')
-    .setContexts(InteractionContextType.Guild)
-    .addSubcommandGroup((group) =>
-      group
-        .setName('vc-speech-log')
-        .setDescription('#vc-speech-log のメッセージリンク引用対象を管理します')
-        .addSubcommand((subcommand) =>
-          subcommand
-            .setName('add')
-            .setDescription('引用対象のチャンネルを追加します')
-            .addChannelOption((option) =>
-              option
-                .setName('channel')
-                .setDescription('追加するテキストチャンネル')
-                .addChannelTypes(ChannelType.GuildText)
-                .setRequired(true)
-            )
-        )
-        .addSubcommand((subcommand) =>
-          subcommand
-            .setName('remove')
-            .setDescription('引用対象のチャンネルを登録解除します')
-            .addChannelOption((option) =>
-              option
-                .setName('channel')
-                .setDescription('登録解除するテキストチャンネル')
-                .addChannelTypes(ChannelType.GuildText)
-            )
-            .addStringOption((option) =>
-              option
-                .setName('channel-id')
-                .setDescription('削除済みなど選択できないチャンネルの ID')
-            )
-        )
-        .addSubcommand((subcommand) =>
-          subcommand
-            .setName('list')
-            .setDescription('登録中のチャンネルを表示します')
-        )
-    )
-    .toJSON()
+  { ...baseCommand.toJSON(), contexts: [InteractionContextType.Guild] }
 
 function hasRole(
   member: ChatInputCommandInteraction['member'],
@@ -251,10 +256,10 @@ export async function registerJaotantsCommand(discord: Discord): Promise<void> {
     if (!application) {
       throw new Error('Client application is not available yet')
     }
-    await application.commands.create(
-      jaotantsCommandData,
-      discord.getConfig().get('discord').guildId
-    )
+    const guildId = discord.getConfig().get('discord').guildId
+    await (guildId
+      ? application.commands.create(jaotantsGuildCommandData, guildId)
+      : application.commands.create(jaotantsCommandData))
     logger.info('👌 registered /jaotants')
   } catch (error) {
     logger.error('❌ failed to register /jaotants', error as Error)

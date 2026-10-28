@@ -4,6 +4,7 @@ import path from 'node:path'
 import {
   ChannelType,
   ChatInputCommandInteraction,
+  InteractionContextType,
   MessageFlags,
   PermissionFlagsBits,
 } from 'discord.js'
@@ -12,6 +13,7 @@ import { ChannelConfigStore } from '@/features/channel-config-store'
 import {
   handleJaotantsInteraction,
   jaotantsCommandData,
+  jaotantsGuildCommandData,
   jaotantsMessages,
   registerJaotantsCommand,
 } from '@/interactions/jaotants'
@@ -494,18 +496,38 @@ describe('jaotants command', () => {
   })
 
   describe('registerJaotantsCommand', () => {
-    it('registers as a global command when guildId is not configured', async () => {
+    it('registers as a global command with contexts when guildId is not configured', async () => {
       await registerJaotantsCommand(createDiscord())
 
-      expect(create).toHaveBeenCalledWith(jaotantsCommandData, undefined)
+      expect(create).toHaveBeenCalledTimes(1)
+      const [payload, guildId] = create.mock.calls[0] as [
+        Record<string, unknown>,
+        string | undefined,
+      ]
+      expect(guildId).toBeUndefined()
+      expect(payload).toEqual(jaotantsCommandData)
+      expect(payload.contexts).toEqual([InteractionContextType.Guild])
     })
 
-    it('registers as a guild command when guildId is configured', async () => {
+    it('registers as a guild command without contexts when guildId is configured', async () => {
       discordConfig = { guildId: GUILD_ID }
 
       await registerJaotantsCommand(createDiscord())
 
-      expect(create).toHaveBeenCalledWith(jaotantsCommandData, GUILD_ID)
+      expect(create).toHaveBeenCalledTimes(1)
+      const [payload, guildId] = create.mock.calls[0] as [
+        Record<string, unknown>,
+        string | undefined,
+      ]
+      expect(guildId).toBe(GUILD_ID)
+      expect(payload).toEqual(jaotantsGuildCommandData)
+      const sentKeys = Object.entries(payload)
+        .filter(([, value]) => value !== undefined)
+        .map(([key]) => key)
+      expect(sentKeys).not.toContain('contexts')
+      expect(sentKeys).not.toContain('integration_types')
+      expect(payload.name).toBe(jaotantsCommandData.name)
+      expect(payload.options).toEqual(jaotantsCommandData.options)
     })
 
     it('does not throw when registration fails', async () => {
