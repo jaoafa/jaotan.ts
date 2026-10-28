@@ -75,7 +75,7 @@ export class NitrotanMessageEvent extends BaseDiscordEvent<'messageCreate'> {
 
     return matches.some((match) => {
       const emojiId = match.groups?.id
-      return emojiId ? !guildEmojis.has(emojiId) : false
+      return emojiId !== undefined && !guildEmojis.has(emojiId)
     })
   }
 
@@ -89,10 +89,7 @@ export class NitrotanMessageEvent extends BaseDiscordEvent<'messageCreate'> {
     const stickers = message.stickers
 
     const guildStickers = message.guild.stickers.cache
-    return stickers.some((sticker) => {
-      const stickerId = sticker.id
-      return stickerId ? !guildStickers.has(stickerId) : false
-    })
+    return stickers.some((sticker) => !guildStickers.has(sticker.id))
   }
 
   /**
