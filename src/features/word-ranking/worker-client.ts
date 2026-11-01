@@ -115,10 +115,14 @@ export class WordWorker {
   }
 
   private expect(type: WorkerResponse['type']): Promise<WorkerResponse> {
-    if (this.error) return Promise.reject(this.error)
-    return new Promise((resolve, reject) => {
-      this.waiter = { type, resolve, reject }
-    })
+    const response = this.error
+      ? Promise.reject(this.error)
+      : new Promise<WorkerResponse>((resolve, reject) => {
+          this.waiter = { type, resolve, reject }
+        })
+    // request() が先に失敗すると response は待たれないまま拒否され、Bot 全体が落ちる。
+    response.catch(() => undefined)
+    return response
   }
 
   private request(request: WorkerRequest): Promise<void> {

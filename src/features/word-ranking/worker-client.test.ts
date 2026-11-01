@@ -100,6 +100,33 @@ describe('WordWorker', () => {
     )
   })
 
+  it('rejects finish without an unhandled rejection when the child already exited', async () => {
+    const unhandled: unknown[] = []
+    const onUnhandled = (reason: unknown) => {
+      unhandled.push(reason)
+    }
+    process.on('unhandledRejection', onUnhandled)
+    try {
+      const worker = await start(`
+        process.on('message', (request) => {
+          if (request.type === 'init') {
+            process.send({ type: 'ready' }, () => process.exit(3))
+          }
+        })
+      `)
+      await new Promise((resolve) => setTimeout(resolve, 300))
+
+      await expect(worker.finish()).rejects.toThrow(
+        'Word worker exited unexpectedly (code=3, signal=null)'
+      )
+      await new Promise((resolve) => setTimeout(resolve, 50))
+
+      expect(unhandled).toEqual([])
+    } finally {
+      process.off('unhandledRejection', onUnhandled)
+    }
+  })
+
   it('rejects start when the child never becomes ready within the timeout', async () => {
     await expect(start(`setInterval(() => {}, 1000)`, 200)).rejects.toThrow(
       'Word worker timed out after 200ms'
