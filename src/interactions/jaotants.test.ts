@@ -522,24 +522,27 @@ describe('jaotants command', () => {
       expect(groups.map((group) => group.name)).toEqual([
         'vc-speech-log',
         'word-ranking',
+        'vc-word-ranking',
         'stopword',
       ])
-      expect(
-        groups[1].options.map((subcommand) => [
-          subcommand.name,
-          (subcommand.options ?? []).map((option) => option.name),
+      for (const channelGroup of [groups[1], groups[2]]) {
+        expect(
+          channelGroup.options.map((subcommand) => [
+            subcommand.name,
+            (subcommand.options ?? []).map((option) => option.name),
+          ])
+        ).toEqual([
+          ['add', ['channel']],
+          ['remove', ['channel', 'channel-id']],
+          ['list', []],
         ])
-      ).toEqual([
-        ['add', ['channel']],
-        ['remove', ['channel', 'channel-id']],
-        ['list', []],
-      ])
-      expect(groups[2].options.map((subcommand) => subcommand.name)).toEqual([
+      }
+      expect(groups[3].options.map((subcommand) => subcommand.name)).toEqual([
         'add',
         'remove',
         'list',
       ])
-      expect(groups[2].options[0].options).toEqual([
+      expect(groups[3].options[0].options).toEqual([
         expect.objectContaining({
           name: 'word',
           required: true,
@@ -627,6 +630,53 @@ describe('jaotants command', () => {
       it('shows the empty message when nothing is registered', async () => {
         const interaction = await run({
           group: 'word-ranking',
+          subcommand: 'list',
+        })
+
+        expectEphemeralReply(interaction, jaotantsMessages.listEmpty)
+      })
+    })
+
+    describe('vc-word-ranking channels', () => {
+      it('adds a channel to vc-word-ranking only, without the audience reminder', async () => {
+        const interaction = await run({
+          group: 'vc-word-ranking',
+          subcommand: 'add',
+          channelId: CHANNEL_NEW,
+        })
+
+        expectEphemeralReply(interaction, jaotantsMessages.added(CHANNEL_NEW))
+        expect(store.get('vc-word-ranking')).toEqual([CHANNEL_NEW])
+        expect(store.get('vc-speech-log')).toEqual([CHANNEL_A])
+        expect(store.get('word-ranking')).toEqual([])
+      })
+
+      it('removes and lists channels independently of the other features', async () => {
+        await store.add('vc-word-ranking', CHANNEL_B)
+        await store.add('word-ranking', CHANNEL_NEW)
+
+        const listed = await run({
+          group: 'vc-word-ranking',
+          subcommand: 'list',
+        })
+        expectEphemeralReply(listed, jaotantsMessages.list(`- <#${CHANNEL_B}>`))
+
+        const removed = await run({
+          group: 'vc-word-ranking',
+          subcommand: 'remove',
+          channelId: CHANNEL_B,
+        })
+        expectEphemeralReply(
+          removed,
+          jaotantsMessages.removed(`<#${CHANNEL_B}>`)
+        )
+        expect(store.get('vc-word-ranking')).toEqual([])
+        expect(store.get('word-ranking')).toEqual([CHANNEL_NEW])
+      })
+
+      it('shows the empty message when nothing is registered', async () => {
+        const interaction = await run({
+          group: 'vc-word-ranking',
           subcommand: 'list',
         })
 

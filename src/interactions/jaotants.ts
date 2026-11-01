@@ -28,6 +28,7 @@ const DEFAULT_ADMIN_ROLE_ID = '1138605444600963163'
 const CHANNEL_FEATURES: readonly ChannelConfigFeature[] = [
   'vc-speech-log',
   'word-ranking',
+  'vc-word-ranking',
 ]
 const STOPWORD_GROUP = 'stopword'
 const MAX_WORD_LENGTH = 100
@@ -165,6 +166,13 @@ const baseCommand = new SlashCommandBuilder()
     channelGroup(
       'word-ranking',
       '月次の単語ランキングの集計対象を管理します',
+      '集計対象'
+    )
+  )
+  .addSubcommandGroup(
+    channelGroup(
+      'vc-word-ranking',
+      '月次の VC 音声認識ログの集計対象を管理します',
       '集計対象'
     )
   )
