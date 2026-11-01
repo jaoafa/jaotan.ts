@@ -48,6 +48,7 @@ import { BaseDiscordJob } from './jobs'
 import nodeCron from 'node-cron'
 import { EveryDayJob } from './jobs/everyday'
 import { MonthlyEmojiRankingJob } from './jobs/emoji-ranking'
+import { MonthlyWordRankingJob } from './jobs/word-ranking'
 import { BirthdayCommand } from './commands/birthday'
 import { GetAtamaCommand } from './commands/getatama'
 import { SetbannerCommand } from './commands/setbanner'
@@ -214,6 +215,7 @@ export class Discord {
     const crons: BaseDiscordJob[] = [
       new EveryDayJob(this),
       new MonthlyEmojiRankingJob(this),
+      new MonthlyWordRankingJob(this),
     ]
     for (const job of crons) {
       job.register(nodeCron)
