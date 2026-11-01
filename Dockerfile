@@ -13,16 +13,33 @@ RUN apk update && \
   npm install -g corepack@latest && \
   corepack enable
 
+# renovate: datasource=github-releases depName=WorksApplications/SudachiDict versioning=loose
+ENV SUDACHI_DICT_VERSION=v20261015
+
+# sudachi-wasm333 は sudachi.rs 0.6 系の旧形式の辞書だけを読める。v1/ 配下や GitHub のリリースの辞書は読めない。
+RUN wget -q -O /tmp/sudachi-dict.zip "https://d2ej7fkh96fzlu.cloudfront.net/sudachidict/sudachi-dictionary-${SUDACHI_DICT_VERSION#v}-core.zip" && \
+  mkdir -p /opt/sudachi && \
+  unzip -q -j /tmp/sudachi-dict.zip "*/system_core.dic" -d /opt/sudachi && \
+  rm /tmp/sudachi-dict.zip && \
+  test -s /opt/sudachi/system_core.dic
+
+ENV SUDACHI_DICT_PATH=/opt/sudachi/system_core.dic
+
 WORKDIR /app
 
 COPY pnpm-lock.yaml package.json pnpm-workspace.yaml ./
 
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm fetch
+# sudachi-wasm333 が同梱する辞書は使わないため、層に残らないよう同じ RUN で消す。
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
+  --mount=type=cache,id=pnpm-metadata,target=/root/.cache/pnpm \
+  pnpm fetch && \
+  pnpm install --frozen-lockfile --offline && \
+  rm -rf node_modules/.pnpm/sudachi-wasm333@*/node_modules/sudachi-wasm333/resources
 
 COPY tsconfig.json ./
 COPY src src
 
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile --offline
+RUN node --input-type=module -e "import fs from 'node:fs'; import { SudachiStateless } from 'sudachi-wasm333'; try { await new SudachiStateless().initialize_node(fs.promises.readFile, process.env.SUDACHI_DICT_PATH) } catch (error) { console.error(JSON.stringify(error)); process.exit(1) }"
 
 COPY assets /assets
 
