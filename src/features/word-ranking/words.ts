@@ -25,10 +25,6 @@ export interface WordToken {
   poses: readonly string[]
 }
 
-/**
- * 集計用の正規形にする。NFKC 正規化と小文字化に加え、小書きカナを通常のカナにし、
- * 同じ文字が 3 回以上続く部分を 1 文字にまとめて表記ゆれを統合する。
- */
 export function normalizeWord(word: string): string {
   return word
     .normalize('NFKC')

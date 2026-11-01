@@ -12,7 +12,6 @@ const DEFAULT_TIMEOUT_MS = 30 * 60 * 1000
 export interface WordWorkerOptions {
   dictPath: string
   stopwords: readonly string[]
-  /** 子プロセスで実行するスクリプト。既定は同じディレクトリの tokenizer-worker.ts */
   scriptPath?: string
   execArgv?: string[]
   timeoutMs?: number

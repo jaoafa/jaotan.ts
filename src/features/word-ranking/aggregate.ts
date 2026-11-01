@@ -84,11 +84,7 @@ interface WordTally {
   users: Set<string>
 }
 
-/**
- * 同一チャンネル・同一ユーザーの連続した発言を 1 つの「単位」にまとめ、
- * 月ごと・語ごとに単位数と使用ユーザー数を数える。
- * 同じチャンネルのメッセージは、時刻の昇順で渡すこと。
- */
+/** 同じチャンネルのメッセージは、時刻の昇順で渡すこと。 */
 export class UnitAccumulator {
   private readonly pending = new Map<string, PendingUnit>()
   private readonly months = new Map<string, Map<string, WordTally>>()

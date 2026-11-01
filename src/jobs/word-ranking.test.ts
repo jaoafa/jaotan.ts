@@ -232,6 +232,18 @@ describe('MonthlyWordRankingJob', () => {
     expect(worker.kill).toHaveBeenCalledTimes(1)
   })
 
+  it('fails without posting when every registered channel is unreadable', async () => {
+    channelIds = ['source1', 'source2']
+    dependencies.collectSources.mockResolvedValue([])
+
+    await expect(createJob().job.execute()).rejects.toThrow(
+      'No readable source for word ranking: source1, source2'
+    )
+
+    expect(dependencies.startWorker).not.toHaveBeenCalled()
+    expect(generalChannel.send).not.toHaveBeenCalled()
+  })
+
   it('does nothing when no channel is registered', async () => {
     channelIds = []
 

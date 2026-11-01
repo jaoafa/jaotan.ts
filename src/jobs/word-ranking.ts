@@ -35,7 +35,7 @@ const defaultDependencies: WordRankingJobDependencies = {
 }
 
 /**
- * 毎月 1 日 1:00 に、前月に使われた単語のランキングを #general へ投稿する。
+ * 前月に使われた単語のランキングを #general へ投稿する。
  * 集計中に失敗した場合は、順位が歪むため何も投稿しない。
  */
 export class MonthlyWordRankingJob extends BaseDiscordJob {
@@ -93,6 +93,11 @@ export class MonthlyWordRankingJob extends BaseDiscordJob {
       startMs,
       logger
     )
+    if (sources.length === 0) {
+      throw new Error(
+        `No readable source for word ranking: ${channelIds.join(', ')}`
+      )
+    }
     const worker = await this.dependencies.startWorker({
       dictPath,
       stopwords: [...composeStopwords(stopwordData)],

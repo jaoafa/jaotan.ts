@@ -115,7 +115,7 @@ export async function collectSources(
 }
 
 /**
- * 期間内のメッセージを、古い順に最大 100 件ずつ返す。
+ * 期間内のメッセージを、古い順に返す。
  * @param startMs - この時刻以降のメッセージを含む
  * @param endMs - この時刻より前のメッセージまで含む
  */
@@ -141,7 +141,6 @@ export async function* fetchMessages(
   }
 }
 
-/** 集計対象のメッセージだけを WordMessage にする */
 export function toWordMessage(message: Message): WordMessage | undefined {
   if (message.author.bot || message.webhookId !== null) return undefined
   if (
