@@ -2,6 +2,7 @@ import {
   BURST_MS,
   buildRanking,
   getMonthWindow,
+  getSingleMonthRange,
   toMonthlyStats,
   UnitAccumulator,
 } from './aggregate'
@@ -47,6 +48,92 @@ describe('getMonthWindow', () => {
 
   it('ends at the start of the next year for December', () => {
     expect(getMonthWindow('2026-12').endMs).toBe(jst('2027-01-01T00:00:00'))
+  })
+})
+
+describe('getSingleMonthRange', () => {
+  it('covers exactly the target month in Asia/Tokyo', () => {
+    expect(getSingleMonthRange('2026-10')).toEqual({
+      startMs: jst('2026-10-01T00:00:00'),
+      endMs: jst('2026-11-01T00:00:00'),
+    })
+  })
+
+  it('ends at the start of the next year for December', () => {
+    expect(getSingleMonthRange('2026-12')).toEqual({
+      startMs: jst('2026-12-01T00:00:00'),
+      endMs: jst('2027-01-01T00:00:00'),
+    })
+  })
+
+  it('starts at the beginning of January', () => {
+    expect(getSingleMonthRange('2026-01').startMs).toBe(
+      jst('2026-01-01T00:00:00')
+    )
+  })
+})
+
+describe('UnitAccumulator with trackAuthors', () => {
+  const base = jst('2026-10-05T12:00:00')
+  const message = (authorId: string, timestamp: number, content: string) => ({
+    channelId: 'c1',
+    authorId,
+    timestamp,
+    content,
+  })
+
+  it('does not include authors unless trackAuthors is enabled', () => {
+    const accumulator = new UnitAccumulator(extract)
+    accumulator.add(message('a', base, 'ケツ'))
+
+    expect(accumulator.finish()).not.toHaveProperty('authors')
+  })
+
+  it('returns per-author unit counts and per-word unit counts, sorted', () => {
+    const accumulator = new UnitAccumulator(extract, BURST_MS, true)
+    accumulator.add(message('b', base, 'ケツ 虫'))
+    accumulator.add(message('a', base + MIN, 'ケツ'))
+    accumulator.add(message('a', base + 2 * MIN, 'ケツ 虫'))
+    accumulator.add(message('b', base + 30 * MIN, '虫'))
+
+    expect(accumulator.finish().authors).toEqual([
+      [
+        '2026-10',
+        'a',
+        1,
+        [
+          ['ケツ', 1],
+          ['虫', 1],
+        ],
+      ],
+      [
+        '2026-10',
+        'b',
+        2,
+        [
+          ['ケツ', 1],
+          ['虫', 2],
+        ],
+      ],
+    ])
+  })
+
+  it('counts a unit without words as a unit of the author', () => {
+    const accumulator = new UnitAccumulator(extract, BURST_MS, true)
+    accumulator.add(message('a', base, ''))
+
+    expect(accumulator.finish().authors).toEqual([['2026-10', 'a', 1, []]])
+  })
+
+  it('splits authors by the month of the first message of a unit', () => {
+    const accumulator = new UnitAccumulator(extract, BURST_MS, true)
+    accumulator.add(message('a', jst('2026-09-30T23:58:00'), 'ケツ'))
+    accumulator.add(message('a', jst('2026-10-01T00:30:00'), 'ケツ'))
+
+    expect(accumulator.finish().authors).toEqual([
+      ['2026-09', 'a', 1, [['ケツ', 1]]],
+      ['2026-10', 'a', 1, [['ケツ', 1]]],
+    ])
   })
 })
 
