@@ -11,3 +11,4 @@
 - [pin-reaction](pin-reaction.md): メッセージに `📌` のリアクションがつけられた場合、メッセージをピン留めします。
 - [reply](reply.md): jaotan に対してリプライされた場合、[miibo](https://miibo.ai/) を用いて返信します。
 - [vc-speech-log-url](vc-speech-log-url.md): `#vc-speech-log` へのメッセージリンクが投稿された際、リンク先メッセージの内容を引用して投稿します。
+- [word-ranking](word-ranking.md): 毎月1日の 1:00 に、前月に使われた単語のランキングを `#general` へ投稿します。
