@@ -6,6 +6,7 @@ import {
   Guild,
   Message,
   MessageType,
+  PermissionFlagsBits,
   TextChannel,
 } from 'discord.js'
 import { isTemplateMessage } from './preprocess'
@@ -33,13 +34,23 @@ async function fetchTargetChannels(
   logger: Logger
 ): Promise<TextChannel[]> {
   const channels: TextChannel[] = []
+  const botMember = guild.members.me ?? (await guild.members.fetchMe())
   for (const channelId of channelIds) {
     try {
       const channel = await guild.channels.fetch(channelId)
-      if (channel?.type === ChannelType.GuildText) {
+      if (channel?.type !== ChannelType.GuildText) {
+        logger.warn(`⚠️ skip ${channelId}: not a text channel`)
+      } else if (
+        channel
+          .permissionsFor(botMember)
+          .has([
+            PermissionFlagsBits.ViewChannel,
+            PermissionFlagsBits.ReadMessageHistory,
+          ])
+      ) {
         channels.push(channel)
       } else {
-        logger.warn(`⚠️ skip ${channelId}: not a text channel`)
+        logger.warn(`⚠️ skip ${channelId}: missing read permissions`)
       }
     } catch (error) {
       if (!isSkippableDiscordError(error)) throw error

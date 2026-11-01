@@ -140,7 +140,11 @@ describe('fetchMessages', () => {
 describe('collectSources', () => {
   const logger = { warn: jest.fn() } as unknown as Logger
 
-  const textChannel = (id: string, archivedPages: unknown[] | Error = []) => {
+  const textChannel = (
+    id: string,
+    archivedPages: unknown[] | Error = [],
+    canRead = true
+  ) => {
     const fetchArchived = jest.fn()
     if (archivedPages instanceof Error) {
       fetchArchived.mockRejectedValue(archivedPages)
@@ -156,6 +160,7 @@ describe('collectSources', () => {
       id,
       type: ChannelType.GuildText,
       threads: { fetchArchived },
+      permissionsFor: jest.fn(() => ({ has: () => canRead })),
     }
   }
   const thread = (
@@ -178,6 +183,7 @@ describe('collectSources', () => {
     activeThreads: ReturnType<typeof thread>[] = []
   ) =>
     ({
+      members: { me: { id: 'bot' } },
       channels: {
         fetch: jest.fn((id: string) => {
           const channel = channels[id]
@@ -269,6 +275,20 @@ describe('collectSources', () => {
     expect(sources).toEqual([])
     expect(logger.warn).toHaveBeenCalledWith('⚠️ skip c1: not a text channel')
     expect(logger.warn).toHaveBeenCalledWith('⚠️ skip c2: not a text channel')
+  })
+
+  it('skips a channel the bot cannot read, with its threads', async () => {
+    const guild = createGuild(
+      { c1: textChannel('c1', [], false), c2: textChannel('c2') },
+      [thread('t1', 'c1'), thread('t2', 'c2')]
+    )
+
+    const sources = await collectSources(guild, ['c1', 'c2'], START, logger)
+
+    expect(ids(sources)).toEqual(['c2', 't2'])
+    expect(logger.warn).toHaveBeenCalledWith(
+      '⚠️ skip c1: missing read permissions'
+    )
   })
 
   it('keeps the channel when its archived thread list is forbidden', async () => {
