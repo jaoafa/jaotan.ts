@@ -39,7 +39,8 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
 COPY tsconfig.json ./
 COPY src src
 
-RUN node --input-type=module -e "import fs from 'node:fs'; import { SudachiStateless } from 'sudachi-wasm333'; try { await new SudachiStateless().initialize_node(fs.promises.readFile, process.env.SUDACHI_DICT_PATH) } catch (error) { console.error(JSON.stringify(error)); process.exit(1) }"
+COPY scripts/check-sudachi-dict.mjs scripts/check-sudachi-dict.mjs
+RUN node scripts/check-sudachi-dict.mjs
 
 COPY assets /assets
 
