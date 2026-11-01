@@ -74,7 +74,8 @@ async function handle(request: WorkerRequest): Promise<void> {
 
 process.on('message', (request: WorkerRequest) => {
   handle(request).catch(async (error: unknown) => {
-    const message = error instanceof Error ? error.message : String(error)
+    const message =
+      error instanceof Error ? error.message : JSON.stringify(error)
     await send({ type: 'error', message }).catch((sendError: unknown) => {
       process.stderr.write(`failed to report error: ${String(sendError)}\n`)
     })

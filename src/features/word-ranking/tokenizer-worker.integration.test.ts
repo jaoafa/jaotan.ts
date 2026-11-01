@@ -60,13 +60,15 @@ describeWithDictionary(
       }
     })
 
-    it('rejects start when the dictionary cannot be loaded', async () => {
+    it('reports why the dictionary cannot be loaded', async () => {
       await expect(
         WordWorker.start({
           dictPath: '/nonexistent/system_core.dic',
           stopwords: [],
         })
-      ).rejects.toThrow('Word worker reported an error:')
+      ).rejects.toThrow(
+        /^Word worker reported an error: \{"error":"FileReadError","details":"Failed to resolve read_file_func promise: JsValue\(Error: ENOENT: no such file or directory, open '\/nonexistent\/system_core\.dic'/
+      )
     })
   }
 )
