@@ -1,9 +1,9 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import { randomUUID } from 'node:crypto'
 import { Logger } from '@book000/node-utils'
+import { SerialQueue, writeJsonAtomically } from './atomic-json'
 
-export type ChannelConfigFeature = 'vc-speech-log'
+export type ChannelConfigFeature = 'vc-speech-log' | 'word-ranking'
 
 type ChannelConfigData = Record<string, string[]>
 
@@ -47,7 +47,7 @@ export class ChannelConfigStore {
   private readonly filePath: string
   private readonly legacyChannelIds: () => string[]
   private data: ChannelConfigData | undefined
-  private queue: Promise<unknown> = Promise.resolve()
+  private readonly queue = new SerialQueue()
 
   constructor(options: {
     dataDirectory?: string
@@ -81,7 +81,7 @@ export class ChannelConfigStore {
         const migrated = parseChannelConfig({
           'vc-speech-log': [...new Set(this.legacyChannelIds())],
         })
-        await this.write(migrated)
+        await writeJsonAtomically(this.filePath, migrated)
         this.data = migrated
         logger.info(`👌 migrated legacy channels to ${this.filePath}`)
         return
@@ -104,13 +104,13 @@ export class ChannelConfigStore {
     feature: ChannelConfigFeature,
     channelId: string
   ): Promise<'added' | 'exists'> {
-    return this.enqueue(async () => {
+    return this.queue.enqueue(async () => {
       const data = this.requireData()
       const channelIds = data[feature] ?? []
       if (channelIds.includes(channelId)) return 'exists'
 
       const next = { ...data, [feature]: [...channelIds, channelId] }
-      await this.write(next)
+      await writeJsonAtomically(this.filePath, next)
       this.data = next
       return 'added'
     })
@@ -120,7 +120,7 @@ export class ChannelConfigStore {
     feature: ChannelConfigFeature,
     channelId: string
   ): Promise<'removed' | 'absent'> {
-    return this.enqueue(async () => {
+    return this.queue.enqueue(async () => {
       const data = this.requireData()
       const channelIds = data[feature] ?? []
       if (!channelIds.includes(channelId)) return 'absent'
@@ -129,7 +129,7 @@ export class ChannelConfigStore {
         ...data,
         [feature]: channelIds.filter((id) => id !== channelId),
       }
-      await this.write(next)
+      await writeJsonAtomically(this.filePath, next)
       this.data = next
       return 'removed'
     })
@@ -142,41 +142,5 @@ export class ChannelConfigStore {
       )
     }
     return this.data
-  }
-
-  private enqueue<T>(task: () => Promise<T>): Promise<T> {
-    const result = this.queue.then(task)
-    this.queue = result.then(
-      () => undefined,
-      () => undefined
-    )
-    return result
-  }
-
-  // 一時ファイルを同じディレクトリに書いて rename し、読み手に書きかけを見せない
-  private async write(data: ChannelConfigData): Promise<void> {
-    const directory = path.dirname(this.filePath)
-    const temporaryPath = `${this.filePath}.${process.pid}.${randomUUID()}.tmp`
-    await fs.promises.mkdir(directory, { recursive: true })
-    try {
-      const handle = await fs.promises.open(temporaryPath, 'w')
-      try {
-        await handle.writeFile(JSON.stringify(data, null, 2) + '\n')
-        await handle.sync()
-      } finally {
-        await handle.close()
-      }
-      await fs.promises.rename(temporaryPath, this.filePath)
-    } catch (error) {
-      await fs.promises
-        .rm(temporaryPath, { force: true })
-        .catch((removeError: unknown) => {
-          Logger.configure('ChannelConfigStore.write').warn(
-            `⚠️ failed to remove ${temporaryPath}`,
-            removeError as Error
-          )
-        })
-      throw error
-    }
   }
 }

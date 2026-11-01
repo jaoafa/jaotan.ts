@@ -69,6 +69,7 @@ import { ReplyEvent } from './events/reply'
 import { SetbannerExtraCommand } from './commands/setbannerextra'
 import { GreetingTimeoutTask } from './tasks/greeting-timeout'
 import { ChannelConfigStore } from './features/channel-config-store'
+import { StopwordStore } from './features/stopword-store'
 import {
   handleJaotantsInteraction,
   jaotantsCommandData,
@@ -80,6 +81,7 @@ export class Discord {
   private config: Configuration
   public readonly client: Client
   private readonly channelConfigStore: ChannelConfigStore
+  private readonly stopwordStore: StopwordStore
 
   private readonly tasks: BaseDiscordTask[] = []
 
@@ -167,6 +169,7 @@ export class Discord {
         '1555864863052398632',
       ],
     })
+    this.stopwordStore = new StopwordStore()
 
     const events: BaseDiscordEvent<any>[] = [
       new EmojiMessageEvent(this),
@@ -231,6 +234,10 @@ export class Discord {
     return this.channelConfigStore
   }
 
+  public getStopwordStore() {
+    return this.stopwordStore
+  }
+
   public async close() {
     await this.client.destroy()
   }
@@ -246,6 +253,7 @@ export class Discord {
     }
 
     await this.channelConfigStore.init()
+    await this.stopwordStore.init()
     await registerJaotantsCommand(this)
   }
 
