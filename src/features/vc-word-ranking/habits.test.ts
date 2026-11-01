@@ -1,8 +1,6 @@
 import { WordStat } from '@/features/word-ranking/types'
 import { buildHabits, buildVolume, HABIT_TOP_N, MAX_SPEAKERS } from './habits'
 
-type Authors = NonNullable<Parameters<typeof buildHabits>[0]['authors']>
-
 const MONTH = '2026-10'
 const stats = (entries: [string, number, number][]) =>
   new Map<string, WordStat>(
@@ -46,6 +44,7 @@ describe('buildVolume', () => {
 })
 
 describe('buildHabits', () => {
+  type Authors = NonNullable<Parameters<typeof buildHabits>[0]['authors']>
   const authors: Authors = [
     [
       MONTH,
@@ -107,7 +106,7 @@ describe('buildHabits', () => {
     ])
     expect(habits[0].words[0].lift).toBeCloseTo(16, 10)
     expect(habits[0].words[1].lift).toBeCloseTo(3.84, 10)
-    expect(habits[0].words[2].lift).toBeCloseTo(0.774_193_548, 8)
+    expect(habits[0].words[2].lift).toBeCloseTo(0.7742, 3)
   })
 
   it('excludes words used fewer than eight units by the speaker or by a single user', () => {

@@ -113,7 +113,7 @@ export class UnitAccumulator {
   constructor(
     private readonly extract: WordExtractor,
     private readonly burstMs: number = BURST_MS,
-    private readonly trackAuthors: boolean = false
+    private readonly trackAuthors = false
   ) {}
 
   add(message: WordMessage): void {

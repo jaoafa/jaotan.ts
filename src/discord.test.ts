@@ -40,7 +40,7 @@ describe('Discord command registry', () => {
     expect(input.reply).toHaveBeenCalledWith('pong!')
     expect(login).toHaveBeenCalledWith('token')
     expect(registerTask).toHaveBeenCalledTimes(4)
-    expect(schedule).toHaveBeenCalledTimes(3)
+    expect(schedule).toHaveBeenCalledTimes(4)
 
     jest.restoreAllMocks()
   })

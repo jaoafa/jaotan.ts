@@ -118,7 +118,8 @@ describe('MonthlyVcWordRankingJob', () => {
       Promise.resolve(ids.map((id) => ({ id }) as unknown as MessageSource))
     )
     dependencies.fetchMessages.mockImplementation(async function* (source) {
-      for (const batch of batchesBySource[source.id]) {
+      const batches = batchesBySource[source.id]
+      for (const batch of batches) {
         await Promise.resolve()
         if (batch instanceof Error) throw batch
         yield batch

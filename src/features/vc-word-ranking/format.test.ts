@@ -167,7 +167,7 @@ describe('formatVcRankingMessages', () => {
       expect(message.length).toBeLessThanOrEqual(MAX_MESSAGE_LENGTH)
     }
     const joined = messages.join('\n')
-    for (const [index] of frequent.entries()) {
+    for (const index of frequent.keys()) {
       expect(joined).toContain(`${index + 1}. ${long}${index} (`)
     }
   })

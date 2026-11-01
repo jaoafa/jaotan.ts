@@ -62,23 +62,20 @@ export function buildHabits(input: {
   volumes: Volumes
 }): SpeakerHabit[] {
   const rows = (input.authors ?? []).filter(([month]) => month === input.month)
-  const totalUnits = rows.reduce((sum, [, , units]) => sum + units, 0)
+  const totalUnits = rows.reduce((sum, row) => sum + row[2], 0)
 
   const habits: SpeakerHabit[] = []
   for (const [, speaker, speakerUnits, words] of rows) {
     const otherUnits = totalUnits - speakerUnits
-    if (speakerUnits < HABIT_MIN_SPEAKER_UNITS || otherUnits === 0) continue
+    if (otherUnits === 0) continue
+    if (speakerUnits < HABIT_MIN_SPEAKER_UNITS) continue
 
     const ranked = words
       .flatMap(([word, units]): HabitWord[] => {
         const stat = input.stats.get(word)
-        if (
-          units < HABIT_MIN_WORD_UNITS ||
-          stat === undefined ||
-          stat.users < HABIT_MIN_WORD_USERS
-        ) {
-          return []
-        }
+        if (stat === undefined) return []
+        if (units < HABIT_MIN_WORD_UNITS) return []
+        if (stat.users < HABIT_MIN_WORD_USERS) return []
         const others = stat.units - units
         return [
           {

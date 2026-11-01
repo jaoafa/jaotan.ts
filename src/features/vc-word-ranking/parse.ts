@@ -19,6 +19,6 @@ export function parseSpeechLog(content: string): SpeechLog | undefined {
   return {
     speaker: match[1],
     text: match[2],
-    confidence: match[3] === undefined ? undefined : Number(match[3]),
+    confidence: match[3] ? Number(match[3]) : undefined,
   }
 }

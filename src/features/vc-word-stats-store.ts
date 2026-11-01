@@ -21,7 +21,7 @@ function assertMonthKey(month: string): void {
 }
 
 function isPositiveInteger(value: unknown): value is number {
-  return typeof value === 'number' && Number.isInteger(value) && value > 0
+  return typeof value === 'number' && Number.isSafeInteger(value) && value > 0
 }
 
 function parseEntries(month: string, source: unknown): Entry[] {
