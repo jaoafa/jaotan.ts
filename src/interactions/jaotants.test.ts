@@ -10,6 +10,7 @@ import {
 } from 'discord.js'
 import { Discord } from '@/discord'
 import { ChannelConfigStore } from '@/features/channel-config-store'
+import { StopwordStore } from '@/features/stopword-store'
 import {
   handleJaotantsInteraction,
   jaotantsCommandData,
@@ -30,6 +31,7 @@ interface InteractionOptions {
   group?: string
   channelId?: string
   channelIdString?: string
+  word?: string
   roles?: string[] | { cache: Map<string, unknown> }
   inGuild?: boolean
   guildId?: string
@@ -38,6 +40,7 @@ interface InteractionOptions {
 describe('jaotants command', () => {
   let directory: string
   let store: ChannelConfigStore
+  let stopwordStore: StopwordStore
   let discordConfig: {
     guildId?: string
     role?: { admin?: string }
@@ -71,6 +74,7 @@ describe('jaotants command', () => {
     ({
       getConfig: () => ({ get: () => discordConfig }),
       getChannelConfigStore: () => store,
+      getStopwordStore: () => stopwordStore,
       client: { application: { commands: { create } } },
     }) as unknown as Discord
 
@@ -96,7 +100,8 @@ describe('jaotants command', () => {
         getSubcommand: () => options.subcommand,
         getChannel: () =>
           options.channelId === undefined ? null : { id: options.channelId },
-        getString: () => options.channelIdString ?? null,
+        getString: (name: string) =>
+          (name === 'word' ? options.word : options.channelIdString) ?? null,
       },
       reply: jest.fn(),
       deferReply: jest.fn(),
@@ -145,6 +150,8 @@ describe('jaotants command', () => {
       legacyChannelIds: () => [CHANNEL_A],
     })
     await store.init()
+    stopwordStore = new StopwordStore({ dataDirectory: directory })
+    await stopwordStore.init()
     discordConfig = {}
     channels = {
       [CHANNEL_A]: createChannel(CHANNEL_A),
@@ -492,6 +499,343 @@ describe('jaotants command', () => {
       })
 
       expectDenied(interaction, jaotantsMessages.unknownSubcommand)
+    })
+  })
+
+  describe('word-ranking and stopword groups', () => {
+    const stopwordsOf = () => stopwordStore.get()
+
+    it('defines the word-ranking and stopword groups after vc-speech-log', () => {
+      const groups = jaotantsCommandData.options as unknown as {
+        name: string
+        options: {
+          name: string
+          options?: {
+            name: string
+            required?: boolean
+            min_length?: number
+            max_length?: number
+          }[]
+        }[]
+      }[]
+
+      expect(groups.map((group) => group.name)).toEqual([
+        'vc-speech-log',
+        'word-ranking',
+        'stopword',
+      ])
+      expect(
+        groups[1].options.map((subcommand) => [
+          subcommand.name,
+          (subcommand.options ?? []).map((option) => option.name),
+        ])
+      ).toEqual([
+        ['add', ['channel']],
+        ['remove', ['channel', 'channel-id']],
+        ['list', []],
+      ])
+      expect(groups[2].options.map((subcommand) => subcommand.name)).toEqual([
+        'add',
+        'remove',
+        'list',
+      ])
+      expect(groups[2].options[0].options).toEqual([
+        expect.objectContaining({
+          name: 'word',
+          required: true,
+          min_length: 1,
+          max_length: 100,
+        }),
+      ])
+    })
+
+    describe('word-ranking channels', () => {
+      it('adds a channel to word-ranking only, with a reminder about the audience', async () => {
+        const interaction = await run({
+          group: 'word-ranking',
+          subcommand: 'add',
+          channelId: CHANNEL_NEW,
+        })
+
+        expectEphemeralReply(
+          interaction,
+          `${jaotantsMessages.added(CHANNEL_NEW)}\n${jaotantsMessages.wordRankingNotice}`
+        )
+        expect(store.get('word-ranking')).toEqual([CHANNEL_NEW])
+        expect(store.get('vc-speech-log')).toEqual([CHANNEL_A])
+      })
+
+      it('does not add the reminder to vc-speech-log', async () => {
+        const interaction = await run({
+          subcommand: 'add',
+          channelId: CHANNEL_NEW,
+        })
+
+        expectEphemeralReply(interaction, jaotantsMessages.added(CHANNEL_NEW))
+      })
+
+      it('reports a duplicate without a reminder', async () => {
+        await store.add('word-ranking', CHANNEL_NEW)
+
+        const interaction = await run({
+          group: 'word-ranking',
+          subcommand: 'add',
+          channelId: CHANNEL_NEW,
+        })
+
+        expectEphemeralReply(
+          interaction,
+          jaotantsMessages.alreadyRegistered(CHANNEL_NEW)
+        )
+      })
+
+      it('rejects a channel the bot cannot read', async () => {
+        botMember = null
+
+        const interaction = await run({
+          group: 'word-ranking',
+          subcommand: 'add',
+          channelId: CHANNEL_NEW,
+        })
+
+        expectEphemeralReply(
+          interaction,
+          jaotantsMessages.noBotPermission(CHANNEL_NEW)
+        )
+        expect(store.get('word-ranking')).toEqual([])
+      })
+
+      it('removes and lists channels independently of vc-speech-log', async () => {
+        await store.add('word-ranking', CHANNEL_B)
+
+        const listed = await run({ group: 'word-ranking', subcommand: 'list' })
+        expectEphemeralReply(listed, jaotantsMessages.list(`- <#${CHANNEL_B}>`))
+
+        const removed = await run({
+          group: 'word-ranking',
+          subcommand: 'remove',
+          channelId: CHANNEL_B,
+        })
+        expectEphemeralReply(
+          removed,
+          jaotantsMessages.removed(`<#${CHANNEL_B}>`)
+        )
+        expect(store.get('word-ranking')).toEqual([])
+        expect(store.get('vc-speech-log')).toEqual([CHANNEL_A])
+      })
+
+      it('shows the empty message when nothing is registered', async () => {
+        const interaction = await run({
+          group: 'word-ranking',
+          subcommand: 'list',
+        })
+
+        expectEphemeralReply(interaction, jaotantsMessages.listEmpty)
+      })
+    })
+
+    describe('stopword', () => {
+      it('adds a new word', async () => {
+        const interaction = await run({
+          group: 'stopword',
+          subcommand: 'add',
+          word: 'ケツ',
+        })
+
+        expectEphemeralReply(
+          interaction,
+          jaotantsMessages.stopwordAdded('ケツ')
+        )
+        expect(stopwordsOf()).toEqual({ added: ['ケツ'], removed: [] })
+      })
+
+      it('normalizes the word like extracted words', async () => {
+        const interaction = await run({
+          group: 'stopword',
+          subcommand: 'add',
+          word: 'ＡＢＣ',
+        })
+
+        expectEphemeralReply(interaction, jaotantsMessages.stopwordAdded('abc'))
+        expect(stopwordsOf()).toEqual({ added: ['abc'], removed: [] })
+      })
+
+      it('reports a word that is already a stopword', async () => {
+        await run({ group: 'stopword', subcommand: 'add', word: 'ケツ' })
+
+        const duplicate = await run({
+          group: 'stopword',
+          subcommand: 'add',
+          word: 'ケツ',
+        })
+        const standard = await run({
+          group: 'stopword',
+          subcommand: 'add',
+          word: 'ゲーム',
+        })
+
+        expectEphemeralReply(duplicate, jaotantsMessages.stopwordExists('ケツ'))
+        expectEphemeralReply(
+          standard,
+          jaotantsMessages.stopwordExists('ゲーム')
+        )
+        expect(stopwordsOf()).toEqual({ added: ['ケツ'], removed: [] })
+      })
+
+      it('excludes a standard stopword and restores it', async () => {
+        const excluded = await run({
+          group: 'stopword',
+          subcommand: 'remove',
+          word: 'ゲーム',
+        })
+        expectEphemeralReply(
+          excluded,
+          jaotantsMessages.stopwordExcluded('ゲーム')
+        )
+        expect(stopwordsOf()).toEqual({ added: [], removed: ['ゲーム'] })
+
+        const again = await run({
+          group: 'stopword',
+          subcommand: 'remove',
+          word: 'ゲーム',
+        })
+        expectEphemeralReply(again, jaotantsMessages.stopwordAbsent('ゲーム'))
+
+        const restored = await run({
+          group: 'stopword',
+          subcommand: 'add',
+          word: 'ゲーム',
+        })
+        expectEphemeralReply(
+          restored,
+          jaotantsMessages.stopwordRestored('ゲーム')
+        )
+        expect(stopwordsOf()).toEqual({ added: [], removed: [] })
+      })
+
+      it('removes a custom word and reports an unknown word', async () => {
+        await run({ group: 'stopword', subcommand: 'add', word: 'ケツ' })
+
+        const removed = await run({
+          group: 'stopword',
+          subcommand: 'remove',
+          word: 'ケツ',
+        })
+        const unknown = await run({
+          group: 'stopword',
+          subcommand: 'remove',
+          word: 'ケツ',
+        })
+
+        expectEphemeralReply(removed, jaotantsMessages.stopwordRemoved('ケツ'))
+        expectEphemeralReply(unknown, jaotantsMessages.stopwordAbsent('ケツ'))
+        expect(stopwordsOf()).toEqual({ added: [], removed: [] })
+      })
+
+      it.each(['a b', ' ', 'a\tb'])(
+        'rejects a word containing whitespace: %j',
+        async (word) => {
+          const interaction = await run({
+            group: 'stopword',
+            subcommand: 'add',
+            word,
+          })
+
+          expectEphemeralReply(interaction, jaotantsMessages.invalidWord)
+          expect(stopwordsOf()).toEqual({ added: [], removed: [] })
+        }
+      )
+
+      it('rejects a word longer than 100 characters', async () => {
+        const word = Array.from({ length: 101 }, (_, index) =>
+          String.fromCodePoint(0x4e_00 + index)
+        ).join('')
+
+        const interaction = await run({
+          group: 'stopword',
+          subcommand: 'add',
+          word,
+        })
+
+        expectEphemeralReply(interaction, jaotantsMessages.invalidWord)
+        expect(stopwordsOf()).toEqual({ added: [], removed: [] })
+      })
+
+      it('shows a message when nothing is customized', async () => {
+        const interaction = await run({ group: 'stopword', subcommand: 'list' })
+
+        expectEphemeralReply(interaction, jaotantsMessages.stopwordListEmpty)
+      })
+
+      it('lists the added and excluded words', async () => {
+        await run({ group: 'stopword', subcommand: 'add', word: 'ケツ' })
+        await run({ group: 'stopword', subcommand: 'add', word: 'a*b' })
+        await run({ group: 'stopword', subcommand: 'remove', word: 'ゲーム' })
+
+        const interaction = await run({ group: 'stopword', subcommand: 'list' })
+
+        expectEphemeralReply(
+          interaction,
+          [
+            jaotantsMessages.stopwordListAdded,
+            '- ケツ',
+            '- a\\*b',
+            jaotantsMessages.stopwordListRemoved,
+            '- ゲーム',
+          ].join('\n')
+        )
+      })
+
+      it('cuts a long list and reports how many lines were left out', async () => {
+        const words = Array.from(
+          { length: 200 },
+          (_, index) => `word${String(index).padStart(3, '0')}`
+        )
+        await stopwordStore.update(() => ({
+          data: { added: words, removed: [] },
+          result: undefined,
+        }))
+
+        const interaction = await run({ group: 'stopword', subcommand: 'list' })
+
+        const [{ content }] = interaction.editReply.mock.calls[0] as [
+          { content: string },
+        ]
+        const lines = content.split('\n')
+        expect(lines[0]).toBe(jaotantsMessages.stopwordListAdded)
+        expect(lines[1]).toBe('- word000')
+        expect(lines.at(-2)).toBe('- word187')
+        expect(lines.at(-1)).toBe(jaotantsMessages.stopwordListRest(12))
+        expect(content.length).toBeLessThanOrEqual(2000)
+      })
+
+      it('reports an unavailable config', async () => {
+        fs.writeFileSync(path.join(directory, 'word-stopwords.json'), '{broken')
+        stopwordStore = new StopwordStore({ dataDirectory: directory })
+        await stopwordStore.init()
+
+        const add = await run({
+          group: 'stopword',
+          subcommand: 'add',
+          word: 'ケツ',
+        })
+        const list = await run({ group: 'stopword', subcommand: 'list' })
+
+        expectEphemeralReply(add, jaotantsMessages.unavailable)
+        expectEphemeralReply(list, jaotantsMessages.unavailable)
+      })
+
+      it('denies a member without the Admin role', async () => {
+        const interaction = await run({
+          group: 'stopword',
+          subcommand: 'add',
+          word: 'ケツ',
+          roles: [DEVELOPER_ROLE_ID],
+        })
+
+        expectDenied(interaction, jaotantsMessages.forbidden)
+        expect(stopwordsOf()).toEqual({ added: [], removed: [] })
+      })
     })
   })
 
