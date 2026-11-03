@@ -5,26 +5,26 @@ import {
 } from './format'
 
 const displays = new Map([
-  ['ドリル', 'ドリル'],
-  ['襲う', '襲う'],
+  ['ワードA', 'ワードA'],
+  ['ワードB', 'ワードB'],
   ['a*b', 'a*b'],
 ])
 const base = {
   month: '2026-10',
   frequent: [
-    { word: 'ドリル', units: 24 },
+    { word: 'ワードA', units: 24 },
     { word: 'a*b', units: 5 },
   ],
   volume: [
-    { speaker: 'ekusas83', messages: 2698, chars: 60_115 },
-    { speaker: 'kaepi.', messages: 1111, chars: 16_089 },
+    { speaker: 'speaker-a', messages: 2698, chars: 60_115 },
+    { speaker: 'speaker-b', messages: 1111, chars: 16_089 },
   ],
   habits: [
     {
-      speaker: 'ekusas83',
+      speaker: 'speaker-a',
       words: [
-        { word: 'ドリル', units: 20, lift: 30.26 },
-        { word: '襲う', units: 42, lift: 21.24 },
+        { word: 'ワードA', units: 20, lift: 30.26 },
+        { word: 'ワードB', units: 42, lift: 21.24 },
       ],
     },
   ],
@@ -38,15 +38,15 @@ describe('formatVcRankingMessages', () => {
         ':microphone: __**2026-10 の VC 単語ランキング**__ :microphone:',
         '',
         '**よく使われた単語**',
-        '1. ドリル (24回)',
+        '1. ワードA (24回)',
         '2. a\\*b (5回)',
         '',
         '**発言量**',
-        '1. ekusas83 (60,115字 / 2,698件)',
-        '2. kaepi. (16,089字 / 1,111件)',
+        '1. speaker-a (60,115字 / 2,698件)',
+        '2. speaker-b (16,089字 / 1,111件)',
         '',
         '**口癖** (他の人より何倍多く使うか)',
-        '- ekusas83: ドリル (30.3倍) / 襲う (21.2倍)',
+        '- speaker-a: ワードA (30.3倍) / ワードB (21.2倍)',
       ].join('\n'),
     ])
   })
@@ -109,7 +109,7 @@ describe('formatVcRankingMessages', () => {
         ...base,
         habits: [
           {
-            speaker: 'ekusas83',
+            speaker: 'speaker-a',
             words: [{ word: '未登録', units: 9, lift: 2 }],
           },
         ],

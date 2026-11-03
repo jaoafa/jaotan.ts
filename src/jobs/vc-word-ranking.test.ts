@@ -110,7 +110,7 @@ describe('MonthlyVcWordRankingJob', () => {
     }
     fetchChannel.mockResolvedValue(vcChannel)
     batchesBySource = {
-      source1: [[logMessage('`tomachi`: `ケツ` (97%)')]],
+      source1: [[logMessage('`speaker-a`: `ケツ` (97%)')]],
     }
     save.mockResolvedValue()
     worker.finish.mockResolvedValue(RESULT)
@@ -188,18 +188,18 @@ describe('MonthlyVcWordRankingJob', () => {
     batchesBySource = {
       source1: [
         [
-          logMessage('`tomachi`: `いやいや` (97%)', {
+          logMessage('`speaker-a`: `こんにちは` (97%)', {
             createdTimestamp: 1,
           }),
-          logMessage('`kaepi.`: `マジか`', { createdTimestamp: 2 }),
+          logMessage('`speaker-b`: `マジか`', { createdTimestamp: 2 }),
           logMessage('`VCWatcher`: `お二人が参加しました` (100%)'),
-          logMessage('`tomachi`: `  ` (50%)'),
+          logMessage('`speaker-a`: `  ` (50%)'),
           logMessage('通常の発言'),
-          logMessage('`tomachi`: `人間の偽装` (90%)', {
+          logMessage('`speaker-a`: `人間の偽装` (90%)', {
             author: { bot: false, id: 'user1' },
           }),
-          logMessage('`tomachi`: `Webhook` (90%)', { webhookId: 'hook1' }),
-          logMessage('`tomachi`: `返信` (90%)', { type: MessageType.Reply }),
+          logMessage('`speaker-a`: `Webhook` (90%)', { webhookId: 'hook1' }),
+          logMessage('`speaker-a`: `返信` (90%)', { type: MessageType.Reply }),
         ],
       ],
     }
@@ -210,13 +210,13 @@ describe('MonthlyVcWordRankingJob', () => {
     expect(worker.send).toHaveBeenCalledWith([
       {
         channelId: 'source1',
-        authorId: 'tomachi',
+        authorId: 'speaker-a',
         timestamp: 1,
-        content: 'いやいや',
+        content: 'こんにちは',
       },
       {
         channelId: 'source1',
-        authorId: 'kaepi.',
+        authorId: 'speaker-b',
         timestamp: 2,
         content: 'マジか',
       },
@@ -227,9 +227,9 @@ describe('MonthlyVcWordRankingJob', () => {
     batchesBySource = {
       source1: [
         [
-          logMessage('`tomachi`: `ケツ`'),
-          logMessage('`tomachi`: `ケツケツ` (80%)'),
-          logMessage('`kaepi.`: `あ`'),
+          logMessage('`speaker-a`: `ケツ`'),
+          logMessage('`speaker-a`: `ケツケツ` (80%)'),
+          logMessage('`speaker-b`: `あ`'),
         ],
       ],
     }
@@ -238,7 +238,7 @@ describe('MonthlyVcWordRankingJob', () => {
 
     const [payload] = vcChannel.send.mock.calls[0] as [{ content: string }]
     expect(payload.content).toContain(
-      '**発言量**\n1. tomachi (6字 / 2件)\n2. kaepi. (1字 / 1件)'
+      '**発言量**\n1. speaker-a (6字 / 2件)\n2. speaker-b (1字 / 1件)'
     )
   })
 
@@ -249,31 +249,31 @@ describe('MonthlyVcWordRankingJob', () => {
         [
           '2026-10',
           [
-            ['ドリル', 21, 2],
+            ['ワードA', 21, 2],
             ['普通', 40, 2],
           ],
         ],
       ],
       displays: [
-        ['ドリル', 'ドリル'],
+        ['ワードA', 'ワードA'],
         ['普通', '普通'],
       ],
       authors: [
         [
           '2026-10',
-          'tomachi',
+          'speaker-a',
           100,
           [
-            ['ドリル', 20],
+            ['ワードA', 20],
             ['普通', 20],
           ],
         ],
         [
           '2026-10',
-          'kaepi.',
+          'speaker-b',
           100,
           [
-            ['ドリル', 1],
+            ['ワードA', 1],
             ['普通', 20],
           ],
         ],
@@ -281,7 +281,7 @@ describe('MonthlyVcWordRankingJob', () => {
     })
     batchesBySource = {
       source1: [
-        [logMessage('`tomachi`: `ドリル`'), logMessage('`kaepi.`: `あ`')],
+        [logMessage('`speaker-a`: `ワードA`'), logMessage('`speaker-b`: `あ`')],
       ],
     }
 
@@ -289,7 +289,7 @@ describe('MonthlyVcWordRankingJob', () => {
 
     const [payload] = vcChannel.send.mock.calls[0] as [{ content: string }]
     expect(payload.content).toContain(
-      '**口癖** (他の人より何倍多く使うか)\n- tomachi: ドリル (13.3倍) / 普通 (1.0倍)\n- kaepi.: 普通 (1.0倍)'
+      '**口癖** (他の人より何倍多く使うか)\n- speaker-a: ワードA (13.3倍) / 普通 (1.0倍)\n- speaker-b: 普通 (1.0倍)'
     )
   })
 
@@ -345,7 +345,7 @@ describe('MonthlyVcWordRankingJob', () => {
     channelIds = ['source1', 'source2']
     batchesBySource = {
       source1: [apiError(403)],
-      source2: [[logMessage('`tomachi`: `ケツ`', { channelId: 'source2' })]],
+      source2: [[logMessage('`speaker-a`: `ケツ`', { channelId: 'source2' })]],
     }
 
     await createJob().execute()

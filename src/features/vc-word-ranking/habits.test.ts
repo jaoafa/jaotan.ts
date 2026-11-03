@@ -55,7 +55,7 @@ describe('buildHabits', () => {
         ['少ない', 7],
         ['単独', 9],
         ['普通', 10],
-        ['ドリル', 20],
+        ['ワードA', 20],
       ],
     ],
     [
@@ -72,7 +72,7 @@ describe('buildHabits', () => {
       'C',
       20,
       [
-        ['ドリル', 1],
+        ['ワードA', 1],
         ['普通', 5],
       ],
     ],
@@ -82,7 +82,7 @@ describe('buildHabits', () => {
     ['少ない', 7, 1],
     ['単独', 9, 1],
     ['普通', 25, 3],
-    ['ドリル', 21, 2],
+    ['ワードA', 21, 2],
   ])
   const chars = volumes([
     ['A', 500],
@@ -100,7 +100,7 @@ describe('buildHabits', () => {
 
     expect(habits.map(({ speaker }) => speaker)).toEqual(['A', 'B'])
     expect(habits[0].words.map(({ word, units }) => [word, units])).toEqual([
-      ['ドリル', 20],
+      ['ワードA', 20],
       ['境界', 8],
       ['普通', 10],
     ])
