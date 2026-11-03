@@ -111,9 +111,9 @@ async optimize(): Promise<void> {
 ### 例
 
 ```
-feat(commands): add toheja command for language translation
-fix(nitrotan): improve animation emoji detection logic
-docs: update API documentation
+feat(commands): 言語翻訳用の toheja コマンドを追加
+fix(nitrotan): アニメーション絵文字の判定ロジックを改善
+docs: API ドキュメントを更新
 ```
 
 ## テスト
