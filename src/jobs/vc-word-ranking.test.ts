@@ -354,6 +354,21 @@ describe('MonthlyVcWordRankingJob', () => {
     expect(vcChannel.send).toHaveBeenCalledTimes(1)
   })
 
+  it.each([403, 404])(
+    'aborts without saving or posting when a source responds with %i after some of its messages were fetched',
+    async (status) => {
+      batchesBySource = {
+        source1: [[logMessage('`speaker-a`: `ケツ`')], apiError(status)],
+      }
+
+      await expect(createJob().execute()).rejects.toThrow(`status ${status}`)
+
+      expect(save).not.toHaveBeenCalled()
+      expect(vcChannel.send).not.toHaveBeenCalled()
+      expect(worker.kill).toHaveBeenCalledTimes(1)
+    }
+  )
+
   it('saves and posts nothing and stops the worker when fetching fails', async () => {
     batchesBySource = { source1: [new Error('boom')] }
 

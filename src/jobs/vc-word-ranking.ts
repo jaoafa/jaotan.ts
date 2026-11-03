@@ -130,18 +130,20 @@ export class MonthlyVcWordRankingJob extends BaseDiscordJob {
     let result
     try {
       for (const source of sources) {
+        let fetchedAny = false
         try {
           for await (const batch of this.dependencies.fetchMessages(
             source,
             startMs,
             endMs
           )) {
+            fetchedAny = true
             const messages = toSpeechMessages(batch, volumes)
             messageCount += messages.length
             if (messages.length > 0) await worker.send(messages)
           }
         } catch (error) {
-          if (!isSkippableDiscordError(error)) throw error
+          if (fetchedAny || !isSkippableDiscordError(error)) throw error
           logger.warn(`⚠️ skip ${source.id}: ${(error as Error).message}`)
         }
       }

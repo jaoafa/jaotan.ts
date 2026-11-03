@@ -5,7 +5,7 @@ export interface SpeechLog {
   confidence: number | undefined
 }
 
-const SPEECH_LOG = /^`([^`]+)`: `([\S\s]*?)`(?: \((\d+)%\))?$/
+const SPEECH_LOG = /^`([^\n\r`]+)`: `([\S\s]*?)`(?: \((\d+)%\))?$/
 const NOTICE_SPEAKER = 'VCWatcher'
 
 /**

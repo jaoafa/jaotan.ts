@@ -56,6 +56,8 @@ describe('parseSpeechLog', () => {
     ['text after the confidence', '`speaker-a`: `はい` (97%) 追記'],
     ['a non-numeric confidence', '`speaker-a`: `はい` (高%)'],
     ['an empty speaker', '``: `はい`'],
+    ['a speaker label with a line break', '`name\n2. other`: `はい`'],
+    ['a speaker label with a carriage return', '`name\r2. other`: `はい`'],
   ])('returns undefined for %s', (_name, content) => {
     expect(parseSpeechLog(content)).toBe(undefined)
   })

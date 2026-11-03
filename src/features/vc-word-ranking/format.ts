@@ -4,16 +4,17 @@ import { SpeakerHabit, SpeakerVolume } from './habits'
 
 export const MAX_MESSAGE_LENGTH = 2000
 export const MAX_SPEAKER_NAME_LENGTH = 40
+export const MAX_WORD_LENGTH = 50
 
 const NO_WORDS = '該当する単語がありませんでした'
 const NO_SPEAKERS = '該当する話者がいませんでした'
 
+function truncate(text: string, maxLength: number): string {
+  return text.length > maxLength ? `${text.slice(0, maxLength)}…` : text
+}
+
 function speakerName(speaker: string): string {
-  const name =
-    speaker.length > MAX_SPEAKER_NAME_LENGTH
-      ? `${speaker.slice(0, MAX_SPEAKER_NAME_LENGTH)}…`
-      : speaker
-  return escapeMarkdown(name)
+  return escapeMarkdown(truncate(speaker, MAX_SPEAKER_NAME_LENGTH))
 }
 
 function displayOf(word: string, displays: ReadonlyMap<string, string>) {
@@ -21,7 +22,7 @@ function displayOf(word: string, displays: ReadonlyMap<string, string>) {
   if (display === undefined) {
     throw new Error(`語 "${word}" の表示用の語がありません`)
   }
-  return escapeMarkdown(display)
+  return escapeMarkdown(truncate(display, MAX_WORD_LENGTH))
 }
 
 function splitLines(text: string): string[] {

@@ -2,6 +2,7 @@ import {
   formatVcRankingMessages,
   MAX_MESSAGE_LENGTH,
   MAX_SPEAKER_NAME_LENGTH,
+  MAX_WORD_LENGTH,
 } from './format'
 
 const displays = new Map([
@@ -97,6 +98,47 @@ describe('formatVcRankingMessages', () => {
     )
   })
 
+  it('truncates a word that is longer than a message so that every message fits', () => {
+    const word = '長'.repeat(MAX_MESSAGE_LENGTH + 1)
+
+    const messages = formatVcRankingMessages({
+      ...base,
+      frequent: [{ word, units: 1 }],
+      habits: [{ speaker: 'speaker-a', words: [{ word, units: 9, lift: 2 }] }],
+      displays: new Map([[word, word]]),
+    })
+
+    expect(messages.join('\n')).toContain(
+      `1. ${'長'.repeat(MAX_WORD_LENGTH)}… (1回)`
+    )
+    for (const message of messages) {
+      expect(message.length).toBeLessThanOrEqual(MAX_MESSAGE_LENGTH)
+    }
+  })
+
+  it('keeps every message within the limit when the escaped words are long', () => {
+    const word = '*'.repeat(MAX_MESSAGE_LENGTH)
+    const messages = formatVcRankingMessages({
+      ...base,
+      frequent: Array.from({ length: 10 }, () => ({ word, units: 1 })),
+      habits: [
+        {
+          speaker: '_'.repeat(MAX_MESSAGE_LENGTH),
+          words: Array.from({ length: 5 }, () => ({
+            word,
+            units: 9,
+            lift: 2,
+          })),
+        },
+      ],
+      displays: new Map([[word, word]]),
+    })
+
+    for (const message of messages) {
+      expect(message.length).toBeLessThanOrEqual(MAX_MESSAGE_LENGTH)
+    }
+  })
+
   it('throws when a display form is missing', () => {
     expect(() =>
       formatVcRankingMessages({
@@ -117,49 +159,59 @@ describe('formatVcRankingMessages', () => {
     ).toThrow('語 "未登録" の表示用の語がありません')
   })
 
+  const fullLengthWords = (count: number) =>
+    Array.from(
+      { length: count },
+      (_, index) =>
+        `${'あ'.repeat(MAX_WORD_LENGTH - 3)}${String(index).padStart(3, '0')}`
+    )
+  const longSpeakers = (count: number) =>
+    Array.from({ length: count }, (_, index) =>
+      `speaker-${index}`.padEnd(MAX_SPEAKER_NAME_LENGTH - 10, 'x')
+    )
+
   it('splits at section boundaries when the message is too long', () => {
-    const long = 'あ'.repeat(360)
-    const wideDisplays = new Map(displays)
-    const frequent = Array.from({ length: 5 }, (_, index) => {
-      const word = `${long}${index}`
-      wideDisplays.set(word, word)
-      return { word, units: 10 - index }
-    })
-    const volume = ['a', 'b', 'c', 'd'].map((speaker) => ({
-      speaker: `speaker-${speaker}`,
-      messages: 1000,
-      chars: 20_000,
-    }))
+    const words = fullLengthWords(10)
+    const wideDisplays = new Map(words.map((word) => [word, word]))
 
     const messages = formatVcRankingMessages({
       ...base,
-      frequent,
-      volume,
+      frequent: words.map((word, index) => ({ word, units: 10 - index })),
+      volume: longSpeakers(8).map((speaker, index) => ({
+        speaker,
+        messages: 1000,
+        chars: 20_000 - index,
+      })),
+      habits: longSpeakers(4).map((speaker) => ({
+        speaker,
+        words: words.slice(0, 5).map((word) => ({ word, units: 9, lift: 2 })),
+      })),
       displays: wideDisplays,
     })
 
     expect(messages).toHaveLength(2)
     expect(messages[0].startsWith(':microphone:')).toBe(true)
-    expect(messages[0]).toContain('**よく使われた単語**')
-    expect(messages[1].startsWith('**発言量**')).toBe(true)
+    expect(messages[0]).toContain('**発言量**')
+    expect(messages[1].startsWith('**口癖**')).toBe(true)
     for (const message of messages) {
       expect(message.length).toBeLessThanOrEqual(MAX_MESSAGE_LENGTH)
     }
   })
 
   it('splits at line boundaries when a section alone is too long', () => {
-    const long = 'あ'.repeat(300)
-    const wideDisplays = new Map(displays)
-    const frequent = Array.from({ length: 10 }, (_, index) => {
-      const word = `${long}${index}`
-      wideDisplays.set(word, word)
-      return { word, units: 10 - index }
-    })
+    const words = fullLengthWords(5)
+    const speakers = longSpeakers(8)
 
     const messages = formatVcRankingMessages({
       ...base,
-      frequent,
-      displays: wideDisplays,
+      habits: speakers.map((speaker) => ({
+        speaker,
+        words: words.map((word) => ({ word, units: 9, lift: 2 })),
+      })),
+      displays: new Map([
+        ...displays,
+        ...words.map((word): [string, string] => [word, word]),
+      ]),
     })
 
     expect(messages.length).toBeGreaterThan(2)
@@ -167,8 +219,8 @@ describe('formatVcRankingMessages', () => {
       expect(message.length).toBeLessThanOrEqual(MAX_MESSAGE_LENGTH)
     }
     const joined = messages.join('\n')
-    for (const index of frequent.keys()) {
-      expect(joined).toContain(`${index + 1}. ${long}${index} (`)
+    for (const speaker of speakers) {
+      expect(joined).toContain(`- ${speaker}: ${words[0]} (2.0倍)`)
     }
   })
 })
