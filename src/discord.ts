@@ -49,6 +49,7 @@ import nodeCron from 'node-cron'
 import { EveryDayJob } from './jobs/everyday'
 import { MonthlyEmojiRankingJob } from './jobs/emoji-ranking'
 import { MonthlyWordRankingJob } from './jobs/word-ranking'
+import { MonthlyVcWordRankingJob } from './jobs/vc-word-ranking'
 import { BirthdayCommand } from './commands/birthday'
 import { GetAtamaCommand } from './commands/getatama'
 import { SetbannerCommand } from './commands/setbanner'
@@ -71,6 +72,7 @@ import { SetbannerExtraCommand } from './commands/setbannerextra'
 import { GreetingTimeoutTask } from './tasks/greeting-timeout'
 import { ChannelConfigStore } from './features/channel-config-store'
 import { StopwordStore } from './features/stopword-store'
+import { VcWordStatsStore } from './features/vc-word-stats-store'
 import {
   handleJaotantsInteraction,
   jaotantsCommandData,
@@ -83,6 +85,7 @@ export class Discord {
   public readonly client: Client
   private readonly channelConfigStore: ChannelConfigStore
   private readonly stopwordStore: StopwordStore
+  private readonly vcWordStatsStore: VcWordStatsStore
 
   private readonly tasks: BaseDiscordTask[] = []
 
@@ -171,6 +174,7 @@ export class Discord {
       ],
     })
     this.stopwordStore = new StopwordStore()
+    this.vcWordStatsStore = new VcWordStatsStore()
 
     const events: BaseDiscordEvent<any>[] = [
       new EmojiMessageEvent(this),
@@ -216,6 +220,7 @@ export class Discord {
       new EveryDayJob(this),
       new MonthlyEmojiRankingJob(this),
       new MonthlyWordRankingJob(this),
+      new MonthlyVcWordRankingJob(this),
     ]
     for (const job of crons) {
       job.register(nodeCron)
@@ -240,6 +245,10 @@ export class Discord {
     return this.stopwordStore
   }
 
+  public getVcWordStatsStore() {
+    return this.vcWordStatsStore
+  }
+
   public async close() {
     await this.client.destroy()
   }
@@ -256,6 +265,7 @@ export class Discord {
 
     await this.channelConfigStore.init()
     await this.stopwordStore.init()
+    await this.vcWordStatsStore.init()
     await registerJaotantsCommand(this)
   }
 

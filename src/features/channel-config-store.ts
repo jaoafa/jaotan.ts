@@ -3,7 +3,8 @@ import path from 'node:path'
 import { Logger } from '@book000/node-utils'
 import { SerialQueue, writeJsonAtomically } from './atomic-json'
 
-export type ChannelConfigFeature = 'vc-speech-log' | 'word-ranking'
+export type ChannelConfigFeature =
+  'vc-speech-log' | 'word-ranking' | 'vc-word-ranking'
 
 type ChannelConfigData = Record<string, string[]>
 

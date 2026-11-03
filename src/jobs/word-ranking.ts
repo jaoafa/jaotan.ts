@@ -27,7 +27,7 @@ export interface WordRankingJobDependencies {
   now: () => Date
 }
 
-const defaultDependencies: WordRankingJobDependencies = {
+export const defaultDependencies: WordRankingJobDependencies = {
   collectSources,
   fetchMessages,
   startWorker: (options) => WordWorker.start(options),

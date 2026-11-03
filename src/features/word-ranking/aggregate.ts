@@ -42,6 +42,18 @@ function monthStartMs(monthKey: string): number {
   return Date.UTC(year, month - 1, 1) - JST_OFFSET_MS
 }
 
+/** 対象月の 1 日 0:00 JST (含む) から、翌月 1 日 0:00 JST (含まない) まで */
+export function getSingleMonthRange(monthKey: string): {
+  startMs: number
+  endMs: number
+} {
+  const [year, month] = monthKey.split('-').map(Number)
+  return {
+    startMs: monthStartMs(monthKey),
+    endMs: Date.UTC(year, month, 1) - JST_OFFSET_MS,
+  }
+}
+
 function previousMonths(monthKey: string, count: number): string[] {
   const months: string[] = []
   let current = monthKey
@@ -57,11 +69,10 @@ export function getMonthWindow(targetMonth: string): MonthWindow {
     ...previousMonths(targetMonth, HISTORY_MONTHS).toReversed(),
     targetMonth,
   ]
-  const [year, month] = targetMonth.split('-').map(Number)
   return {
     months,
     startMs: monthStartMs(months[0]),
-    endMs: Date.UTC(year, month, 1) - JST_OFFSET_MS,
+    endMs: getSingleMonthRange(targetMonth).endMs,
   }
 }
 
@@ -84,15 +95,25 @@ interface WordTally {
   users: Set<string>
 }
 
-/** 同じチャンネルのメッセージは、時刻の昇順で渡すこと。 */
+interface AuthorTally {
+  units: number
+  words: Map<string, number>
+}
+
+/**
+ * 同じチャンネルのメッセージは、時刻の昇順で渡すこと。
+ * trackAuthors が真のときは、月・話者ごとの単位数と語ごとの単位数も数える。
+ */
 export class UnitAccumulator {
   private readonly pending = new Map<string, PendingUnit>()
   private readonly months = new Map<string, Map<string, WordTally>>()
+  private readonly authors = new Map<string, Map<string, AuthorTally>>()
   private readonly displayVotes = new Map<string, Map<string, number>>()
 
   constructor(
     private readonly extract: WordExtractor,
-    private readonly burstMs: number = BURST_MS
+    private readonly burstMs: number = BURST_MS,
+    private readonly trackAuthors = false
   ) {}
 
   add(message: WordMessage): void {
@@ -126,7 +147,7 @@ export class UnitAccumulator {
     for (const unit of this.pending.values()) this.flush(unit)
     this.pending.clear()
 
-    return {
+    const result: AccumulatedResult = {
       months: [...this.months]
         .toSorted(([a], [b]) => (a < b ? -1 : 1))
         .map(([month, tallies]) => [
@@ -139,10 +160,52 @@ export class UnitAccumulator {
         .toSorted(([a], [b]) => (a < b ? -1 : 1))
         .map(([key, votes]) => [key, mostVoted(votes)]),
     }
+    if (this.trackAuthors) result.authors = this.authorEntries()
+    return result
+  }
+
+  private authorEntries(): NonNullable<AccumulatedResult['authors']> {
+    return [...this.authors]
+      .toSorted(([a], [b]) => (a < b ? -1 : 1))
+      .flatMap(([month, speakers]) =>
+        [...speakers]
+          .toSorted(([a], [b]) => (a < b ? -1 : 1))
+          .map(
+            ([speaker, tally]): [
+              string,
+              string,
+              number,
+              [string, number][],
+            ] => [
+              month,
+              speaker,
+              tally.units,
+              [...tally.words].toSorted(([a], [b]) => (a < b ? -1 : 1)),
+            ]
+          )
+      )
+  }
+
+  private tallyAuthor(month: string, unit: PendingUnit): void {
+    let speakers = this.authors.get(month)
+    if (!speakers) {
+      speakers = new Map()
+      this.authors.set(month, speakers)
+    }
+    let tally = speakers.get(unit.authorId)
+    if (!tally) {
+      tally = { units: 0, words: new Map() }
+      speakers.set(unit.authorId, tally)
+    }
+    tally.units++
+    for (const key of unit.words.keys()) {
+      tally.words.set(key, (tally.words.get(key) ?? 0) + 1)
+    }
   }
 
   private flush(unit: PendingUnit): void {
     const month = getMonthKey(new Date(unit.firstTimestamp))
+    if (this.trackAuthors) this.tallyAuthor(month, unit)
     let tallies = this.months.get(month)
     if (!tallies) {
       tallies = new Map()

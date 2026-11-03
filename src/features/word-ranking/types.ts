@@ -29,6 +29,13 @@ export interface AccumulatedResult {
     entries: [word: string, units: number, users: number][],
   ][]
   displays: [key: string, display: string][]
+  /** 月 → 話者 → 単位数・語ごとの単位数。話者別の集計を有効にしたときだけ含む */
+  authors?: [
+    month: string,
+    speaker: string,
+    units: number,
+    words: [word: string, units: number][],
+  ][]
 }
 
 export interface StopwordData {
@@ -37,7 +44,7 @@ export interface StopwordData {
 }
 
 export type WorkerRequest =
-  | { type: 'init'; stopwords: string[] }
+  | { type: 'init'; stopwords: string[]; trackAuthors?: boolean }
   | { type: 'messages'; messages: WordMessage[] }
   | { type: 'finish' }
 

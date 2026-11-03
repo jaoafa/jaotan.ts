@@ -328,4 +328,49 @@ describe('ChannelConfigStore', () => {
       })
     })
   })
+
+  describe('vc-word-ranking feature', () => {
+    it('treats a missing vc-word-ranking key as an empty list and keeps the file as it is', async () => {
+      fs.writeFileSync(
+        filePath,
+        JSON.stringify({ 'vc-speech-log': [ID_1], 'word-ranking': [ID_2] })
+      )
+      const before = fs.readFileSync(filePath, 'utf8')
+      const store = createStore()
+      await store.init()
+
+      expect(store.get('vc-word-ranking')).toEqual([])
+      expect(fs.readFileSync(filePath, 'utf8')).toBe(before)
+    })
+
+    it('does not migrate legacy channels into vc-word-ranking', async () => {
+      const store = createStore(() => [ID_1])
+      await store.init()
+
+      expect(store.get('vc-word-ranking')).toEqual([])
+      expect(readFile()).toEqual({ 'vc-speech-log': [ID_1] })
+    })
+
+    it('stores the vc-word-ranking channels separately from the other features', async () => {
+      const store = createStore(() => [ID_1])
+      await store.init()
+      await store.add('word-ranking', ID_3)
+
+      await expect(store.add('vc-word-ranking', ID_2)).resolves.toBe('added')
+      await expect(store.add('vc-word-ranking', ID_2)).resolves.toBe('exists')
+      await expect(store.remove('vc-word-ranking', ID_3)).resolves.toBe(
+        'absent'
+      )
+
+      expect(readFile()).toEqual({
+        'vc-speech-log': [ID_1],
+        'word-ranking': [ID_3],
+        'vc-word-ranking': [ID_2],
+      })
+      await expect(store.remove('vc-word-ranking', ID_2)).resolves.toBe(
+        'removed'
+      )
+      expect(store.get('word-ranking')).toEqual([ID_3])
+    })
+  })
 })

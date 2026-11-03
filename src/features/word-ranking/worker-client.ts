@@ -12,6 +12,8 @@ const DEFAULT_TIMEOUT_MS = 30 * 60 * 1000
 export interface WordWorkerOptions {
   dictPath: string
   stopwords: readonly string[]
+  /** 真のとき、話者 (authorId) ごとの集計も結果に含める */
+  trackAuthors?: boolean
   scriptPath?: string
   execArgv?: string[]
   timeoutMs?: number
@@ -85,6 +87,9 @@ export class WordWorker {
       await worker.request({
         type: 'init',
         stopwords: [...options.stopwords],
+        ...(options.trackAuthors !== undefined && {
+          trackAuthors: options.trackAuthors,
+        }),
       })
       await ready
     } catch (error) {

@@ -24,7 +24,8 @@ function send(response: WorkerResponse): Promise<void> {
 }
 
 async function createAccumulator(
-  stopwords: readonly string[]
+  stopwords: readonly string[],
+  trackAuthors: boolean
 ): Promise<UnitAccumulator> {
   const dictPath = process.env.SUDACHI_DICT_PATH
   if (!dictPath) {
@@ -34,24 +35,31 @@ async function createAccumulator(
   await sudachi.initialize_node(fs.promises.readFile, dictPath)
   const stopwordSet = new Set(stopwords)
 
-  return new UnitAccumulator((content) => {
-    const text = preprocessText(content)
-    if (text.trim() === '') return []
-    const tokens = sudachi.tokenize_raw(text, TokenizeMode.C)
-    return extractWords(
-      tokens.map((token) => ({
-        dictionaryForm: token.dictionary_form,
-        poses: token.poses,
-      })),
-      stopwordSet
-    )
-  })
+  return new UnitAccumulator(
+    (content) => {
+      const text = preprocessText(content)
+      if (text.trim() === '') return []
+      const tokens = sudachi.tokenize_raw(text, TokenizeMode.C)
+      return extractWords(
+        tokens.map((token) => ({
+          dictionaryForm: token.dictionary_form,
+          poses: token.poses,
+        })),
+        stopwordSet
+      )
+    },
+    undefined,
+    trackAuthors
+  )
 }
 
 async function handle(request: WorkerRequest): Promise<void> {
   switch (request.type) {
     case 'init': {
-      accumulator = await createAccumulator(request.stopwords)
+      accumulator = await createAccumulator(
+        request.stopwords,
+        request.trackAuthors ?? false
+      )
       await send({ type: 'ready' })
       break
     }

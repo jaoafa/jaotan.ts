@@ -20,13 +20,18 @@ describe('WordWorker', () => {
     fs.writeFileSync(file, source)
     return file
   }
-  const start = async (source: string, timeoutMs?: number) => {
+  const start = async (
+    source: string,
+    timeoutMs?: number,
+    trackAuthors?: boolean
+  ) => {
     const worker = await WordWorker.start({
       dictPath: '/unused',
       stopwords: ['the'],
       scriptPath: fixture(source),
       execArgv: [],
       timeoutMs,
+      trackAuthors,
     })
     workers.push(worker)
     return worker
@@ -68,6 +73,36 @@ describe('WordWorker', () => {
     await expect(worker.finish()).resolves.toEqual({
       months: [['2026-10', [['the', 3, 1]]]],
       displays: [],
+    })
+  })
+
+  it('sends trackAuthors to the child in the init request', async () => {
+    const worker = await start(
+      `
+      let init
+      process.on('message', (request) => {
+        if (request.type === 'init') {
+          init = request
+          process.send({ type: 'ready' })
+        }
+        if (request.type === 'finish') {
+          process.send(
+            { type: 'result', result: { months: [], displays: [['init', JSON.stringify(init)]] } },
+            () => process.disconnect()
+          )
+        }
+      })
+    `,
+      undefined,
+      true
+    )
+
+    const result = await worker.finish()
+
+    expect(JSON.parse(result.displays[0][1])).toEqual({
+      type: 'init',
+      stopwords: ['the'],
+      trackAuthors: true,
     })
   })
 
