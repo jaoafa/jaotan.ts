@@ -167,7 +167,7 @@ export class Translate {
     return this.azureTranslator.detectLanguage(text)
   }
 
-  /** Validates a command and applies the shared cooldown before API calls. */
+  /** コマンドを検証し、API 呼び出し前に共有のクールダウンを適用します。 */
   public async beginCommand(
     message: Message<true>,
     text: string

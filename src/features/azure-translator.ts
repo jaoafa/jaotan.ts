@@ -27,7 +27,7 @@ const DISPLAY_LANGUAGE_ALIASES: Record<string, string> = {
 const REQUEST_TIMEOUT_MS = 15_000
 const LANGUAGE_CACHE_MS = 60 * 60 * 1000
 
-/** Sends text translation requests to Azure Translator v3. */
+/** Azure Translator v3 へ翻訳リクエストを送信します。 */
 export class AzureTranslator {
   private readonly endpoint: URL
   private readonly apikey: string
@@ -66,7 +66,7 @@ export class AzureTranslator {
     this.fetcher = fetcher
   }
 
-  /** Gets language codes that the configured Translator endpoint supports. */
+  /** 設定されたエンドポイントが対応する言語コードを取得します。 */
   async getSupportedLanguages(): Promise<Set<string>> {
     if (
       this.supportedLanguages &&
@@ -116,19 +116,19 @@ export class AzureTranslator {
     }
   }
 
-  /** Converts an application language code to an Azure-supported code. */
+  /** アプリケーションの言語コードを Azure が対応するコードへ変換します。 */
   async toAzureLanguage(language: string): Promise<string | undefined> {
     const supported = await this.getSupportedLanguages()
     const canonical = LANGUAGE_ALIASES[language] ?? language
     return supported.has(canonical) ? canonical : undefined
   }
 
-  /** Converts an Azure language code to an application language code. */
+  /** Azure の言語コードをアプリケーションの言語コードへ変換します。 */
   publicLanguage(language: string): string {
     return DISPLAY_LANGUAGE_ALIASES[language] ?? language
   }
 
-  /** Detects a source language with Azure Translator. */
+  /** Azure Translator で翻訳元の言語を判定します。 */
   async detectLanguage(text: string): Promise<string> {
     const leaseId = await this.usageStore.reserveAndAcquireRequest(0)
     try {
@@ -167,7 +167,7 @@ export class AzureTranslator {
     }
   }
 
-  /** Translates one sequential step and reserves usage before each network attempt. */
+  /** 連続翻訳の 1 ステップを翻訳します。ネットワーク試行ごとに事前に使用量を予約します。 */
   async translate(
     beforeLanguage: string,
     afterLanguage: string,

@@ -17,7 +17,7 @@ interface UsageRow {
 
 export class TranslationLimitError extends Error {}
 
-/** Persists quota reservations and request coordination in a shared SQLite database. */
+/** 割り当て量の予約とリクエストの同時実行制御を、共有の SQLite データベースに保存します。 */
 export class TranslationUsageStore {
   private readonly directory: string
   private readonly databasePath: string
@@ -27,7 +27,7 @@ export class TranslationUsageStore {
     this.databasePath = path.join(this.directory, 'usage.sqlite')
   }
 
-  /** Starts a translation command and enforces the shared per-user cooldown. */
+  /** 翻訳コマンドを開始し、ユーザーごとの共有クールダウンを適用します。 */
   async startCommand(userId: string, now = Date.now()): Promise<void> {
     await Promise.resolve()
     const limited = this.withTransaction((database) => {
@@ -50,7 +50,7 @@ export class TranslationUsageStore {
     }
   }
 
-  /** Reserves characters and an active request slot before sending a request. */
+  /** リクエスト送信前に、文字数と同時実行スロットを予約します。 */
   async reserveAndAcquireRequest(
     characters: number,
     now = Date.now()
@@ -125,7 +125,7 @@ export class TranslationUsageStore {
     return leaseId
   }
 
-  /** Releases a request slot after its network request finishes. */
+  /** ネットワークリクエストの完了後に、同時実行スロットを解放します。 */
   async releaseRequest(leaseId: string, now = Date.now()): Promise<void> {
     await Promise.resolve()
     this.withTransaction((database) => {
