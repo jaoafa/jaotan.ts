@@ -13,9 +13,9 @@ jaotan.ts の開発に興味を持っていただきありがとうございま�
 ## 開発環境 - Development environments
 
 - プログラミング言語は TypeScript です。
-- Node.js v18 + pnpm で開発しています。
+- Node.js ([`.node-version`](../.node-version) のバージョン) + pnpm で開発しています。
 - Visual Studio Code での開発を推奨しています。
-- 依存パッケージは [`package.json`](package.json) で定義しています。
+- 依存パッケージは [`package.json`](../package.json) で定義しています。
   - Discord API との通信に [discord.js](https://discord.js.org/) というライブラリを使っています。
   - コードのフォーマッタに [prettier](https://prettier.io/) を、Lintに [eslint](https://eslint.org/) を使っています。
     - 自動で動いたり動かなかったりするので、適宜 `pnpm fix` すると良いです
@@ -31,23 +31,23 @@ jaotan.ts の開発に興味を持っていただきありがとうございま�
   - Bot が参加している Discord サーバ
 - 設定ファイルはJSONC形式、ファイルパスは `data/config.json` です。
   - `CONFIG_PATH` または `CONFIG_FILE` 環境変数で設定ファイルのパスを変更できます。
-- 設定ファイルの JSON schema は [`schema/Configuration.json`](schema/Configuration.json) にあります。
-  - 手動で書いているので、実装と異なっていたら Issue または Pull Request をください。
+- 設定ファイルの JSON schema は [`schema/Configuration.json`](../schema/Configuration.json) にあります。
+  - `pnpm generate-schema` で `src/config.ts` から生成します。実装と異なっていたら Issue または Pull Request をください。
 
 ## 仕様 - Specifications
 
 - コマンドは BaseCommand クラスを実装する `<コマンド名>Command` クラスで作ります。（例: `ping` コマンドなら `PingCommand`）
 - イベント駆動の機能は BaseDiscordEvent クラスを実装するクラスで作ります。（クラス名検討中）
-- コマンドのサンプルは [`src/commands/ping.ts`](src/commands/ping.ts) があるので、それを見てください。
-- コマンドもイベント駆動の機能も、[`src/discord.ts`](src/discord.ts) の `commands`, `events` 配列変数にインスタンスを追加する必要があります。
+- コマンドのサンプルは [`src/commands/ping.ts`](../src/commands/ping.ts) があるので、それを見てください。
+- コマンドもイベント駆動の機能も、[`src/discord.ts`](../src/discord.ts) の `commands`・`events`・`tasks` 配列にインスタンスを追加する必要があります。
 - `pnpm start` で実行できます。
   - `pnpm dev` でコード変更に合わせて自動再起動ができますが、ログイン回数多すぎって言われてトークンリセットされることがあるので、あんまりお勧めしません。
 
 ## ディレクトリ構造 - Directory structure
 
 - ソースファイルは `src` ディレクトリの中に置いています。
-- コマンド駆動（`/` から始まる**テキスト**コマンド）のものは [`src/commands`](src/commands) に置くようにしています。
-- イベント駆動（サーバへの参加とか）は [`src/events`](src/events) に置くようにしています。
+- コマンド駆動（`/` から始まる**テキスト**コマンド）のものは [`src/commands`](../src/commands) に置くようにしています。
+- イベント駆動（サーバへの参加とか）は [`src/events`](../src/events) に置くようにしています。
 
 ## Git
 

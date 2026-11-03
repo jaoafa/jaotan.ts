@@ -14,9 +14,9 @@ export class BirthdayCommand implements BaseCommand {
     args: string[]
   ): Promise<void> {
     // birthday: 設定されている誕生日を表示
-    // birthday set 2000-01-01: 誕生日を設定
-    // birthday force 20: 強制する年齢を設定
-    // birthday delete: 誕生日を削除
+    // 入力例: birthday set 2000-01-01: 誕生日を設定
+    // 入力例: birthday force 20: 強制する年齢を設定
+    // 入力例: birthday delete: 誕生日を削除
     // それ以外: ヘルプを表示
 
     if (args.length === 0) {
@@ -89,7 +89,7 @@ export class BirthdayCommand implements BaseCommand {
     message: Message<true>,
     args: string[]
   ): Promise<void> {
-    // birthday set 2000-01-01
+    // 入力例: birthday set 2000-01-01
     const inputDate = Birthday.parseInputDate(args.join(' '))
 
     if (!inputDate) {
@@ -144,7 +144,7 @@ export class BirthdayCommand implements BaseCommand {
     message: Message<true>,
     args: string[]
   ): Promise<void> {
-    // birthday force 20
+    // 入力例: birthday force 20
 
     if (args.length === 0) {
       const embed = this.createEmbed(
@@ -200,7 +200,7 @@ export class BirthdayCommand implements BaseCommand {
     _discord: Discord,
     message: Message<true>
   ): Promise<void> {
-    // birthday delete
+    // 入力例: birthday delete
 
     const birthday = new Birthday()
     birthday.delete(message.author.id)

@@ -8,8 +8,8 @@ jaotan.ts は jao Minecraft Server の公式 Discord サーバ「jao Gamers Club
 
 ## 開発環境と技術スタック
 
-- **言語**: TypeScript 5.8+
-- **ランタイム**: Node.js v18+
+- **言語**: TypeScript 6.x
+- **ランタイム**: Node.js ([`.node-version`](../.node-version) のバージョン)
 - **パッケージマネージャー**: pnpm
 - **Discord ライブラリ**: discord.js v14
 - **テストフレームワーク**: Jest
@@ -27,11 +27,12 @@ src/
 ├── events/       # イベント駆動機能 (サーバ参加など)
 ├── features/     # コア機能 (nitrotan, translate など)
 ├── tasks/        # 定期実行タスク
+├── interactions/ # インタラクション (/jaotants など)
 ├── jobs/         # ジョブ処理
+├── types/        # 型定義
 ├── config.ts     # 設定管理
 ├── discord.ts    # Discord クライアント
-├── main.ts       # エントリーポイント
-└── types.d.ts    # 型定義
+└── main.ts       # エントリーポイント
 ```
 
 ### 基底クラス

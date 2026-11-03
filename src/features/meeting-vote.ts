@@ -219,8 +219,8 @@ export class MeetingVote {
   /**
    * 複数のリアクション投票（賛成・反対・白票）をしていないかどうかを取得します。
    *
-   * @param message
-   * @param user
+   * @param message 投票メッセージ
+   * @param user 判定対象のユーザー
    */
   public async isMultipleVote(message: Message<true>, user: User) {
     const goodUsers = await VoteReactionType.Good.getUsers(message, true)
