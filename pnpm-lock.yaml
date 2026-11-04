@@ -173,8 +173,8 @@ importers:
         specifier: 8.0.1
         version: 8.0.1(@babel/core@8.0.10)
       '@book000/eslint-config':
-        specifier: 1.16.113
-        version: 1.16.113(eslint@10.14.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
+        specifier: 1.16.114
+        version: 1.16.114(eslint@10.14.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       '@book000/node-utils':
         specifier: 1.26.0
         version: 1.26.0
@@ -491,8 +491,8 @@ packages:
   '@bcoe/v8-coverage@0.2.3':
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
 
-  '@book000/eslint-config@1.16.113':
-    resolution: {integrity: sha512-lp4nJ8kqnU0p0CPgod1UUhoC1h3IooVsNPS5ssazIB8ft/50bCYuwH4yeKQLhSNC5piZ49tfMNyJQ2iDhbdUjg==}
+  '@book000/eslint-config@1.16.114':
+    resolution: {integrity: sha512-5Y+uNtHBCZXrV+OA6K3ZwsDm42jGxAqmIr1vEKrheyb0QzKlqL9o6kevQPK4St/thfEq8v45t2qCA33h8uRDqA==}
     peerDependencies:
       eslint: 10.14.0
 
@@ -1895,6 +1895,7 @@ packages:
   discord.js@14.28.0:
     resolution: {integrity: sha512-l/mIllvqvWQDWqa8NPw7b2AU2tM9oPWiWR6Jk54DTNlUdyArXbi+Y0m0sLIUtQ9O0x+tyVpDMCG6K6Kf0yeAWQ==}
     engines: {node: '>=18'}
+    deprecated: Please upgrade to 14.28.1 or newer as those versions solve a potential security issue related to the new permission fields on channels
 
   doctrine@2.1.0:
     resolution: {integrity: sha512-35mSku4ZXK0vfCuHEDAwt55dg2jNajHZ1odvF+8SSr82EsZY4QmXfuWso8oEd8zRhVObSN18aM0CjSdoBX7zIw==}
@@ -2327,8 +2328,8 @@ packages:
     resolution: {integrity: sha512-7ACyT3wmyp3I61S4fG682L0VA2RGD9otkqGJIwNUMF1SWUombIIk+af1unuDYgMm082aHYwD+mzJvv9Iu8dsgg==}
     engines: {node: '>=18'}
 
-  globals@17.13.0:
-    resolution: {integrity: sha512-RwMTC61u7hrG3ZJMkZQOK4JLJrKS8QtoTii63EmWvFXHqycY9FObBJQCbsLxSO8kjKhWE5kV1GC+Vb1g3RI0Zg==}
+  globals@17.14.0:
+    resolution: {integrity: sha512-UtdkTVyAJePQv0J2M9Xe4L0ruNSDV314XiIJsADI2Zf40bcdAonE/D/OhAU8AT99oij9mhLByb+NvA3QWZYgCg==}
     engines: {node: '>=18'}
 
   globalthis@1.0.4:
@@ -4108,13 +4109,13 @@ snapshots:
 
   '@bcoe/v8-coverage@0.2.3': {}
 
-  '@book000/eslint-config@1.16.113(eslint@10.14.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)':
+  '@book000/eslint-config@1.16.114(eslint@10.14.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)':
     dependencies:
       '@typescript-eslint/parser': 8.72.1(eslint@10.14.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       eslint: 10.14.0(supports-color@8.1.1)
       eslint-config-prettier: 10.1.8(eslint@10.14.0(supports-color@8.1.1))
       eslint-plugin-unicorn: 79.0.0(eslint@10.14.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
-      globals: 17.13.0
+      globals: 17.14.0
       neostandard: 0.14.1(eslint@10.14.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       typescript-eslint: 8.72.1(eslint@10.14.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
     transitivePeerDependencies:
@@ -5846,7 +5847,7 @@ snapshots:
       entities: 8.1.0
       eslint: 10.14.0(supports-color@8.1.1)
       find-up-simple: 1.0.1
-      globals: 17.13.0
+      globals: 17.14.0
       identifier-regex: 1.1.0
       indent-string: 5.0.0
       is-builtin-module: 5.0.0
@@ -6103,7 +6104,7 @@ snapshots:
 
   globals@15.15.0: {}
 
-  globals@17.13.0: {}
+  globals@17.14.0: {}
 
   globalthis@1.0.4:
     dependencies:
@@ -6949,7 +6950,7 @@ snapshots:
       eslint-plugin-n: 18.5.0(eslint@10.14.0(supports-color@8.1.1))(typescript@6.0.3)
       eslint-plugin-promise: 7.3.0(eslint@10.14.0(supports-color@8.1.1))
       find-up: 8.0.0
-      globals: 17.13.0
+      globals: 17.14.0
       peowly: 2.0.1
       typescript-eslint: 8.72.1(eslint@10.14.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
     transitivePeerDependencies:
