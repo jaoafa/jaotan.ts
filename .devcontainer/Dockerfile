@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/typescript-node:1-18
+FROM mcr.microsoft.com/devcontainers/typescript-node:26
 
 # Install python and pip
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
