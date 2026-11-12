@@ -176,8 +176,8 @@ importers:
         specifier: 1.16.120
         version: 1.16.120(eslint@10.14.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       '@book000/node-utils':
-        specifier: 1.26.12
-        version: 1.26.12
+        specifier: 1.26.13
+        version: 1.26.13
       '@napi-rs/canvas':
         specifier: 1.1.0
         version: 1.1.0
@@ -496,8 +496,8 @@ packages:
     peerDependencies:
       eslint: 10.14.0
 
-  '@book000/node-utils@1.26.12':
-    resolution: {integrity: sha512-Pn2v6Ola9s/mQfnn0spu84SSy/F8Spsg5oqy+V+ZwNrt86aU9/BAXASnNsPyamhHZFPAu6mkjnq/8XRnmIXKDw==}
+  '@book000/node-utils@1.26.13':
+    resolution: {integrity: sha512-xpuuAjhn3XBKCSwNV1PWUxAo86yetqvXxiulmGvFljUO/wTm8F8kCt8VZWrh065QomQJuxQtxxzAvFmDuOd/pA==}
 
   '@cacheable/memory@2.2.0':
     resolution: {integrity: sha512-CTLKqLItRCEixEAewD3/j9DB3/o96gpTPD4eJ1v+DGOlxZRZncRQkGYqqnAGCscYd6RNeXfGeiuCphsPtqyIfQ==}
@@ -4141,7 +4141,7 @@ snapshots:
       - ts-declaration-location
       - typescript
 
-  '@book000/node-utils@1.26.12':
+  '@book000/node-utils@1.26.13':
     dependencies:
       '@sentry/node': 11.11.0
       cycle: 1.0.3
