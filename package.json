@@ -28,7 +28,7 @@
     "generate-schema": "typescript-json-schema --esModuleInterop --required src/config.ts ConfigInterface -o schema/Configuration.json"
   },
   "devDependencies": {
-    "@babel/plugin-transform-modules-commonjs": "8.0.1",
+    "@babel/plugin-transform-modules-commonjs": "8.1.2",
     "@book000/eslint-config": "1.16.123",
     "@book000/node-utils": "1.26.17",
     "@napi-rs/canvas": "1.1.0",
