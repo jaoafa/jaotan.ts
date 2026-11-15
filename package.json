@@ -31,7 +31,7 @@
     "@babel/plugin-transform-modules-commonjs": "8.1.2",
     "@book000/eslint-config": "1.16.123",
     "@book000/node-utils": "1.26.20",
-    "@napi-rs/canvas": "1.1.0",
+    "@napi-rs/canvas": "1.1.1",
     "@types/jest": "30.0.0",
     "@types/node": "26.6.6",
     "@types/node-cron": "3.0.11",
