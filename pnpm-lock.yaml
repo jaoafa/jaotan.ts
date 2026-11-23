@@ -185,8 +185,8 @@ importers:
         specifier: 1.16.124
         version: 1.16.124(eslint@10.15.0(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       '@book000/node-utils':
-        specifier: 1.26.40
-        version: 1.26.40
+        specifier: 1.26.41
+        version: 1.26.41
       '@napi-rs/canvas':
         specifier: 1.1.1
         version: 1.1.1
@@ -284,10 +284,6 @@ packages:
     resolution: {integrity: sha512-qSY56jgW5JnSXzuekLVil6zaOQxOCtOHidr65KkaMBw772IuAY28Qx4ZykAcDn8+FRF15qk80XzKwgSc/RYW6g==}
     engines: {node: '>=6.9.0'}
 
-  '@babel/generator@8.1.2':
-    resolution: {integrity: sha512-tAjURz1NaCZGtdG3hB6gjaIeTVo4XFD4TnbqIEneADVJ1Jpt2NxhPBAjbhius8ulUG5b/P2b56ec1ClJZa2aBQ==}
-    engines: {node: ^22.18.0 || >=24.11.0}
-
   '@babel/generator@8.1.3':
     resolution: {integrity: sha512-lfUz17Qtr+EinAoqyK1+4J5F0GtgsZjXktM5o+QXWM8KRUOauR/WuwBHWGU/aaSp4FI99M7rj6kg851XYWDvmQ==}
     engines: {node: ^22.18.0 || >=24.11.0}
@@ -377,11 +373,6 @@ packages:
   '@babel/parser@7.29.14':
     resolution: {integrity: sha512-VL220vXuyO2z3rNIQwY7ftj9UwpqOt+33sH+sBWkOekbsSR2g7EEMnOx24ZlCH0xOA3DM/33SifVFGbnJD8r/w==}
     engines: {node: '>=6.0.0'}
-    hasBin: true
-
-  '@babel/parser@8.1.2':
-    resolution: {integrity: sha512-ZDKU7vaX0VORd2BhaO+3FKr/30TKjbUy3SMZcydiPngnAb+MesgUoh5SJcE5EwEyBj14M5J6fK56GuBqvYmOpw==}
-    engines: {node: ^22.18.0 || >=24.11.0}
     hasBin: true
 
   '@babel/parser@8.1.3':
@@ -498,10 +489,6 @@ packages:
     resolution: {integrity: sha512-RAdQJrBgmIH1FWvN0X+1hoDxzMzlP4cv/1Zi4dn4tG1H0cTb+rw7CzUxQJhp1f4ANd8j5vH3fy8BAWFGkBDEsA==}
     engines: {node: '>=6.9.0'}
 
-  '@babel/traverse@8.1.2':
-    resolution: {integrity: sha512-J8OoydypQO6HGgRYiiHPMj0iBfz2XpSm5hkmd0+OEHWgQFzYL8TEvYq2y4Gu8vxRCa7g06BilFZ0Imiye5jzzg==}
-    engines: {node: ^22.18.0 || >=24.11.0}
-
   '@babel/traverse@8.1.3':
     resolution: {integrity: sha512-Mil7E37zLel1sjGwcgAF0wn8tbTJp3LLVMb0fqgDxWJJm52NXBv3MJaqmNOp76qzInY/0uDH3rSZfl3BqCjHiw==}
     engines: {node: ^22.18.0 || >=24.11.0}
@@ -526,8 +513,8 @@ packages:
     peerDependencies:
       eslint: 10.14.0
 
-  '@book000/node-utils@1.26.40':
-    resolution: {integrity: sha512-fDF+bxwDuiRAssL2LAQroxJ8ZfgI4VUCZudgKjtNSVWbQKJ8Q1acXH3XpGNiYhdsXHEbjuYNtY841AC+0+C/3w==}
+  '@book000/node-utils@1.26.41':
+    resolution: {integrity: sha512-mfX1lNomRatVzzyhPWKcLpNmSUppBijOCP4HBZom6icpeDLQCK6V+aziK4WmyQyUCoQkct2yJ11obNCq/vmv3Q==}
 
   '@cacheable/memory@2.2.0':
     resolution: {integrity: sha512-CTLKqLItRCEixEAewD3/j9DB3/o96gpTPD4eJ1v+DGOlxZRZncRQkGYqqnAGCscYd6RNeXfGeiuCphsPtqyIfQ==}
@@ -3813,13 +3800,13 @@ snapshots:
   '@babel/core@8.1.2':
     dependencies:
       '@babel/code-frame': 8.0.6
-      '@babel/generator': 8.1.2
+      '@babel/generator': 8.1.3
       '@babel/helper-compilation-targets': 8.0.7
       '@babel/helpers': 8.1.2
-      '@babel/parser': 8.1.2
+      '@babel/parser': 8.1.3
       '@babel/template': 8.1.2
-      '@babel/traverse': 8.1.2
-      '@babel/types': 8.1.2
+      '@babel/traverse': 8.1.3
+      '@babel/types': 8.1.3
       '@types/gensync': 1.0.5
       convert-source-map: 2.0.0
       empathic: 2.1.0
@@ -3835,15 +3822,6 @@ snapshots:
       '@babel/types': 7.29.14
       '@jridgewell/gen-mapping': 0.3.13
       '@jridgewell/trace-mapping': 0.3.31
-      jsesc: 3.1.0
-
-  '@babel/generator@8.1.2':
-    dependencies:
-      '@babel/parser': 8.1.2
-      '@babel/types': 8.1.2
-      '@jridgewell/gen-mapping': 0.4.0-beta.0
-      '@jridgewell/trace-mapping': 0.3.31
-      '@types/jsesc': 2.5.1
       jsesc: 3.1.0
 
   '@babel/generator@8.1.3':
@@ -3931,15 +3909,11 @@ snapshots:
   '@babel/helpers@8.1.2':
     dependencies:
       '@babel/template': 8.1.2
-      '@babel/types': 8.1.2
+      '@babel/types': 8.1.3
 
   '@babel/parser@7.29.14':
     dependencies:
       '@babel/types': 7.29.14
-
-  '@babel/parser@8.1.2':
-    dependencies:
-      '@babel/types': 8.1.2
 
   '@babel/parser@8.1.3':
     dependencies:
@@ -4150,16 +4124,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@babel/traverse@8.1.2':
-    dependencies:
-      '@babel/code-frame': 8.0.6
-      '@babel/generator': 8.1.2
-      '@babel/helper-globals': 8.0.6
-      '@babel/parser': 8.1.2
-      '@babel/template': 8.1.2
-      '@babel/types': 8.1.2
-      obug: 3.0.0
-
   '@babel/traverse@8.1.3':
     dependencies:
       '@babel/code-frame': 8.0.6
@@ -4201,7 +4165,7 @@ snapshots:
       - ts-declaration-location
       - typescript
 
-  '@book000/node-utils@1.26.40':
+  '@book000/node-utils@1.26.41':
     dependencies:
       '@sentry/node': 11.16.0
       cycle: 1.0.3
